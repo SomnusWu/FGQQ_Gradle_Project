@@ -1,0 +1,475 @@
+package com.llg.privateproject.fragment;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.common.constant.enums.UserTypeEnums;
+import com.llg.help.MyFormat;
+import com.llg.help.SetListHeigt;
+import com.llg.privateproject.AppContext;
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.llg.privateproject.actvity.BangDing;
+import com.llg.privateproject.actvity.ContactUsActivity;
+import com.llg.privateproject.actvity.FeedBackActivity;
+import com.llg.privateproject.actvity.GeRenZiLiao;
+import com.llg.privateproject.actvity.GuanzhuActivity;
+import com.llg.privateproject.actvity.Huiyuandengji;
+import com.llg.privateproject.actvity.LoginActivity;
+import com.llg.privateproject.actvity.MineAdvertisementAty;
+import com.llg.privateproject.actvity.MineBalanceAty;
+import com.llg.privateproject.actvity.MyMoney;
+import com.llg.privateproject.actvity.OrderStatusActivity;
+import com.llg.privateproject.actvity.SecurityCenter;
+import com.llg.privateproject.actvity.ShakeScreen;
+import com.llg.privateproject.actvity.SysSetting;
+import com.llg.privateproject.actvity.WebLoginActivity;
+import com.llg.privateproject.adapters.InformationItemAdapter;
+import com.llg.privateproject.entities.Customer;
+import com.llg.privateproject.entities.InformationItem;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.CommonUtils;
+import com.llg.privateproject.utils.Constants;
+
+/**
+ * 设置 Fragment
+ * 
+ * @author gongyibing
+ * @version 1.0
+ * @created 2015-05-07
+ */
+public class SettingFragment extends BaseFragment implements
+		OnItemClickListener {
+	private static final String TAG = "SettingFragment";
+	private Context mActivity;
+	@ViewInject(R.id.infomation_lv)
+	private ListView information_lv;// 个人中心列表
+	@ViewInject(R.id.username)
+	private TextView username;
+	@ViewInject(R.id.usergrade)
+	private TextView usergrade;
+	@ViewInject(R.id.title_tv2)
+	private TextView title_tv2;
+	@ViewInject(R.id.title_tv3)
+	private TextView title_tv3;
+
+	@ViewInject(R.id.rl_userinformation)
+	private RelativeLayout rl_userinformation;// 用户信息
+	UserInformation userInformation = AppContext.getUserInformation();// 用户信息
+	@ViewInject(R.id.iv_login)
+	private ImageView iv_login;// 用户头像
+	@ViewInject(R.id.tv_login)
+	private TextView tv_login;// 登录/注册
+	private List<InformationItem> list;// 用户信息列表
+	private AppContext appContext;
+	private String imgUrl;// 用户头像地址;
+	private Bitmap bitmap;// 用户头像
+	private Drawable roundedAvatarDrawable;// 用户头像
+	public Customer customer;// 个人用户资料
+	Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case Constants.SUCCESS:
+
+				break;
+
+			default:
+				break;
+			}
+		};
+	};
+
+	public static SettingFragment newInstance() {
+		SettingFragment settingFragment = new SettingFragment();
+		return settingFragment;
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		this.mActivity = activity;
+		appContext = (AppContext) activity.getApplication();
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		// 用户信息列表
+		list = new ArrayList<InformationItem>();
+		// int
+		// images[]=getResources().getIntArray(R.array.userinformationimages);
+		// 用户信息图片数组
+		int images[] = new int[] { R.drawable.personer,
+				R.drawable.songhuoshangmen_small, R.drawable.guanzhu,
+				R.drawable.help, R.drawable.wdeguanggao,
+
+				R.drawable.level, R.drawable.safe, R.drawable.shake,
+				R.drawable.suggest, R.drawable.contact, R.drawable.shezhi };
+		// 用户信息描述列表
+
+		String describe[] = getResources().getStringArray(
+				R.array.userinformationdescribe);
+		// 用户信息名称
+		String name[] = getResources().getStringArray(R.array.userinformation);
+
+		for (int i = 0; i < name.length; i++) {
+			if (name[i].equals("摇一摇")) {
+				continue;
+			}
+			if (name[i].equals("联系我们")) {
+				continue;
+			}
+			if (name[i].equals("我的任务")) {
+				continue;
+			}
+			if (name[i].equals("我的发布")) {
+				continue;
+			}
+			list.add(new InformationItem(getActivity(), images[i], name[i],
+					describe[i]));
+		}
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_setting, container,
+				false);
+		// 在使用注解绑定控件的时候，一定记得在onCreate中调用ViewUtils.inject(this);
+		ViewUtils.inject(this, view);
+		InformationItemAdapter adapter = new InformationItemAdapter(
+				getActivity(), list);
+		SetListHeigt listHeigt = new SetListHeigt();
+		information_lv.setAdapter(adapter);
+		// 设置列表高度
+		listHeigt.setlistHeight(information_lv);
+		information_lv.setOnItemClickListener(this);
+
+		// setBadgeView();
+		return view;
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == 4 && resultCode == getActivity().RESULT_OK
+				&& data != null) {
+			imgUrl = data.getStringExtra("imgUrl");
+			if (imgUrl != null) {
+				new BitmapUtils(getActivity()).display(iv_login, imgUrl);
+			}
+		}
+	}
+
+	/** 设置提示 */
+	private void setBadgeView() {
+
+		// badge1=new BadgeView(getActivity(), mTitleTv);
+		// badge2=new BadgeView(getActivity(), title_tv1);
+		// badge3=new BadgeView(getActivity(), title_tv2);
+		// badge4=new BadgeView(getActivity(), title_tv3);
+
+		// badge1.setBadgeMargin(1);
+		// badge1.setText("1");
+		// badge1.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+		// badge1.setTextSize(10);
+		// badge1.show();
+		//
+		// badge2.setBadgeMargin(1);
+		// badge2.setText("1");
+		// badge2.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+		// badge2.setTextSize(10);
+		// badge2.setBackgroundResource(R.color.green1);
+		// badge2.show();
+
+	}
+
+	/**
+	 * 点击事件
+	 * 
+	 * @param v
+	 */
+	@OnClick({ R.id.iv_login, R.id.address, R.id.title_tv2, R.id.title_tv3 })
+	public void myClick(View v) {
+		Intent intent = null;
+
+		switch (v.getId()) {
+
+		/** 跳转没有登录跳转到登录界面、登录了点击修改图片 */
+		case R.id.iv_login:
+
+			Intent intent2 = new Intent(getActivity(), WebLoginActivity.class);
+			startActivity(intent2);
+			break;
+		case R.id.address:
+			Toast.makeText(getActivity(), "address", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.title_tv2:// 我的资产
+			getMyMoney();
+			break;
+		case R.id.title_tv3:// 资料设置
+
+			intent = new Intent();
+			intent.setClass(mActivity, GeRenZiLiao.class);
+			startActivityForResult(intent, 4);
+			break;
+		default:
+			break;
+		}
+	}
+
+	/** 获取我的资产 */
+	private void getMyMoney() {
+		if (appContext.isNetworkConnected()) {
+			if (UserInformation.isLogin()) {
+				Intent intent = new Intent();
+				intent.setClass(mActivity, MineBalanceAty.class);
+				mActivity.startActivity(intent);
+			} else {
+				toast("为了您的账户安全请先登录");
+				startActivity(new Intent(mActivity, LoginActivity.class));
+
+			}
+		} else {
+			toast(R.string.t_Connection);
+		}
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+
+		// if(!userInformation.isLogin()){
+		//
+		//
+		// rl_userinformation.setVisibility(View.GONE);
+		// iv_login.setBackgroundResource(R.drawable.bkg_head3);
+		// tv_login.setVisibility(View.VISIBLE);
+		//
+		// }else{
+		// rl_userinformation.setVisibility(View.VISIBLE);
+		// iv_login.setBackgroundResource(R.drawable.bkg_head2);
+		// tv_login.setVisibility(View.GONE);
+		//
+		//
+		// }
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+
+		boolean isLogin = getActivity().getSharedPreferences(
+				"userInformation1", Context.MODE_PRIVATE).getBoolean("isLogin",
+				false);
+		if (!isLogin) {
+			username.setText("游客");
+			usergrade.setText("游客");
+			rl_userinformation.setVisibility(View.GONE);
+			iv_login.setBackgroundResource(R.drawable.bkg_head3);
+			tv_login.setVisibility(View.VISIBLE);
+
+		} else {
+			rl_userinformation.setVisibility(View.VISIBLE);
+
+			String headString = mActivity
+					.getString(R.string.test_image_server_url)
+					+ mActivity.getSharedPreferences("userInformation1",
+							Context.MODE_PRIVATE).getString("pictureUrl", "");
+			new BitmapUtils(mActivity, CommonUtils.createSDCardDir())
+					.configDefaultLoadFailedImage(R.drawable.bkg_head2)
+					.configDefaultLoadingImage(R.drawable.bkg_head2)
+					.display(iv_login, headString);
+			;
+			tv_login.setVisibility(View.GONE);
+			username.setText(AppContext.appellation);
+
+			switch (Integer.parseInt(AppContext.userType)) {
+			case 0:// 普通用户
+
+				usergrade.setText(UserTypeEnums.GENERAL_USER.getInfo());
+				break;
+			case 1:// vip用户
+
+				usergrade.setText(UserTypeEnums.VIP_USER.getInfo());
+				break;
+			case 5:// 创业者
+				usergrade.setText(UserTypeEnums.ENTREPRENEUR.getInfo());
+				break;
+			case 50:// 创业工工作室员工
+				usergrade.setText(UserTypeEnums.STUDIO_COM.getInfo());
+				break;
+			case 6:// 网头
+				usergrade.setText(UserTypeEnums.NETWORK_LEADER.getInfo());
+				break;
+			case 7:// 区域代理商
+				usergrade.setText(UserTypeEnums.REGION_PROXY.getInfo());
+				break;
+			case 100:// 系统管理员
+				usergrade.setText(UserTypeEnums.SUPER_ADMIN.getInfo());
+				break;
+			case 101:// 运营部
+				usergrade.setText(UserTypeEnums.MANAGER.getInfo());
+				break;
+			case 8:// 省代理
+				usergrade.setText(UserTypeEnums.PROVINCE.getInfo());
+				break;
+			case 9:// 县代理
+				usergrade.setText(UserTypeEnums.COUNTY.getInfo());
+				break;
+
+			}
+			username.setText(AppContext.appellation);
+		}
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (bitmap != null) {
+
+			bitmap.recycle();
+		}
+		roundedAvatarDrawable = null;
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	public String getFragmentName() {
+		return TAG;
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// InformationItem item1=(InformationItem)
+		// parent.getItemAtPosition(position);
+		// Log.i("my", "item1.dsc"+item1.dsc);
+		// TODO Auto-generated method stub
+		if (!appContext.isNetworkConnected()) {
+			toast(R.string.t_Connection);
+			return;
+
+		}
+		Log.i("tag", "==========执行了onItemClick");
+		Intent intent = new Intent();
+		if (!AppContext.getUserInformation().isLogin()) {
+			toast("请登录");
+			intent.setClass(mActivity, WebLoginActivity.class);
+			intent.putExtra("isFinishTop", false);
+			Log.i("tag", intent.getBooleanExtra("isFinishTop", true)
+					+ "==========执行了isFinishTop赋值");
+			mActivity.startActivity(intent);
+			return;
+		}
+		InformationItem item = list.get(position);
+		// Toast.makeText(getActivity(), "position"+position,
+		// Toast.LENGTH_SHORT).show();
+		if (item.name.equals("我的关注")) {
+
+			intent.setClass(mActivity, GuanzhuActivity.class);
+			mActivity.startActivity(intent);
+
+			// Toast.makeText(getActivity(), "item.name"+item.name,
+			// Toast.LENGTH_SHORT).show();
+		} else if (item.name.equals("我的订单状态")) {
+			// Toast.makeText(getActivity(), "item.name"+item.name,
+			// Toast.LENGTH_SHORT).show();
+
+			intent.setClass(mActivity, OrderStatusActivity.class);
+			Bundle bundle = new Bundle();
+			bundle.putInt("position", 0);
+			intent.putExtra("bundle", bundle);
+
+			startActivity(intent);
+		} else if (item.name.equals("我的任务")) {
+			Toast.makeText(getActivity(), "正在开发中...", Toast.LENGTH_SHORT)
+					.show();
+
+		} else if (item.name.equals("安全中心")) {
+			// Toast.makeText(getActivity(), "item.name"+item.name,
+			// Toast.LENGTH_SHORT).show();
+			intent.setClass(mActivity, SecurityCenter.class);
+			mActivity.startActivity(intent);
+
+		} else if (item.name.equals("我的发布")) {
+			Toast.makeText(getActivity(), "正在开发中...", Toast.LENGTH_SHORT)
+					.show();
+		} else if (item.name.equals("我的广告")) {
+			if (UserInformation.isLogin()) {
+				intent.setClass(mActivity, MineAdvertisementAty.class);
+				Log.i("tag", "========执行了跳转MineAdvertisementAty=======");
+			}
+			startActivity(intent);
+		}
+
+		else if (item.name.equals("会员等级")) {
+			intent.setClass(mActivity, Huiyuandengji.class);
+			mActivity.startActivity(intent);
+
+		} else if (item.name.equals("摇一摇")) {
+			intent.setClass(mActivity, ShakeScreen.class);
+			mActivity.startActivity(intent);
+
+		} else if (item.name.equals("反馈意见")) {
+			// Toast.makeText(getActivity(), "item.name"+item.name,
+			// Toast.LENGTH_SHORT).show();
+			intent.setClass(mActivity, FeedBackActivity.class);
+			mActivity.startActivity(intent);
+
+		} else if (item.name.equals("联系我们")) {
+			// Toast.makeText(getActivity(), "item.name"+item.name,
+			// Toast.LENGTH_SHORT).show();
+			intent.setClass(mActivity, ContactUsActivity.class);
+			mActivity.startActivity(intent);
+		} else if (item.name.equals("系统设置")) {
+			intent.setClass(mActivity, SysSetting.class);
+			mActivity.startActivity(intent);
+
+		}
+	}
+
+}

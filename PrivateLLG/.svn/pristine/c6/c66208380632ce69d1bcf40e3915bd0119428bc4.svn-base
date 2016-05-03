@@ -1,0 +1,725 @@
+package com.llg.privateproject.actvity;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.webkit.WebView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.LocationClientOption.LocationMode;
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.adapters.ViewPagerAdapter;
+import com.llg.privateproject.fragment.Guide1;
+import com.llg.privateproject.fragment.Guide2;
+import com.llg.privateproject.fragment.Guide3;
+import com.llg.privateproject.fragment.Guide4;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.listener.MyLocationListener;
+import com.llg.privateproject.utils.CommonUtils;
+
+/**
+ * 启动页
+ * 
+ * @author gongyibing
+ * @version 1.0
+ * @created 2015-05-07
+ */
+@SuppressLint("HandlerLeak")
+public class WelcomeActivity extends FragmentActivity implements
+		OnClickListener {
+	public LocationClient mLocationClient = null;
+	public BDLocationListener myListener;
+
+	List<Fragment> list = null;
+	List<Map<String, Object>> listMaps = null;
+	private String objectType = "";
+	private String objectId = "";
+	private String adRedEnvelopId = "";
+	private String img = "";
+	/** 正常加载列表 */
+	List<Map<String, Object>> list1 = null;
+	@ViewInject(R.id.welcome)
+	private LinearLayout llLayout;
+	ViewPagerAdapter viewPagerAdapter;
+	Context context = this;
+	Timer timer;
+	WebView wv;
+	Guide1 guide1;
+	Guide2 guide2;
+	Guide3 guide3;
+	Guide4 guide4;
+	String methodName = "firstInstall";
+	String listName = "adinfoFirstInstallList";
+	BitmapUtils bitmapUtils;
+	boolean isInstall;
+	FrameLayout ll;
+	private AppContext appContext;
+	/** 引导页列表 */
+	List<Map<String, Object>> map;
+	
+	SharedPreferences sPreferences;
+	private boolean toGetRedPackage=false;
+	private String path;
+	private long time1;
+	public interface IsetPic {
+		public void setPicId(String url);
+	}
+
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(android.os.Message msg) {
+			int key = msg.what;
+			switch (key) {
+			case 0:// 跳转到主界面
+				if(toGetRedPackage){
+					return;
+				}
+				Intent intent = new Intent(WelcomeActivity.this,
+				// MainActivity.class);
+						NewHomeActivity.class);
+				startActivity(intent);
+				finish();
+				break;
+			case 2:// 加载失败
+
+				break;
+			case 3:// 引导页加载成功
+				if (guide1 == null) {
+					guide1 = new Guide1();
+				}
+				if (map.size() > 0) {
+					myPic((IsetPic) guide1, map.get(0).get("img").toString());
+					myPic((IsetPic) guide2, map.get(1).get("img").toString());
+					myPic((IsetPic) guide3, map.get(2).get("img").toString());
+					myPic((IsetPic) guide4, map.get(3).get("img").toString());
+				}
+				// String string=map.get(0).get("img").toString();
+				// new BitmapUtils(context,
+				// CommonUtils.createSDCardDir()).configDefaultLoadFailedImage(R.drawable.defaultpic).display(guide4.getView(),string);
+				viewPagerAdapter.notifyDataSetChanged();
+				break;
+			case 4:// 正常加载
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				if (list1!=null&&list1.size() > 0) {
+				
+					llLayout.setOnClickListener(WelcomeActivity.this);
+					String imgUrlEnd = WelcomeActivity.this.getResources()
+							.getString(R.string.test_image_server_url)+list1.get(0).get("imageUrl")
+							.toString();
+					
+					getSharedPreferences("openappimg", Context.MODE_PRIVATE)
+					.edit().putString("imageUrl",
+							imgUrlEnd);
+					new BitmapUtils(context,CommonUtils.createSDCardDir())
+					.configDefaultLoadFailedImage(context.getResources().getDrawable(R.drawable.welcome))
+					.configDefaultLoadFailedImage(context.getResources().getDrawable(R.drawable.welcome))
+					.display(llLayout, imgUrlEnd);;
+					new Thread() {
+						@Override
+						public void run() {
+							try {
+								
+								Thread.sleep(2000);
+								handler.sendEmptyMessage(0);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					}.start();
+				}else{
+				
+					handler.sendEmptyMessage(0);
+				}
+
+				break;
+			case 5:// 加载弹出广告
+
+				break;
+
+			}
+		}
+	};
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		// sPreferences=getSharedPreferences("popupad", Context.MODE_PRIVATE);
+		// sPreferences.edit().putString("json", value);
+		// startService(new Intent(this, MyService.class));
+		time1=System.currentTimeMillis()/1000;
+		appContext = (AppContext) getApplication();
+		myListener = MyLocationListener.getMyLocationListener();
+		mLocationClient = new LocationClient(getApplicationContext()); // 声明LocationClient类
+		mLocationClient.registerLocationListener(myListener); // 注册监听函数
+		initLocation();
+		mLocationClient.start();
+		String objectId = "";
+		Intent i_getvalue = getIntent();
+		String action = i_getvalue.getAction();
+		Uri uri = i_getvalue.getData();
+		if (uri != null && uri.getQueryParameter("objectId") != null) {
+			objectId = uri.getQueryParameter("objectId");
+		}
+		isInstall();
+		if (appContext.isNetworkConnected()) {
+			// login();
+		}
+		if (isInstall) {
+			addFragment(methodName, listName);
+
+		} else if (objectId.length() > 0) {
+
+			toShop(objectId, action, i_getvalue, uri);
+
+		} else if (getIntent().getBooleanExtra("isDialog", false)) {
+			telephonyStateChange();
+
+		} else {
+			addHtml("openApp", "AdinfoOpenAppList");//
+		}
+	}
+
+	/** 去店铺 */
+	private void toShop(String objectId, String action, Intent i_getvalue,
+			Uri uri) {
+
+		if (Intent.ACTION_VIEW.equals(action)) {
+
+			Log.d("my", "uri:" + uri);
+
+			if (uri != null) {
+				String host = uri.getHost();
+
+				String dataString = i_getvalue.getDataString();
+
+				String objectType = uri.getQueryParameter("objectType");
+
+				String path = uri.getPath();
+
+				String path1 = uri.getEncodedPath();
+
+				String queryString = uri.getQuery();
+				Log.d("my", "getScheme:" + uri.getScheme());
+				Log.d("my", "host:" + host);
+				Log.d("my", "uri.getPath():" + uri.getPath());
+				Log.d("my", "uri.getPort():" + uri.getPort());
+				Log.d("my", "shopId:" + objectId);
+				if (!uri.getScheme().equals("fgqqg")) {
+					Log.d("my",
+							"##########************getScheme:"
+									+ uri.getScheme());
+					return;
+				}
+				Log.d("my", "************getScheme:" + uri.getScheme());
+				if (objectId != null) {
+					MyFormat.toSomeWhere(this, objectType, objectId,
+							uri.getQueryParameter("forwardId"),
+							uri.getQueryParameter("chain"),"");
+					finish();
+				}
+
+			}
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (mLocationClient != null && mLocationClient.isStarted()) {
+
+			// mLocationClient.stop();
+		}
+	}
+
+
+	/** 正常加载 */
+	private void addHtml(String methodName, final String listName) {
+		setTheme(R.style.guidestyle);
+		setContentView(R.layout.welcome);
+		list1 = new ArrayList<Map<String, Object>>();
+		llLayout = (LinearLayout) findViewById(R.id.welcome);
+		new BitmapUtils(context, CommonUtils.createSDCardDir())
+				.configDefaultLoadFailedImage(R.drawable.welcome)
+				.display(
+						llLayout,
+						getSharedPreferences("openappimg", Context.MODE_PRIVATE)
+								.getString("img", ""));
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("cusId", AppContext.userid);
+		params.addQueryStringParameter("locationCode", "APP_HOME_OPEN_APP");// 欢迎页广告
+		params.addQueryStringParameter("lng",
+				String.valueOf(AppContext.myLongitude));
+		params.addQueryStringParameter("lat",
+				String.valueOf(AppContext.myLatitude));
+
+		AppContext.getHtmlUitls().xUtils(this, HttpMethod.GET, "ad/getAdList",
+				params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+					
+
+						handler.sendEmptyMessage(0);
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						
+					
+						getAdRedPackageParse1(json);
+					
+
+					}
+				});
+
+	}
+
+	/***
+	 * 查询通用红包解析
+	 * */
+	public void getAdRedPackageParse1(JSONObject json) {
+		try {
+			if (json.getBoolean("success")) {
+				JSONArray array = new JSONArray();
+				array = json.getJSONArray("obj");
+				
+				if (array.length() > 0) {
+					if(list1==null){
+						list1 = new ArrayList<Map<String, Object>>();
+						}
+//					list.clear();
+					JSONObject object = array.getJSONObject(0);
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("adid", object.get("id"));// 广告id
+
+					map.put("name", "" + object.get("title"));
+
+					map.put("imageUrl", object.get("img"));
+					if (object.get("objectId") == null) {
+						String objectId = "";
+						map.put("objectId", "" + objectId);
+					} else {
+						map.put("objectId", "" + object.get("objectId"));
+					}
+					map.put("objectType", object.get("objectType"));
+					if (object.get("adRedEnvelopId") == null) {
+						map.put("adRedEnvelopId", "");
+					} else {
+						map.put("adRedEnvelopId", object.get("adRedEnvelopId"));
+					}
+					map.put("q", object.getDouble("q"));
+					map.put("isGettedRed", object.get("isGettedRed"));
+
+					map.put("isEmpty", object.getString("isEmpty"));
+
+
+					map.put("adStatus", object.getString("adStatus"));
+
+					map.put("adInfoId", object.get("id"));// 广告id
+					map.put("adForwardId", object.get("adForwardId"));
+
+					if (object.get("adRedType") != null) {
+						if (object.get("adRedType").toString().equals("null")
+								|| object.get("adRedType").toString().length() < 1) {
+							map.put("type", 0);
+						} else {
+
+							map.put("type", object.get("adRedType"));
+
+						}
+					} else {
+
+						map.put("type", 0);
+					}
+					list1.add(map);
+				}
+			}
+			handler.sendEmptyMessage(4);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * 添加引导页
+	 * 
+	 * @param methodName
+	 *            方法名
+	 * @param listName
+	 *            列表名
+	 * */
+	private void addFragment(String methodName, final String listName) {
+
+		AppContext.getHtmlUitls().xUtils(this, HttpMethod.GET, methodName,
+				null, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+
+						handler.sendEmptyMessage(2);
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						if (map == null) {
+							map = new ArrayList<Map<String, Object>>();
+						}
+						ParseJson.getParseJson().getFirstInstall(listName,
+								json, map);
+
+						handler.sendEmptyMessage(3);
+
+					}
+				});
+		setTheme(R.style.guidestyle);
+		list = new ArrayList<Fragment>();
+		guide1 = new Guide1();
+		guide2 = new Guide2();
+		guide3 = new Guide3();
+		guide4 = new Guide4();
+		list.add(guide1);
+		list.add(guide2);
+		list.add(guide3);
+		list.add(guide4);
+		setContentView(R.layout.guide);
+
+		ViewPager pager = (ViewPager) findViewById(R.id.guide);
+		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),
+				this, list);
+		pager.setAdapter(viewPagerAdapter);
+
+	}
+
+	/** 判断是不是第一次安装 */
+	public boolean isInstall() {
+		SharedPreferences sPreferences = getSharedPreferences("isInstall",
+				Context.MODE_PRIVATE);
+		isInstall = sPreferences.getBoolean("isInstall", true);
+		if (isInstall) {
+			sPreferences.edit().putBoolean("isInstall", false).commit();
+			path = Environment.getExternalStorageDirectory().getPath()
+					+ File.separator + "Citys";
+			Log.i("tag", "--------进来了--isInstall-----------" + path);
+			opendb(path, "city");
+		}
+		return isInstall;
+	}
+
+	/** 电话状态改变 */
+	private void telephonyStateChange() {
+		// TODO Auto-generated method stub
+		// setTheme(R.style.agreemdialog);
+
+		setContentView(R.layout.mdialog);// select * from ad_ad_info;
+		TextView tv_see = (TextView) findViewById(R.id.tv_see);
+		TextView tv_finish = (TextView) findViewById(R.id.tv_finish);
+		ll = (FrameLayout) findViewById(R.id.ll);
+		img = getIntent().getStringExtra("img");
+		new BitmapUtils(context, CommonUtils.createSDCardDir())
+				.configDefaultLoadFailedImage(R.drawable.welcome)
+				.configDefaultLoadingImage(R.drawable.welcome).display(ll, img);
+		;
+		objectId = getIntent().getStringExtra("objectId");
+		objectType = getIntent().getStringExtra("objectType");
+		adRedEnvelopId = getIntent().getStringExtra("adRedEnvelopId");
+		if (objectType.equals("") && objectId.length() < 5) {
+			tv_see.setVisibility(View.GONE);
+		}
+		// getAd();
+		tv_see.setOnClickListener(this);
+		tv_finish.setOnClickListener(this);
+		wv = (WebView) findViewById(R.id.wv);
+		// wv.loadUrl("file:///android_asset/test.html");
+		timer = new Timer();
+
+		timer.schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				// cancel();
+
+				finish();
+			}
+		}, 9000);
+
+	}
+
+	private void myPic(IsetPic isetPic, String url) {
+		if (isetPic != null) {
+			isetPic.setPicId(url);
+		}
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		SharedPreferences myLoction = getSharedPreferences("myLoction",
+				Context.MODE_PRIVATE);
+		Editor editor = myLoction.edit();
+
+		editor.putFloat("myLatitude", (float) AppContext.myLatitude);
+		editor.putFloat("myLongitude", (float) AppContext.myLongitude);
+		editor.putString("myCity", AppContext.myCity);
+		editor.putString("myAddress", AppContext.myAddress);
+		editor.putString("myCityCode", AppContext.myCityCode);
+		editor.commit();
+
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.tv_finish:// 离开
+			finish();
+			break;
+		case R.id.tv_see:// 查看
+
+			toSomeWhere();
+
+			break;
+		case R.id.welcome://去红包页面
+			toGetRedPackage=true;
+			Intent intent = new Intent();
+			// if (type != 0) {
+			intent = new Intent(this, GetRedPackage.class);
+			Map<String, Object>map=list1.get(0);
+			intent.putExtra("img", map.get("imageUrl").toString());
+			intent.putExtra("objectId", map.get("objectId").toString());
+			intent.putExtra("objectType", map.get("objectType").toString());
+			intent.putExtra("isEmpty", map.get("isEmpty").toString());
+			intent.putExtra("adRedEnvelopId", map.get("adRedEnvelopId")
+					.toString());
+			intent.putExtra("adForwardId", map.get("adForwardId")
+					.toString());
+			intent.putExtra("type", map.get("type").toString());
+			intent.putExtra("adInfoId", map.get("adid").toString());// 广告id
+			startActivity(intent);
+			break;
+		}
+	}
+
+	/** 到店铺/商品也/专题/URL等 */
+	private void toSomeWhere() {
+		if (objectType.equals("1") && objectId != null
+				&& !objectId.equals("null") && objectId.length() > 0) {// 跳转到店铺
+			Intent intent = new Intent(this, ShopActivity.class);
+			intent.putExtra("shopId", objectId);
+
+			startActivity(intent);
+		} else if (objectType.equals("2") && objectId != null
+				&& !objectId.equals("null") && objectId.length() > 0) {// 跳转到商品
+			Intent intent = new Intent(this, ProductDetailActivity.class);
+			intent.putExtra("prodspecId", objectId);
+			startActivity(intent);
+		} else if (objectType.equals("3") && objectId != null
+				&& !objectId.equals("null") && objectId.length() > 0) {// 专题
+
+		} else if (objectType.equals("4") && objectId != null
+				&& !objectId.equals("null") && objectId.length() > 0) {// url
+			Intent to_more = new Intent(this, WebAty.class);
+
+			to_more.putExtra("prodSpecId", objectId);
+			startActivity(to_more);
+		} else {// 其他
+
+		}
+	}
+
+	/** 获取弹出广告 */
+	private void getAd() {
+		appContext = (AppContext) getApplication();
+		if (appContext.isNetworkConnected()) {
+			RequestParams params = new RequestParams();
+			params.addQueryStringParameter("appType", "2");// 2android
+			params.addQueryStringParameter("appId", appContext.appId());// 手机标识码
+			params.addQueryStringParameter("type", "1");// 0首页广告1弹窗广告
+			params.addQueryStringParameter("lng",
+					String.valueOf(AppContext.myLongitude));// 经度
+			params.addQueryStringParameter("lat",
+					String.valueOf(AppContext.myLatitude));// 纬度
+			params.addQueryStringParameter("cusId", AppContext.username);// 用户名
+
+			// AppContext.getHtmlUitls().xUtils(this, HttpMethod.GET,
+			// "dialogAdin", params, new HttpCallback() {
+			AppContext.getHtmlUitls().xUtils(this, HttpMethod.GET,
+					"getPushAds", params, new HttpCallback() {
+
+						@Override
+						public void onError(String msg) {
+							// TODO Auto-generated method stub
+							sPreferences = getSharedPreferences("popupad",
+									Context.MODE_PRIVATE);
+							String string = sPreferences.getString("json", "");
+							try {
+								if (listMaps == null) {
+									listMaps = new ArrayList<Map<String, Object>>();
+								}
+								listMaps.clear();
+								ParseJson.getParseJson().setDataList(
+										"dialogAdinBeanList",
+										new JSONObject(string)
+												.getJSONObject("attributes"),
+										listMaps);
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							handler.sendEmptyMessage(5);
+						}
+
+						@Override
+						public void onBack(JSONObject json) {
+							// TODO Auto-generated method stub
+
+							sPreferences = getSharedPreferences("popupad",
+									Context.MODE_PRIVATE);
+							sPreferences.edit()
+									.putString("json", json.toString())
+									.commit();
+
+							if (listMaps == null)
+								listMaps = new ArrayList<Map<String, Object>>();
+							try {
+								listMaps.clear();
+								ParseJson.getParseJson().setDataList(
+										"dialogAdinBeanList",
+										json.getJSONObject("attributes"),
+										listMaps);
+
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							handler.sendEmptyMessage(5);
+						}
+					});
+		}
+	}
+
+	/** 设定sdk定位模式 */
+	private void initLocation() {
+		LocationClientOption option = new LocationClientOption();
+		option.setLocationMode(LocationMode.Hight_Accuracy);// 可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
+		option.setCoorType("bd09ll");// 可选，默认gcj02，设置返回的定位结果坐标系
+		int span = 1000;
+		option.setScanSpan(span);// 可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
+		option.setIsNeedAddress(true);// 可选，设置是否需要地址信息，默认不需要
+		option.setOpenGps(true);// 可选，默认false,设置是否使用gps
+		option.setLocationNotify(true);// 可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
+		// option.setIsNeedLocationDescribe(true);//
+		// 可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
+		// option.setIsNeedLocationPoiList(true);//
+		// 可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
+		option.setIgnoreKillProcess(false);// 可选，默认false，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认杀死
+		option.SetIgnoreCacheException(false);// 可选，默认false，设置是否收集CRASH信息，默认收集
+		// option.setEnableSimulateGps(false);// 可选，默认false，设置是否需要过滤gps仿真结果，默认需要
+		mLocationClient.setLocOption(option);
+	}
+
+	private void opendb(String dir, String name) {
+		try {
+			Log.i("tag", "--------进来了--opendb-----------");
+			File fileDir = new File(dir);
+			Log.i("tag", dir + "--------City文件夹路径----------");
+			if (!fileDir.exists()) {
+				fileDir.mkdirs();
+				Log.i("tag", fileDir.exists() + "-------是否进来判断文件夹存在----------");
+			}
+			Log.i("tag", fileDir.exists() + "-------是否存在文件夹----------");
+			File file = new File(dir, name);
+			if (!file.exists()) {
+				Log.e("cc", "file");
+				InputStream is = getResources().openRawResource(R.raw.city);
+				if (is != null) {
+					Log.e("cc", "is null");
+				} else {
+				}
+				FileOutputStream fos = new FileOutputStream(file);
+				if (is != null) {
+					Log.e("cc", "fosnull");
+				} else {
+				}
+				byte[] buffer = new byte[1024];
+				int count = 0;
+				while ((count = is.read(buffer)) > 0) {
+					fos.write(buffer, 0, count);
+					Log.e("cc", "while");
+					fos.flush();
+				}
+				fos.close();
+				is.close();
+			}
+		} catch (FileNotFoundException e) {
+			Log.e("cc", "File not found");
+			e.printStackTrace();
+		} catch (IOException e) {
+			Log.e("cc", "IO exception");
+			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e("cc", "exception " + e.toString());
+		}
+	}
+
+}

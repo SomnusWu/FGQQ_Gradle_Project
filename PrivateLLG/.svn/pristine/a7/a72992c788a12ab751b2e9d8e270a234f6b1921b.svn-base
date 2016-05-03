@@ -1,0 +1,89 @@
+package com.llg.privateproject.adapters;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.bjg.lcc.privateproject.R;
+import com.llg.privateproject.adapters.FabuAdapter.ViewHolder;
+import com.llg.privateproject.entities.MenuItem;
+import com.llg.privateproject.entities.Region;
+
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+public class NearbyAdapter extends BaseAdapter {
+	private Context context;
+	private LayoutInflater inflater;
+	private List<Region> list;
+	private int selectPosition;
+
+	public NearbyAdapter(Context context, List<Region> list) {
+		// TODO Auto-generated constructor stub
+		this.context = context;
+		inflater = LayoutInflater.from(context);
+		this.list = list;
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return (list == null) ? 0 : list.size();
+	}
+
+	@Override
+	public Object getItem(int arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long getItemId(int arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public View getView(int position, View v, ViewGroup arg2) {
+		// TODO Auto-generated method stub
+		ViewHolder holder;
+		if (v == null) {
+			holder = new ViewHolder();
+			v = inflater.inflate(R.layout.popu_listitem_nearby, null);
+			holder.tvContent = (TextView) v.findViewById(R.id.tv_content);
+			v.setTag(holder);
+		} else {
+			holder = (ViewHolder) v.getTag();
+		}
+		if (selectPosition == position) {
+			holder.tvContent.setTextColor(context.getResources().getColor(
+					R.color.orange1));
+			holder.tvContent.setBackgroundColor(context.getResources()
+					.getColor(R.color.light_grays));
+		}else {
+			holder.tvContent.setTextColor(context.getResources().getColor(
+					R.color.black1));
+			holder.tvContent.setBackgroundColor(context.getResources()
+					.getColor(R.color.white));
+		}
+		holder.tvContent.setText(list.get(position).getName());
+		Log.i("tag", list.get(position).getName()+"---------执行了getview------");
+		return v;
+	}
+
+	class ViewHolder {
+		private TextView tvContent;
+	}
+
+	public void setPosition(int position) {
+		selectPosition = position;
+	}
+	public void setList(List<Region> list) {
+		this.list = list;
+		notifyDataSetChanged();
+	}
+}

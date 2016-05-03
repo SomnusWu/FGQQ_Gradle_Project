@@ -1,0 +1,228 @@
+package com.llg.privateproject.actvity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Toast;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.TextView;
+
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.update.UpdateManager;
+import com.llg.privateproject.utils.update.UpdateVersion;
+import com.llg.privateproject.view.OrderStatusDialog;
+import com.llg.privateproject.view.OrderStatusDialog.FinishListener;
+import com.tencent.android.tpush.XGPushManager;
+/**
+ * 系统设置
+ * yh
+ * 2015.10.16
+ * */
+public class SysSetting extends BaseActivity implements OnCheckedChangeListener,FinishListener{
+	/**返回*/
+	@ViewInject(R.id.turn) private TextView turn;
+	/**标题*/
+	@ViewInject(R.id.head_tilte) private TextView head_tilte;
+	/**是否开启推送*/
+	@ViewInject(R.id.ispush) private CheckBox ispush;
+	/**检查新版本*/
+	@ViewInject(R.id.newversion) private TextView newversion;
+	/**关于我们*/
+	@ViewInject(R.id.aboutus) private TextView aboutus;
+	/**退出当前用户*/
+	@ViewInject(R.id.exit_currentuser) private TextView exit_currentuser;
+	private PackageManager packageManager;
+	private PackageInfo packageInfo;
+	OrderStatusDialog dialog;
+	/** (1必须强制更新，2提示更新，3检查更新，4无需更新) */
+	private int checkResult ;
+	private String url="";
+	Handler handler=new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 1://返回成功
+				if(checkResult==1){//必须强制更新代码
+					toast("当前版本存在异常,请及时更新");
+					if(dialog==null){
+						 dialog=new OrderStatusDialog(SysSetting.this,SysSetting.this,10);}
+						dialog.show();
+						Window window=dialog.getWindow();
+						android.view.WindowManager.LayoutParams lp=window.getAttributes();
+						lp.width=AppContext.getScreenWidth()*4/5;
+						lp.height=android.view.WindowManager.LayoutParams.WRAP_CONTENT;
+						window.setAttributes(lp);
+				}else if(checkResult==2) {//提示更新
+				toast("有新版本可更新");	
+				if(dialog==null){
+				 dialog=new OrderStatusDialog(SysSetting.this,SysSetting.this,10);}
+				dialog.show();
+				Window window=dialog.getWindow();
+				android.view.WindowManager.LayoutParams lp=window.getAttributes();
+				lp.width=AppContext.getScreenWidth()*4/5;
+				lp.height=android.view.WindowManager.LayoutParams.WRAP_CONTENT;
+				window.setAttributes(lp);
+				
+			}else if(checkResult==3) {//检查更新
+				toast("检查更新");
+			
+			}else if(checkResult==4) {//无需更新
+				toast("当前已是最新版本,无需更新");
+			}
+				break;
+
+			default:
+				break;
+			}
+			Log.d("my", "url:"+url);
+		}
+		
+	};
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.syssetting);
+		ViewUtils.inject(this);
+		init();
+	}
+	private void init(){
+		head_tilte.setText("系统设置");
+		ispush.setOnCheckedChangeListener(this);
+	}
+	@OnClick({R.id.turn,R.id.exit_currentuser,R.id.newversion,R.id.aboutus})
+public void myClick(View v){
+		switch (v.getId()) {
+		case R.id.turn://返回
+			finish();
+			break;
+		case R.id.newversion://检查新版本
+			if(packageManager==null){
+				packageManager=getPackageManager();
+			}
+			if(packageInfo==null){
+				try {
+					packageInfo=packageManager.getPackageInfo(getPackageName(), 0);
+				} catch (NameNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+			}
+//			UpdateVersion.getServiceVersion(this, );
+//			UpdateManager.getUpdateManager().checkAppUpdate(this, false);
+			versionCheck(packageInfo.versionCode);
+			break;
+		case R.id.aboutus://关于我们
+			Intent intent=new Intent(this, MyDialog.class);
+			intent.putExtra("type", 2);
+			intent.putExtra("title", "关于我们");
+			startActivity(intent);
+		
+			break;
+		case R.id.exit_currentuser://退出当前用户
+
+			AppContext.getUserInformation().setLogin(false);
+			AppContext.isLogin=false;
+			SharedPreferences sharedPreferences=getSharedPreferences("userInformation1",
+					Context.MODE_PRIVATE);
+					Editor editor=sharedPreferences.edit();
+					editor.putBoolean("isLogin", false);
+				
+					editor.putString("password", "");
+					editor.putString("userid", "");
+					editor.putString("userType", "");
+					editor.putString("appellation", "");
+					editor.putString("access_token", "123");
+					editor.putString("refresh_token", "123");
+					editor.putLong("tokenTime",1000);
+					editor.commit();
+					AppContext.userid="";
+					AppContext.userType="0";
+					AppContext.appellation="";
+					
+					AppContext.getUserInformation().setAccess_token("123");
+					AppContext.getUserInformation().setRefreshToken("123");
+					AppContext.isLogin=false;
+
+					editor.commit();
+					toast("您也退出当前用户");
+			break;
+			
+		}
+	}
+	/**检查版本更新
+	 * @param :version
+	 * 返回:checkResult:1~4 (1必须强制更新，2提示更新，3检查更新，4无需更新) 
+	 * */
+	private void versionCheck(int versionCode){
+		RequestParams params=new RequestParams();
+		params.addQueryStringParameter("version", String.valueOf(versionCode));
+		AppContext.getHtmlUitls().xUtils(this, HttpMethod.GET, "version/check", params, new HttpCallback() {
+			
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onBack(JSONObject json) {
+				// TODO Auto-generated method stub
+				handler.sendEmptyMessage(1);
+				try {
+					if(json.getBoolean("success")){
+					JSONObject obj=	json.getJSONObject("obj");
+					checkResult=obj.getInt("checkResult");
+					url=obj.getString("url");
+					
+					}else{
+						toast("当前版本:"+packageInfo.versionCode);
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		// TODO Auto-generated method stub
+		if(isChecked){
+			XGPushManager.registerPush(getApplicationContext(), AppContext.username);
+			toast("已开启推送");
+		}else{
+			XGPushManager.unregisterPush(getApplicationContext());
+			
+			toast("以关闭推送");
+		}
+	}
+	@Override
+	public void callBack(int finishcode) {
+		// TODO Auto-generated method stub
+		
+	}
+}

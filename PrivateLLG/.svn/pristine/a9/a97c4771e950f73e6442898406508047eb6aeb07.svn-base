@@ -1,0 +1,25 @@
+package com.llg.privateproject.view;
+
+import com.bjg.lcc.privateproject.R;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.PopupWindow;
+/**
+ * 尺码选择对话框
+ * yh
+ * 2015.6.18
+ * */
+public class ProductDetailSizePoPuWindow extends PopupWindow{
+	private View v;
+	Context context;
+	public ProductDetailSizePoPuWindow(Context context){
+		this.context=context;
+		LayoutInflater inflatrer=LayoutInflater.from(context);
+	v=	inflatrer.inflate(R.layout.product_detail_size, null);
+	setContentView(v);
+//	setAnimationStyle(android.R.style.Animation_Dialog);
+	}
+	
+}

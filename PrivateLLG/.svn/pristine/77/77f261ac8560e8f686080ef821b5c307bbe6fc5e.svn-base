@@ -1,0 +1,655 @@
+package com.llg.privateproject.actvity;
+
+import java.io.File;
+import java.io.Serializable;
+
+import java.sql.Ref;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
+import android.graphics.Paint;
+import android.graphics.Shader.TileMode;
+
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+
+import com.bjg.lcc.alipay.pay.PayActivity;
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.ScreenManager;
+import com.llg.help.Util;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.camera.FileManager;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.fragment.BaseActivity.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.ImageTools;
+import com.llg.privateproject.view.CustomProgressSmall;
+import com.llg.privateproject.view.DialogAuthentication;
+import com.llg.privateproject.view.DialogUploadPhoto;
+import com.llg.privateproject.view.ProductDetailEllipsisPoPuWindow;
+import com.llg.privateproject.view.DialogAuthentication.onConfirmListener;
+import com.llg.privateproject.view.ProductDetailEllipsisPoPuWindow.MineSelectListenr;
+import com.llg.privateproject.view.ProductDetailEllipsisPoPuWindow.SelecetListener;
+
+/**
+ * @author cc
+ * 
+ */
+public class PutAdvertisementAty extends BaseActivity implements
+		SelecetListener, MineSelectListenr, Serializable {
+
+	private String filename;
+
+	private List<String> list;
+	private ProductDetailEllipsisPoPuWindow window;
+	@ViewInject(R.id.tv_advertisement)
+	private TextView tvAdvertisement;
+
+	/**
+	 * 投放酷币总数
+	 */
+	@ViewInject(R.id.edt_co_number)
+	private EditText edtCoNumber;
+	/**
+	 * 每人可领取CO币个数
+	 */
+	@ViewInject(R.id.edt_draw_number)
+	private EditText edtDrawNumber;
+	/**
+	 * 每人随机领取现金最小值
+	 * 
+	 * 
+	 */
+	@ViewInject(R.id.edt_random_small)
+	private EditText edtRandomSmall;
+	/**
+	 * 投入现金总额
+	 */
+	@ViewInject(R.id.edt_money_total)
+	private EditText edtMoneyTotal;
+	/**
+	 * 每人随机领取现金最大值
+	 */
+	@ViewInject(R.id.edt_random_big)
+	private EditText edtRandomBig;
+	/**
+	 * 广告标题
+	 */
+	@ViewInject(R.id.edt_title)
+	private EditText edtTitle;
+
+	@ViewInject(R.id.edt_timu)
+	private EditText edtTimu;
+
+	@ViewInject(R.id.edt_confirm)
+	private EditText edtConfirm;
+
+	@ViewInject(R.id.edt_error_one)
+	private EditText edtErrorOne;
+
+	@ViewInject(R.id.edt_error_two)
+	private EditText edtErrorTwo;
+
+	@ViewInject(R.id.edt_error_three)
+	private EditText edtErrorThree;
+
+	@ViewInject(R.id.ly_load)
+	private LinearLayout lyLoad;
+
+	@ViewInject(R.id.tv_more)
+	private TextView tvMore;
+
+	@ViewInject(R.id.iv_fengmianguanggao)
+	private ImageView ivFenmian;
+
+	private File file;
+	@ViewInject(R.id.iv_guanggao)
+	private ImageView iv;
+	private String imgID;// 图片ID
+	private String coverImageId;// 封面图片ID
+	private String adInfoID;// 广告ID
+	private String adLoacationName;// 广告位分类名字
+	private String stredtMoneyTotal;// 投入现金总值
+	private String stredtCoNumber;// 投入CO总值
+	private String title;// 投入CO总值
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aty_put_advertisement);
+		ViewUtils.inject(this);
+		initData();
+		initUI();
+		validAdvertisement(UserInformation.getAccess_token());
+	}
+
+	private void initData() {
+		adLoacationName = "APP_START_PAGE";
+		list = new ArrayList<String>();
+		list.add("app投放广告");
+		list.add("app");
+	}
+
+	/**
+	 * 初始化界面
+	 */
+	private void initUI() {
+		tvAdvertisement.setText("app开始页滑动广告");
+		tvMore.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); // 下划线
+		LayoutParams params = (LayoutParams) iv.getLayoutParams();
+		params.width = LayoutParams.WRAP_CONTENT;
+		params.height = Util.dip2px(this, 100);
+		iv.setLayoutParams(params);
+		ivFenmian.setLayoutParams(params);
+
+		ivFenmian.setMaxWidth(AppContext.getScreenWidth());
+		ivFenmian.setMaxHeight(AppContext.getScreenWidth() * 30);
+		iv.setMaxWidth(AppContext.getScreenWidth());
+		iv.setMaxHeight(AppContext.getScreenWidth() * 30);
+		initAutoLoading(lyLoad);
+		autoLoading.setClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				validAdvertisement(UserInformation.getAccess_token());
+			}
+		});
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, list);
+		// LayoutParams params = (LayoutParams) iv.getLayoutParams();
+		// params.width = AppContext.getScreenWidth()-Util.dip2px(this, 10)*2;
+		// params.height = (int)( params.width)*2/5;
+		// iv.setLayoutParams(params);
+		// ivFenmian.setLayoutParams(params);
+	}
+
+	@OnClick({ R.id.iv_back, R.id.tv_advertisement, R.id.tv, R.id.btn_upload,
+			R.id.tv_confirm, R.id.tv_more, R.id.btn_upload_fengmian })
+	public void onClick(View v) {
+		Intent intent = null;
+		switch (v.getId()) {
+		case R.id.iv_back:
+			finish();
+			break;
+		case R.id.tv_more:
+			intent = new Intent(this, MoreFunction.class);
+			startActivity(intent);
+			break;
+		case R.id.tv_confirm:
+			// startActivity(new Intent(this, MineAdvertisementAty.class));
+			// if (imgID == null) {
+			// Toast.makeText(PutAdvertisementAty.this, "请上传图片",
+			// Toast.LENGTH_SHORT).show();
+			// return;
+			// }
+			verifyData();
+			break;
+		case R.id.btn_upload:
+			intent = new Intent(this,
+					com.llg.privateproject.camera.PopupSelectImage.class);
+			startActivityForResult(intent, 1);
+			break;
+		case R.id.btn_upload_fengmian:
+			intent = new Intent(this,
+					com.llg.privateproject.camera.PopupSelectImage.class);
+			startActivityForResult(intent, 2);
+			break;
+		case R.id.tv_advertisement:
+			window = new ProductDetailEllipsisPoPuWindow(this, this, 4,
+					tvAdvertisement);
+			window.setOnMineSelectListener(this);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	private void verifyData() {
+		// TODO Auto-generated method stub
+		if (adLoacationName == null) {
+			toast("请选择广告位种类");
+			return;
+		}
+		title = getStr(edtTitle);
+		if (TextUtils.isEmpty(title)) {
+			toast("请输入广告标题");
+			return;
+		}
+		if (title.length() > 15) {
+			toast("广告标题不得超过15个字符");
+			return;
+		}
+		if (TextUtils.isEmpty(imgID)) {
+			toast("请上传广告图片");
+			return;
+		}
+		// if (coverImageId == null) {
+		// toast("请上传封面广告图片");
+		// return;
+		// }
+		// if (TextUtils.isEmpty(getStr(edtTimu))) {
+		// toast("请输入红包抽奖的题目");
+		// return;
+		// }
+		VarifyTimu();
+		stredtMoneyTotal = getStr(edtMoneyTotal);
+		String stredtRandomSmall = getStr(edtRandomSmall);
+		String stredtRandomBig = getStr(edtRandomBig);
+		String stredtDrawNumber = getStr(edtDrawNumber);
+		stredtCoNumber = getStr(edtCoNumber);
+		if (stredtMoneyTotal.length() > 0) {
+			if (!Util.isDouble(stredtMoneyTotal)) {
+				toast("总现金小数点后最多只能输入两位");
+				return;
+			}
+			if (stredtRandomSmall.length() == 0
+					|| stredtRandomBig.length() == 0) {
+				toast("请输入现金领取值");
+				return;
+			}
+			if (!Util.isDouble(stredtRandomSmall)
+					|| !Util.isDouble(stredtRandomBig)) {
+				toast("现金领取值小数点后最多只能输入两位小数");
+				return;
+			}
+			try {
+				Double smallMoney = Double.parseDouble(stredtRandomSmall);
+				Double bigMoney = Double.parseDouble(stredtRandomBig);
+				Double MoneyTotal = Double.parseDouble(stredtMoneyTotal);
+				if (bigMoney - smallMoney < 0
+						|| (MoneyTotal - smallMoney < 0 || MoneyTotal
+								- bigMoney < 0)) {
+					toast("请输入合法现金领取值");
+					return;
+				}
+				if (smallMoney < 0.1) {
+					toast("每人领取现金最低金额0.1元");
+					return;
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		if (stredtCoNumber.length() > 0) {
+			if (stredtDrawNumber.length() == 0) {
+				toast("请输入酷币领取值");
+				return;
+			}
+			if ((stredtCoNumber.substring(0, 1).equals("0") || stredtDrawNumber
+					.substring(0, 1).equals("0"))) {
+				toast("请输入合法酷币值");
+				return;
+			}
+			try {
+				int CoNumber = Integer.parseInt(stredtCoNumber);
+				int DrawNumber = Integer.parseInt(stredtDrawNumber);
+				if (CoNumber - DrawNumber < 0) {
+					toast("请输入合法酷币领取值");
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		if (stredtCoNumber.length() > 0 || stredtMoneyTotal.length() > 0) {
+			if (TextUtils.isEmpty(getStr(edtTimu))) {
+				toast("请输入抽奖题目");
+				return;
+			}
+			VarifyTimu();
+		}
+		customProgressSmall.setMessage("正在加载中");
+		customProgressSmall.show();
+		uploadAdvertisement(UserInformation.getAccess_token());
+	}
+
+	private void VarifyTimu() {
+		if (!TextUtils.isEmpty(getStr(edtTimu))) {
+			if (TextUtils.isEmpty(getStr(edtConfirm))) {
+				toast("请输入正确答案");
+				return;
+			}
+			if (TextUtils.isEmpty(getStr(edtErrorOne))) {
+				toast("请输入错误答案1");
+				return;
+			}
+			if (TextUtils.isEmpty(getStr(edtErrorTwo))) {
+				toast("请输入错误答案2");
+				return;
+			}
+			if (TextUtils.isEmpty(getStr(edtErrorThree))) {
+				toast("请输入错误答案3");
+				return;
+			}
+		}
+	}
+
+	/**
+	 * 上传广告
+	 */
+	private void uploadAdvertisement(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addQueryStringParameter("title", title);
+		params.addQueryStringParameter("imageId", imgID);// 图片ID
+		if (!TextUtils.isEmpty(coverImageId)) {
+			params.addQueryStringParameter("coverImageId", coverImageId);// 图片ID
+		}
+		if (!TextUtils.isEmpty(getStr(edtTimu))) {
+			params.addQueryStringParameter("question", getStr(edtTimu));// 题目
+			params.addQueryStringParameter("correctAnswer", getStr(edtConfirm));// 正确答案
+			params.addQueryStringParameter("errorAnswer1", getStr(edtErrorOne));// 错误答案1
+			params.addQueryStringParameter("errorAnswer2", getStr(edtErrorTwo));// 错误答案2
+			params.addQueryStringParameter("errorAnswer3",
+					getStr(edtErrorThree));// 错误答案3
+		}
+		params.addQueryStringParameter("adLocationName", adLoacationName);// 广告位种类
+		if (getStr(edtMoneyTotal).length() > 0) {
+			params.addQueryStringParameter("money", getStr(edtMoneyTotal));// 现金总额
+			params.addQueryStringParameter("moneyMin", getStr(edtRandomSmall));// 最小获取现金值
+			params.addQueryStringParameter("moneyMax", getStr(edtRandomBig));// 最大获取现金值
+		}
+		if (getStr(edtCoNumber).length() > 0) {
+			params.addQueryStringParameter("coAmount", getStr(edtCoNumber));// 投放co币总额
+			params.addQueryStringParameter("coMin", getStr(edtDrawNumber));// 每人可领取co币最少值
+		}
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+
+		"m/ad/saveNormalAd", params, new HttpCallback() {
+
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				customProgressSmall.dismiss();
+				Toast.makeText(PutAdvertisementAty.this, "上传异常",
+						Toast.LENGTH_SHORT).show();
+			}
+
+			@Override
+			public void onBack(JSONObject json) {
+				// TODO Auto-generated method stub
+				Map<String, Object> map = ParseJson.getParseJson()
+						.parseIsSuccess(json);
+				customProgressSmall.dismiss();
+				if ((Boolean) map.get("isSuccess")) {
+					try {
+						adInfoID = json.getJSONObject("obj").optString("id");
+						if ((json.getJSONObject("obj").optString("adStatus"))
+								.equals("3")) {
+							initDialog();
+						} else {
+							toast("投放成功");
+							finish();
+						}
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				} else {
+					if (map.get("errorCode").equals("NOT_LOGIN")) {
+						setRefreshListtener(new Refresh() {
+
+							@Override
+							public void refreshRequst(String access_token) {
+								// TODO Auto-generated method stub
+								uploadAdvertisement(access_token);
+							}
+						});
+						RefeshToken();
+					} else {
+						toast(json.optString("msg"));
+					}
+				}
+			}
+
+			/**
+			 * 初始化dialog
+			 */
+			private void initDialog() {
+				final DialogAuthentication dialogAuthentication = new DialogAuthentication(
+						PutAdvertisementAty.this);
+				dialogAuthentication
+						.setOnConfirmListener(new onConfirmListener() {
+
+							@Override
+							public void request() {
+								// TODO Auto-generated method stub
+								dialogAuthentication.dismiss();
+								customProgressSmall = CustomProgressSmall
+										.initDialog(PutAdvertisementAty.this,
+												"正在支付中", true,
+												new OnCancelListener() {
+
+													@Override
+													public void onCancel(
+															DialogInterface arg0) {
+														// TODO
+														// Auto-generated
+														// method stub
+														customProgressSmall
+																.dismiss();
+													}
+												});
+								customProgressSmall.show();
+								requesPay(UserInformation.getAccess_token(),
+										stredtMoneyTotal);
+							}
+						});
+				dialogAuthentication.initUI();
+				dialogAuthentication.setTitle("支付");
+				dialogAuthentication.setMessage("本次需要支付现金" + stredtMoneyTotal
+						+ "元," + "需要支付酷币" + stredtCoNumber + "个,"
+						+ "账户酷币余额不足折算成现金支付,10个酷币等于1元现金");
+				dialogAuthentication.show();
+			}
+		});
+	}
+
+	/**
+	 * 验证是否能发布广告
+	 */
+	private void validAdvertisement(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+
+		"m/ad/validPublishAuth", params, new HttpCallback() {
+
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				autoLoading.showExceptionLayout();
+			}
+
+			@Override
+			public void onBack(JSONObject json) {
+				// TODO Auto-generated method stub
+				Map<String, Object> map = ParseJson.getParseJson()
+						.parseIsSuccess(json);
+				if ((Boolean) map.get("isSuccess")) {
+					try {
+						JSONObject jsonObject = json.getJSONObject("obj");
+						String isSuccess = jsonObject.optString("validResult");
+						String msg = jsonObject.optString("errorMsg");
+						if (isSuccess.equals("N")) {
+							toast(msg);
+							PutAdvertisementAty.this.finish();
+						} else {
+							autoLoading.hideAll();
+						}
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					if (map.get("errorCode").equals("NOT_LOGIN")) {
+						setRefreshListtener(new Refresh() {
+
+							@Override
+							public void refreshRequst(String access_token) {
+								// TODO Auto-generated method stub
+								validAdvertisement(access_token);
+							}
+						});
+						RefeshToken();
+					}
+				}
+			}
+		});
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		BitmapUtils bitmapUtils = new BitmapUtils(this);
+		if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+			file = new File(data.getStringExtra("ImageFilePath"));
+			if (file != null) {
+				bitmapUtils.display(iv, file.getAbsolutePath());
+			}
+			setRefreshListener(new RefreshImgID() {
+				@Override
+				public void refreshImgID(String imgID) {
+					// TODO Auto-generated method stub
+					PutAdvertisementAty.this.imgID = imgID;
+				}
+			});
+		} else if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
+			file = new File(data.getStringExtra("ImageFilePath"));
+			if (file != null) {
+				bitmapUtils.display(ivFenmian, file.getAbsolutePath());
+			}
+			setRefreshListener(new RefreshImgID() {
+				@Override
+				public void refreshImgID(String imgID) {
+					// TODO Auto-generated method stub
+					PutAdvertisementAty.this.coverImageId = imgID;
+				}
+			});
+		}
+		if (file != null) {
+			uploadPhoto(file,
+					AppContext.getUserInformation().getAccess_token(), this);
+		}
+	}
+
+	/**
+	 * 请求去支付
+	 */
+	private void requesPay(String access_token, final String money) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		// if (list.get(position).getID() == null) {
+		// Toast.makeText(context, "广告不存在", Toast.LENGTH_SHORT).show();
+		// return;
+		// }
+		params.addQueryStringParameter("adInfoId", adInfoID);
+		AppContext.getHtmlUitls().xUtilsm(PutAdvertisementAty.this,
+				HttpMethod.POST,
+
+				"m/order/saveAdOrder", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						// autoLoading.showExceptionLayout();
+						customProgressSmall.dismiss();
+						Toast.makeText(PutAdvertisementAty.this, "支付失败",
+								Toast.LENGTH_SHORT).show();
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						ParseJson parseJson = ParseJson.getParseJson();
+						Map<String, Object> map = parseJson
+								.parseIsSuccess(json);
+						if ((Boolean) map.get("isSuccess")) {
+							String id = null;
+							try {
+								id = json.getJSONObject("obj").optString("id");
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							customProgressSmall.dismiss();
+							Intent intent = new Intent(
+									PutAdvertisementAty.this, PayActivity.class);
+							intent.putExtra("price", money);
+							intent.putExtra("code", id);
+							finish();
+							startActivity(intent);
+						} else {
+							if (map.get("errorCode").equals("NOT_LOGIN")) {
+								setRefreshListtener(new Refresh() {
+
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+										requesPay(access_token, money);
+									}
+								});
+								RefeshToken();
+							} else {
+								Toast.makeText(PutAdvertisementAty.this,
+										json.optString("msg"),
+										Toast.LENGTH_LONG).show();
+							}
+						}
+					}
+				});
+	}
+
+	@Override
+	public void setMessage(String message, int type) {
+		// TODO Auto-generated method stub
+		tvAdvertisement.setText(message);
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	}
+
+	@Override
+	public void setAdLocationName(String str) {
+		// TODO Auto-generated method stub
+		adLoacationName = str;
+		Log.i("tag", adLoacationName + "====adLocationName=======");
+	}
+}

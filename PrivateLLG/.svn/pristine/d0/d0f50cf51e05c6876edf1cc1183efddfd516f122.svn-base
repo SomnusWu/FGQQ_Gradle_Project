@@ -1,0 +1,525 @@
+package com.llg.privateproject.camera;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import com.bjg.lcc.privateproject.R;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.SystemClock;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.widget.Toast;
+
+/**
+ * <p>
+ * 选择照片<br/>
+ * 在Manifest中添加两个Activity标签<br/>
+ * 1、<br/>
+ * android:name="com.toocms.frame.ui.PopupSelectImage"<br/>
+ * android:theme="@style/style_window_showmenu" <br/>
+ * 2、<br/>
+ * android:name="cn.toocms.android.common.crop.CropImageActivity"<br/>
+ * <br/>
+ * onActivityResult中的resultCode值为{@link Constants.SELECT_IMAGE}
+ * 
+ * @author Zero @date 2014-2-17<br>
+ * @version 1.0<br>
+ */
+public class PopupSelectImage extends Activity {
+
+	// private static final int REQUEST_CODE_FOLDER = 1006;
+	// private static final int REQUEST_CODE_CAMERA = 1007;
+	//
+	// private File file; // 缓存图片文件
+	// private String mpath; // 缓存图片文件
+	//
+	// private Intent resultIntent;
+	// private Intent intent;
+	// private boolean isCrop = true;;
+	// private int height = 500;
+	// private int width = 500;
+	//
+	// @Override
+	// protected void onCreate(Bundle savedInstanceState) {
+	// super.onCreate(savedInstanceState);
+	// // 竖屏锁定
+	// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+	// // setTheme(R.style.style_window_showmenu);
+	// setContentView(R.layout.pop_selectimage);
+	// // 初始化数据
+	// // file = new File(FileManager.getCompressFilePath()
+	// // + System.currentTimeMillis() + ".jpg");
+	// if (getIntent().getExtras() != null) {
+	// isCrop = getIntent().getExtras().getBoolean("isCrop");
+	// height = getIntent().getExtras().getInt("height");
+	// width = getIntent().getExtras().getInt("width");
+	// }
+	// mpath = FileManager.getCompressFilePath()
+	// + SystemClock.currentThreadTimeMillis() + ".jpg";
+	// file = new File(mpath);
+	// resultIntent = getIntent();
+	// // 初始化控件
+	// // findViewById(R.id.pop_selectimage_linlay_content).setOnClickListener(
+	// // this);
+	// findViewById(R.id.pop_selectimage_btn_camera).setOnClickListener(
+	// new OnClickListener() {
+	//
+	// private android.content.Intent intent;
+	//
+	// @Override
+	// public void onClick(View v) {
+	// if (Environment.getExternalStorageState().equals(
+	// Environment.MEDIA_MOUNTED)) {
+	// if (!file.exists()) {
+	// File f = new File(FileManager.getSaveFilePath());
+	// File file=new File(FileManager.getCompressFilePath());
+	// if (!f.exists()) {
+	// f.mkdirs();
+	// }
+	// if (!file.exists()) {
+	// file.mkdirs();
+	// }
+	//
+	// try {
+	// file.createNewFile();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// Toast.makeText(PopupSelectImage.this,
+	// "照片创建失败!", Toast.LENGTH_LONG)
+	// .show();
+	// return;
+	// }
+	// }
+	// intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	// intent.putExtra(MediaStore.EXTRA_OUTPUT,
+	// Uri.fromFile(file));
+	// try {
+	// startActivityForResult(intent,
+	// REQUEST_CODE_CAMERA);
+	// } catch (Exception e) {
+	// // TODO: handle exception
+	// Toast.makeText(PopupSelectImage.this,
+	// "没有照相机权限!", Toast.LENGTH_LONG).show();
+	// }
+	// } else {
+	// Toast.makeText(PopupSelectImage.this,
+	// "sdcard无效或没有插入!", Toast.LENGTH_LONG).show();
+	// }
+	// }
+	// });
+	// findViewById(R.id.pop_selectimage_btn_folder).setOnClickListener(
+	// new OnClickListener() {
+	//
+	// @Override
+	// public void onClick(View v) {
+	// intent = new Intent();
+	// intent.setType("image/*");
+	// intent.setAction(Intent.ACTION_GET_CONTENT);
+	// startActivityForResult(intent, REQUEST_CODE_FOLDER);
+	// }
+	// });
+	// findViewById(R.id.pop_selectimage_btn_canle).setOnClickListener(
+	// new OnClickListener() {
+	//
+	// @Override
+	// public void onClick(View v) {
+	// finish();
+	// }
+	// });
+	// }
+	//
+	// @Override
+	// public boolean onTouchEvent(MotionEvent event) {
+	// finish();
+	// return true;
+	// }
+	//
+	// @Override
+	// public void finish() {
+	// super.finish();
+	// // overridePendingTransition(R.anim.push_bottom_out, 0);
+	// }
+	//
+	// @Override
+	// protected void onActivityResult(int requestCode, int resultCode, Intent
+	// data) {
+	// super.onActivityResult(requestCode, resultCode, data);
+	// if (resultCode != RESULT_OK)
+	// return;
+	// switch (requestCode) {
+	// case REQUEST_CODE_CAMERA:
+	// if (file != null && file.exists()) {
+	// if (FileManager.hasSDCard()) {
+	// if (isCrop) {
+	// android.util.Log.i("tag", "------进入了相机裁剪---");
+	// beginCrop(Uri.fromFile(file));
+	// } else {
+	// android.util.Log.i("tag", "------没有进入了相机裁剪---");
+	// handleCrop(resultCode, data);
+	// }
+	// } else {
+	// Toast.makeText(this, "未找到存储卡,无法存储照片", Toast.LENGTH_LONG)
+	// .show();
+	// }
+	// }
+	// break;
+	// case REQUEST_CODE_FOLDER:
+	// beginCrop(data.getData());
+	// break;
+	// case Crop.REQUEST_CROP:
+	// handleCrop(resultCode, data);
+	// break;
+	// default:
+	// break;
+	// }
+	// }
+	//
+	// // 开始裁剪
+	// private void beginCrop(Uri source) {
+	// Uri outputUri = Uri.fromFile(file);
+	// Log.i("", (source == null) + "source");
+	// new Crop(source).output(outputUri).asSquare().start(this);
+	// }
+	//
+	// // 保存裁剪之后的图片数据
+	// private void handleCrop(int resultCode, Intent result) {
+	// if (resultCode == RESULT_OK) {
+	// // if (isCrop) {
+	// // CompressionUtil.compressionBitmap(mpath, height, width, this);
+	// // } else {
+	// CompressionUtil.compressionBitmap(mpath, this);
+	// // }
+	// // if (file.exists())
+	// // file.delete();
+	// android.util.Log.i("tag", mpath
+	// + "------+++++handleCrop+++++---path");
+	// resultIntent.putExtra("file", new File(mpath));
+	// setResult(RESULT_OK, resultIntent);
+	// finish();
+	//
+	// } else if (resultCode == Crop.RESULT_ERROR) {
+	// Toast.makeText(this, Crop.getError(result).getMessage(),
+	// Toast.LENGTH_SHORT).show();
+	// }
+	// }
+	private static final int REQUEST_CODE_FOLDER = 1006;
+	private static final int REQUEST_CODE_CAMERA = 1007;
+
+	private File file; // 缓存图片文件
+
+	private Intent resultIntent;
+	private Intent intent;
+
+	private String mpath;
+	private String mImageFilePath;
+	public static final String IMAGEFILEPATH = "ImageFilePath";
+
+	public final static String IMAGE_PATH = "image_path";
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		// 判断 activity被销毁后 有没有数据被保存下来
+		if (savedInstanceState != null) {
+			mImageFilePath = savedInstanceState.getString("ImageFilePath");
+			Log.i("tag", mImageFilePath + "======***====mImageFilePath");
+			if (mImageFilePath != null) {
+				File mFile = new File(mImageFilePath);
+				if (mFile.exists()) {
+					Intent rsl = new Intent();
+					rsl.putExtra("ImageFilePath", mImageFilePath);
+					setResult(Activity.RESULT_OK, rsl);
+					Log.i("tag", "=======图片拍摄成功=======onCreate");
+					finish();
+					return;
+				} else {
+					Log.i("tag", "=============图片拍摄失败");
+				}
+			}
+		}
+		// 竖屏锁定
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		// setTheme(R.style.style_window_showmenu);
+		setContentView(R.layout.pop_selectimage);
+		WindowManager.LayoutParams params = getWindow().getAttributes();
+		// params.width = Settings.displayWidth;
+		// 初始化数据
+		file = new File(FileManager.getCompressFilePath()
+				+ System.currentTimeMillis() + ".jpg");
+		resultIntent = getIntent();
+		// 初始化控件
+		// findViewById(R.id.pop_selectimage_linlay_content).setOnClickListener(
+		// this);
+		findViewById(R.id.pop_selectimage_btn_camera).setOnClickListener(
+				new OnClickListener() {
+
+					private Intent intent;
+
+					@Override
+					public void onClick(View v) {
+						if (Environment.getExternalStorageState().equals(
+								Environment.MEDIA_MOUNTED)) {
+							if (!file.exists()) {
+								File f = new File(FileManager.getSaveFilePath());
+								if (!f.exists()) {
+									f.mkdirs();
+								}
+								File f2 = new File(FileManager
+										.getCompressFilePath());
+								if (!f2.exists()) {
+									f2.mkdirs();
+								}
+								try {
+									file.createNewFile();
+									mpath = file.getAbsolutePath();
+									Log.i("tag", mpath
+											+ "=====onClick=====mpath");
+								} catch (IOException e) {
+									e.printStackTrace();
+									Toast.makeText(PopupSelectImage.this,
+											"照片创建失败!", Toast.LENGTH_LONG)
+											.show();
+									return;
+								}
+							}
+							intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+							intent.putExtra(MediaStore.EXTRA_OUTPUT,
+									Uri.fromFile(file));
+							startActivityForResult(intent, REQUEST_CODE_CAMERA);
+						} else {
+							Toast.makeText(PopupSelectImage.this,
+									"sdcard无效或没有插入!", Toast.LENGTH_LONG).show();
+						}
+					}
+				});
+		findViewById(R.id.pop_selectimage_btn_folder).setOnClickListener(
+				new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						intent = new Intent();
+						intent.setType("image/*");
+						intent.setAction(Intent.ACTION_GET_CONTENT);
+						startActivityForResult(intent, REQUEST_CODE_FOLDER);
+					}
+				});
+		findViewById(R.id.pop_selectimage_btn_canle).setOnClickListener(
+				new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						finish();
+					}
+				});
+	}
+
+	/**
+	 * 读取图片的旋转的角度
+	 * 
+	 * @param path
+	 *            图片绝对路径
+	 * @return 图片的旋转角度
+	 */
+	private int getBitmapDegree(String path) {
+		int degree = 0;
+		try {
+			// 从指定路径下读取图片，并获取其EXIF信息
+			ExifInterface exifInterface = new ExifInterface(path);
+			// 获取图片的旋转信息
+			int orientation = exifInterface.getAttributeInt(
+					ExifInterface.TAG_ORIENTATION,
+					ExifInterface.ORIENTATION_UNDEFINED);
+			switch (orientation) {
+			case ExifInterface.ORIENTATION_ROTATE_90:
+				degree = 90;
+				break;
+			case ExifInterface.ORIENTATION_ROTATE_180:
+				degree = 180;
+				break;
+			case ExifInterface.ORIENTATION_ROTATE_270:
+				degree = 270;
+				break;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return degree;
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		finish();
+		return true;
+	}
+
+	@Override
+	public void finish() {
+		super.finish();
+		overridePendingTransition(R.anim.push_bottom_out, 0);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		mpath = file.getAbsolutePath();
+		Log.i("tag", mpath + "=========onActivityResult===========mpath");
+		if (resultCode != RESULT_OK)
+			return;
+		switch (requestCode) {
+		case REQUEST_CODE_CAMERA:
+			if (file != null && file.exists()) {
+				if (FileManager.hasSDCard()) {
+					mpath = file.getAbsolutePath();
+					// Bitmap bitmap = BitmapFactory.decodeFile(mpath);
+					// int degree = getBitmapDegree(mpath);
+					// Bitmap bitmap2 = rotateBitmapByDegree(bitmap, degree);
+					// FileOutputStream fOut = null;
+					// try {
+					// fOut = new FileOutputStream(mpath);
+					// fOut.flush();
+					// bitmap2.compress(Bitmap.CompressFormat.JPEG, 50, fOut);
+					// fOut.flush();
+					// fOut.close();
+					// } catch (FileNotFoundException e) {
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+					// } catch (IOException e) {
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+					// }
+					// Log.i("tag",
+					// degree
+					// + "=========degree=====onActivityResult======degree");
+					beginCrop(Uri.fromFile(file));
+				} else {
+					Toast.makeText(this, "未找到存储卡,无法存储照片", Toast.LENGTH_LONG)
+							.show();
+				}
+			}
+			break;
+		case REQUEST_CODE_FOLDER:
+			beginCrop(data.getData());
+			
+			break;
+		case Crop.REQUEST_CROP:
+			handleCrop(resultCode, data);
+			break;
+		default:
+			break;
+		}
+	}
+
+	// 开始裁剪
+	private void beginCrop(Uri source) {
+//		if (!file.exists()) {
+//			File f = new File(FileManager.getSaveFilePath());
+//			if (!f.exists()) {
+//				f.mkdirs();
+//			}
+//		}
+//		File f2 = new File(FileManager
+//				.getCompressFilePath());
+//		if (!f2.exists()) {
+//			f2.mkdirs();
+//		}
+		Uri outputUri = Uri.fromFile(file);
+//		mpath = file.getAbsolutePath();
+		new Crop(source).output(outputUri).asSquare().start(this);
+//		int mdegree = getBitmapDegree(source.getPath());
+//		Log.i("tag", mdegree
+//				+ "=========mdegree=====onActivityResult======mdegree");
+		mpath = file.getAbsolutePath();
+	}
+
+	// 保存裁剪之后的图片数据
+	private void handleCrop(int resultCode, Intent result) {
+		if (resultCode == RESULT_OK) {
+			String path = CompressionUtil.compressionBitmap(
+					file.getAbsolutePath(), this);
+			mpath = path;
+			if (file.exists())
+				file.delete();
+			Toast.makeText(this, ((mpath == null) + "===mapth=="),
+					Toast.LENGTH_LONG).show();
+			resultIntent.putExtra("ImageFilePath", mpath);
+			setResult(RESULT_OK, resultIntent);
+			finish();
+		} else if (resultCode == Crop.RESULT_ERROR) {
+			Toast.makeText(this, Crop.getError(result).getMessage(),
+					Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		Log.i("tag", "=================onStart");
+	}
+
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		Log.i("tag", "=================onRestart");
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		Log.i("tag", "=================onResume");
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		Log.i("tag", "=================onDestroy");
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		outState.putString("ImageFilePath", mpath);
+		Log.i("tag", mpath + "=========mpath========onSaveInstanceState");
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+		mImageFilePath = savedInstanceState.getString("ImageFilePath");
+		Log.i("tag", mImageFilePath
+				+ "========onRestoreInstanceState=====mImageFilePath");
+		File mFile = new File(mImageFilePath);
+		if (mFile.exists()) {
+			Intent rsl = new Intent();
+			rsl.putExtra("ImageFilePath", mImageFilePath);
+			setResult(Activity.RESULT_OK, rsl);
+			Log.i("tag", "==============图片拍摄成功");
+			finish();
+			return;
+		} else {
+			Log.i("tag", "=============图片拍摄失败");
+		}
+	}
+
+}

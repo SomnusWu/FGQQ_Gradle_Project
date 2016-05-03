@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+   
+	    android:paddingTop="8dp"
+	    android:paddingBottom="8dp"
+	    android:orientation="horizontal">
+	    <TextView 
+	        android:id="@+id/bianhao"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:text="编号"
+	        android:textSize="12sp"
+	        
+	        android:textColor="@color/black2"/>
+	    <TextView android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:id="@+id/mianzhi"
+	        android:gravity="center"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:text="面值"
+	        android:textSize="12sp"
+	        android:textColor="@color/orange2"/>
+	    <TextView android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:id="@+id/zhuangtai"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:text="状态"
+	        android:textSize="12sp"
+	        android:textColor="@color/black2"/>
+	    <TextView android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:id="@+id/youxiaoqi"
+	        android:text="有效期至"
+	        android:textSize="12sp"
+	        android:textColor="@color/black2"/>
+
+
+</LinearLayout>

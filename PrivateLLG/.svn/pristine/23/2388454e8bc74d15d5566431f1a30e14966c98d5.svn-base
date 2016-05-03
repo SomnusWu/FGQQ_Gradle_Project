@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <include layout="@layout/product_detail_head" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:visibility="gone"
+        >
+
+        <RadioGroup
+            android:id="@+id/rg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black4"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" >
+
+            <!-- 全部评论 -->
+
+            <RadioButton
+                android:id="@+id/rb_all"
+                style="@style/title_text_style"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:button="@null"
+                android:checked="true"
+                android:text="全部（55）"
+                android:textColor="@drawable/rb_product_detail_text_status"
+                android:textSize="12sp" />
+
+            <View
+                style="@style/small_divider"
+                android:layout_gravity="center"
+                android:background="#fff" />
+            <!-- 好评 -->
+
+            <RadioButton
+                android:id="@+id/tv_good"
+                style="@style/title_text_style"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:button="@null"
+                android:text="好评（40）"
+                android:textColor="@drawable/rb_product_detail_text_status"
+                android:textSize="12dp" />
+
+            <View
+                style="@style/small_divider"
+                android:layout_gravity="center" />
+            <!-- 中评 -->
+
+            <RadioButton
+                android:id="@+id/tv_middle"
+                style="@style/title_text_style"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:button="@null"
+                android:text="中评(2)"
+                android:textColor="@drawable/rb_product_detail_text_status"
+                android:textSize="12sp" />
+
+            <View
+                style="@style/small_divider"
+                android:layout_gravity="center" />
+            <!-- 差评 -->
+
+            <RadioButton
+                android:id="@+id/tv_bad"
+                style="@style/title_text_style"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:button="@null"
+                android:text="差评(2)"
+                android:textColor="@drawable/rb_product_detail_text_status"
+                android:textSize="12sp" />
+
+            <View
+                style="@style/small_divider"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+            <!-- 有图 -->
+
+            <RadioButton
+                android:id="@+id/tv_haspic"
+                style="@style/title_text_style"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:button="@null"
+                android:text="有图(2)"
+                android:textColor="@drawable/rb_product_detail_text_status"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </RadioGroup>
+        <!-- 指示剂 -->
+
+        <LinearLayout
+            android:id="@+id/indictor"
+            android:layout_width="107dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="44dp" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="@color/orange1" />
+        </LinearLayout>
+    </FrameLayout>
+    <!-- 评论列表 -->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/gv_comments"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            ptr:ptrHeaderTextColor="@color/black3"
+            ptr:ptrMode="both" >
+        </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+        <include layout="@layout/product_detail_bottom" />
+
+        <ImageView
+            android:id="@+id/iv_totop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="60dp"
+            android:layout_marginRight="10dp"
+            android:alpha="0.3"
+            android:src="@drawable/threestagepage_fanhuidingbu"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:scrollbars="none"
+    android:id="@+id/sv_r"
+    android:padding="30dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+	<LinearLayout android:layout_width="match_parent"
+	    android:layout_height="250dp"
+	    android:background="@drawable/dengluzhuce_bj03"
+	    android:orientation="vertical">
+        <EditText
+            android:id="@+id/r_et_username"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="0dp"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:phoneNumber="true"
+            android:background="@null"
+            android:textColor="@color/black2"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@drawable/dengluzhuce_user"
+            android:hint="请输入手机号"
+            android:singleLine="true" />
+<View android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/graywhite"/>
+        <EditText
+            android:id="@+id/r_et_password"
+            android:layout_width="match_parent"
+           android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="0dp"
+            android:padding="10dp"
+            android:textSize="16sp"
+               android:textColor="@color/black2"
+            android:background="@null"
+            android:drawableLeft="@drawable/dengluzhuce_password"
+            android:inputType="textPassword"
+            android:drawablePadding="5dp"
+            android:hint="请输入密码"
+            android:includeFontPadding="true"
+            android:singleLine="true" />
+<View android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/graywhite"/>
+        <EditText
+            android:id="@+id/r_et_passwordconfirm"
+            android:layout_width="match_parent"
+           android:layout_height="0dp"
+            android:layout_weight="1"
+               android:textColor="@color/black2"
+            android:layout_marginTop="0dp"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:background="@null"
+            android:drawableLeft="@drawable/dengluzhuce_password"
+            android:inputType="textPassword"
+            android:hint="确认密码"
+            android:drawablePadding="5dp"
+            android:singleLine="true" />
+<View android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/graywhite"/>
+        <EditText
+            android:id="@+id/invitecode"
+            android:layout_width="match_parent"
+           android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+               android:textColor="@color/black2"
+            android:layout_marginTop="0dp"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:background="@null"
+            android:drawableLeft="@drawable/dengluzhuce_yaoqingma"
+            android:inputType="textPassword"
+            android:hint="填入朋友邀请码可获更多优惠"
+            android:drawablePadding="5dp"
+            android:singleLine="true" />
+<View android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/graywhite"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="0dp"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/r_et_smscode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:layout_gravity="center"
+                   android:textColor="@color/black2"
+                android:background="@null"
+                android:drawableLeft="@drawable/dengluzhuce_message"
+                android:hint="请输入手机验证码"
+                android:drawablePadding="5dp"
+                android:singleLine="true" />
+
+          <TextView
+                android:id="@+id/r_tv_smscode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:padding="10dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:text="获取验证码"
+                android:textColor="@color/orange1"
+              
+                android:textSize="12sp" />
+
+        </LinearLayout>
+</LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_r_p"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal" >
+
+            <CheckBox
+                android:id="@+id/r_cb_isagree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:checked="true"
+                android:background="@drawable/cb_status"
+                android:layout_gravity="center" />                         
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                
+                android:text="我同意"
+                android:textColor="#8c5204"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/r_tv_agreement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="《风购全球注册协议》"
+                android:textColor="#fbc16d"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/r_tv_register"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/dengluzhuce_bj01"
+            android:gravity="center"
+            android:enabled="true"
+            android:padding="10dp"
+            android:text="注册"
+            android:textColor="@color/rosered"
+            android:textSize="20sp" />
+
+       
+    </LinearLayout>
+    
+</LinearLayout>

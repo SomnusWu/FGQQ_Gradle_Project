@@ -1,0 +1,160 @@
+package com.llg.privateproject.fragment;
+
+import java.sql.Date;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.actvity.PhoneActivity;
+import com.llg.privateproject.actvity.PhoneRegistAty;
+import com.llg.privateproject.actvity.WebLoginActivity;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseFragment.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+public class FragmentPhoneMoney extends BaseFragment {
+	private PhoneActivity context;
+	@ViewInject(R.id.tel)
+	private TextView tel;
+	@ViewInject(R.id.money)
+	private TextView money;
+	@ViewInject(R.id.lastdate)
+	private TextView lastdate;
+	private String account = "";
+	private String mymoney = "";
+	private String lasttime = "";
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 1:
+
+				tel.setText(account);
+				money.setText(mymoney);
+				lastdate.setText(lasttime);
+				break;
+
+			default:
+				break;
+			}
+		};
+	};
+
+	@Override
+	public String getFragmentName() {
+		// TODO Auto-generated method stub
+		return "FragmentPhoneMoney";
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		context = (PhoneActivity) activity;
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		View v = inflater.inflate(R.layout.phonemoney, null);
+		ViewUtils.inject(this, v);
+		if (TextUtils.isEmpty(getSharePrefence().getString("phone", null))) {
+			toast("余额查询失败");
+			return v;
+		}
+		customProgressSmall.show();
+		searchBalance(UserInformation.getAccess_token());
+		return v;
+	}
+
+	private void searchBalance(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addQueryStringParameter("tel",
+				getSharePrefence().getString("phone", null));
+
+		AppContext.getHtmlUitls().xUtils(getActivity(), HttpMethod.POST,
+				"tel/getinfo", params,
+
+				new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						Log.i("tag", msg);
+						customProgressSmall.dismiss();
+						if (msg.equals("401")) {
+							startActivity(new Intent(getActivity(),
+									WebLoginActivity.class));
+						} else {
+							toast("余额查询失败");
+						}
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						Log.i("tag", json.toString());
+						try {
+							if (json.getBoolean("success")) {
+								customProgressSmall.dismiss();
+								JSONArray infoCustomers = json.getJSONObject(
+										"obj").getJSONArray("infoCustomers");
+								if (infoCustomers.length() > 0) {
+									JSONObject obj = infoCustomers
+											.getJSONObject(0);
+									account = obj.getString("account");
+									mymoney = obj.getString("money");
+									lasttime = ""
+											+ new Date(obj.getLong("validTime"));// .getInt("validTime")));
+									handler.sendEmptyMessage(1);
+								}
+							} else {
+								if (json.get("errorCode").equals("NOT_LOGIN")) {
+									// Log.i("tag", json.toString()
+									// + "------监听上一句--------");
+									setRefreshListtener(new Refresh() {
+										@Override
+										public void refreshRequst(
+												String access_token) {
+											// TODO Auto-generated method
+											// stub
+											Log.i("tag", "------监听里-------");
+											searchBalance(UserInformation
+													.getAccess_token());
+										}
+									});
+									RefeshToken();
+								} else {
+									customProgressSmall.dismiss();
+									toast("查询余额失败");
+								}
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+
+}

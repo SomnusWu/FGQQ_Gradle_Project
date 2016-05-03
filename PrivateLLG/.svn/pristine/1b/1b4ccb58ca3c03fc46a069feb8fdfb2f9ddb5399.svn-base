@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <include layout="@layout/order_clear_head" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/black6" />
+    <!-- 订单状态 -->
+
+
+    <!-- android:background="#bbcecbba" -->
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/title_tv"
+                style="@style/title_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/wdedingdan_daifukuan_gray"
+                android:text="待付款"
+                android:textColor="@color/black2"
+                android:textSize="12sp" />
+        </FrameLayout>
+
+        <View
+            style="@style/small_divider"
+            android:layout_gravity="center"
+            android:background="@color/black8" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/title_tv1"
+                style="@style/title_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/wdedingdan_daishouhuo_gray"
+                android:text="待收货"
+                android:textColor="@color/black2"
+                android:textSize="12dp" />
+        </FrameLayout>
+
+        <View
+            style="@style/small_divider"
+            android:layout_gravity="center"
+            android:background="@color/black8" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/title_tv2"
+                style="@style/title_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/wdedingdan_daipingjia_gray"
+                android:text="待评价"
+                android:textColor="@color/black2"
+                android:textSize="12sp" />
+        </FrameLayout>
+
+        <View
+            style="@style/small_divider"
+            android:layout_gravity="center"
+            android:background="@color/black8" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/title_tv3"
+                style="@style/title_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/wdedingdan_wodedingdan_gray"
+                android:text="全部订单"
+                android:textColor="@color/black2"
+                android:textSize="12sp" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black8" />
+
+        <RelativeLayout
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/orange1" />
+        </RelativeLayout>
+    </RelativeLayout>
+    <!-- 未支付 -->
+
+    <LinearLayout
+        android:id="@+id/has_order"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/ly_load"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/lv_order_status"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:listSelector="@color/orange2"
+                android:visibility="visible" >
+            </ListView>
+            <!-- 待收货 -->
+
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+                xmlns:ptr="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/lv2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                ptr:ptrHeaderTextColor="@color/black3"
+                ptr:ptrMode="pullUpFromBottom" >
+            </com.handmark.pulltorefresh.library.PullToRefreshListView>
+            <!-- 待评价 -->
+
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+                xmlns:ptr="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/lv3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                ptr:ptrHeaderTextColor="@color/black3"
+                ptr:ptrMode="pullUpFromBottom" >
+            </com.handmark.pulltorefresh.library.PullToRefreshListView>
+            <!-- 全部订单 -->
+
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+                xmlns:ptr="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/lv4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                ptr:ptrHeaderTextColor="@color/black3"
+                ptr:ptrMode="pullUpFromBottom" >
+            </com.handmark.pulltorefresh.library.PullToRefreshListView>
+        </LinearLayout>
+    </LinearLayout>
+    <!-- 购物车为空 -->
+
+    <LinearLayout
+        android:id="@+id/ll_noproduct"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="50dp" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/wdedingdan_meiyoudingdan" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:text="亲,还没有相关订单哦"
+            android:textColor="@color/black2" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/quguangguang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/stroke_orange1_r_val"
+            android:paddingBottom="5dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="5dp"
+            android:text="去逛逛"
+            android:textColor="@color/orange1"
+            android:textSize="16sp" />
+
+        <View
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/dian_line_product_e8" />
+
+        <TextView
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dp"
+            android:padding="5dp"
+            android:text="猜你喜欢"
+            android:textColor="@color/black1" />
+
+        <HorizontalScrollView
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="10dp"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.llg.privateproject.view.MyGridView
+                    android:id="@+id/mayby_youlike_lv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fadingEdge="none"
+                    android:fadingEdgeLength="0dp"
+                    android:horizontalSpacing="2dp"
+                    android:listSelector="@color/white"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:stretchMode="columnWidth" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\progress_loading_image_01.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\progress_loading_image_01.png"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\jiazaidongtai3.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\jiazaidongtai3.png"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ic_launcher.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_launcher.png"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\progress_loading_image_02.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\progress_loading_image_02.png"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\pengyouq1.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\pengyouq1.png"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\jiazaidongtai4.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\jiazaidongtai4.png"
+    }
+]

@@ -1,0 +1,640 @@
+package com.llg.privateproject.view;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.lidroid.xutils.ViewUtils;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.bjg.lcc.privateproject.R;
+import com.llg.privateproject.actvity.NewAppDown;
+import com.llg.privateproject.actvity.OrderStatuspingjia;
+import com.llg.privateproject.adapters.QuanAdapter;
+import com.llg.privateproject.adapters.UserGradeInstructionAdapter;
+import com.llg.privateproject.entities.Quan;
+import com.mob.tools.utils.Data;
+import com.rabbitmq.client.GetResponse;
+
+import android.app.Dialog;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.format.Time;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.Toast;
+import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
+
+/**
+ * 订单状态 yh 2015.8.3
+ * */
+public class OrderStatusDialog extends Dialog implements
+		android.view.View.OnClickListener {
+	Context context;
+	int type;
+	/** 用户等级 */
+	int grade;
+	/** 物流详情添加商品布局 */
+	LinearLayout ll_product;
+	/** 物流详情添加物流过程布局 */
+	LinearLayout ll_wuliu;
+	/** 评价图片布局 */
+	LinearLayout ll_pics;
+	/** 评价对话框 */
+	private OrderStatusDialog dialog1;
+	/** 订单详情 */
+	private OrderStatusDialog dialog2;
+	/** 上传图片对话框 */
+	private OrderStatusDialog dialog3;
+	/*** 商品列表 */
+	// List<Map<String, Object>>list_product;
+	File file;
+	/** sd卡路径 */
+	String path = null;
+	Uri imageUri;
+	private PicListener picListener;
+
+	private FinishListener finishListener;
+
+	ImageView chuantupian;
+
+	/** 图片监听 */
+	public interface PicListener {
+		/**
+		 * type 1 本地上传，2 拍照上传
+		 * 
+		 * */
+		public void setPictrue(int type);
+	}
+
+	/** 传送一个结束Activity的结束代码 */
+	public interface FinishListener {
+		/** finishcode =1时结束Activity */
+		public void callBack(int finishcode);
+	}
+
+	/**
+	 * @param type
+	 *            :1 查看物流，2订单详情，3交易成功，7退款进度,9我邀请的会员
+	 * */
+	public OrderStatusDialog(Context context, int type) {
+		super(context, R.style.agreemdialog);
+		// TODO Auto-generated constructor stub
+		this.context = context;
+		this.type = type;
+
+	}
+
+	/**
+	 * type:3发表评价
+	 * */
+	public OrderStatusDialog(Context context, int type, PicListener picListener) {
+		super(context, R.style.agreemdialog);
+		// TODO Auto-generated constructor stub
+		this.context = context;
+		this.type = type;
+		this.picListener = picListener;
+
+	}
+
+	/**
+	 * type:4上传图片对话框
+	 * */
+	public OrderStatusDialog(Context context, int type,
+			PicListener picListener, LinearLayout ll_pics) {
+		super(context, R.style.agreemdialog);
+		// TODO Auto-generated constructor stub
+		this.context = context;
+		this.type = type;
+		this.picListener = picListener;
+		// this.ll_pics=ll_pics;
+
+	}
+
+	/**
+	 * type:5未完成评价提示,6删除订单,10
+	 * */
+	public OrderStatusDialog(Context context, FinishListener finishListener,
+			int type) {
+		super(context, R.style.agreemdialog);
+		// TODO Auto-generated constructor stub
+		this.context = context;
+		this.type = type;
+		this.finishListener = finishListener;
+
+	}
+
+	/**
+	 * @param type
+	 *            :8用户等级介绍对话框
+	 * @param grade
+	 *            :用户等级 1 普通会员,2VIP用户 ,3创业者,4付款升级说明
+	 * */
+	public OrderStatusDialog(Context context, int type, int grade) {
+		super(context, R.style.agreemdialog);
+		// TODO Auto-generated constructor stub
+		this.context = context;
+		this.type = type;
+		this.grade = grade;
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+
+		switch (type) {
+		case 1:// 物流对话框
+			testWuliu();
+			break;
+		case 2:// 订单详情对话框
+			testOrderDetail();
+			break;
+		case 3:// 交易成功
+			jiaoYichenggong();
+			break;
+		case 4:// 上传图片对话框
+			initHead();
+			break;
+		case 5:// 未完成评价提示
+			weiWanchenghint();
+			break;
+		case 6:// 删除订单
+			deleteOrder();
+			break;
+		case 7:// 退款进度
+			returnStatus();
+			break;
+		case 8:// 特色功能对话框
+			tesegongnengDialog(grade);
+			break;
+		case 9:// 我的会员
+			wodeHuiyuan();
+			break;
+		case 10:// 版本更新提示
+			versionCheck();
+			break;
+		}
+	}
+
+	/** 物流对话框 */
+	private void testWuliu() {
+		setContentView(R.layout.orderstatus_wuliuxiangqing);
+		ImageView turn = (ImageView) findViewById(R.id.turn);
+		TextView head_tilte = (TextView) findViewById(R.id.head_tilte);
+		head_tilte.setText("物流详情");
+		turn.setOnClickListener(this);
+		ll_product = (LinearLayout) findViewById(R.id.ll_product);
+		ll_product.setOnClickListener(this);
+		// list_product=new ArrayList<Map<String,Object>>();
+		for (int i = 1; i < 4; i++) {
+			View view = View.inflate(context,
+					R.layout.order_gridview_item_item, null);
+			ImageView product_img = (ImageView) view
+					.findViewById(R.id.product_img);
+			TextView product_dsc = (TextView) view
+					.findViewById(R.id.product_dsc);
+			TextView product_price = (TextView) view
+					.findViewById(R.id.product_price);
+			TextView product_count = (TextView) view
+					.findViewById(R.id.product_count);
+			View v = (View) view.findViewById(R.id.view);
+
+			product_img.setBackgroundResource(R.drawable.welcome);
+			product_dsc.setText("这里是商品描述信息");
+			product_price.setText("￥" + MyFormat.getPriceFormat("122".trim()));
+			product_count.setText("X" + i);
+			view.setTag(i);
+			if (i == 3) {
+				v.setVisibility(View.GONE);
+			}
+			ll_product.addView(view);
+
+		}
+		ll_wuliu = (LinearLayout) findViewById(R.id.ll_wuliu);
+		ll_wuliu.removeAllViews();
+		for (int j = 10; j > 0; j--) {
+			View view1 = View.inflate(context,
+					R.layout.orderstatus_wuliuguocheng_item, null);
+			ImageView iv = (ImageView) view1.findViewById(R.id.iv);
+			TextView wuliuguocheng = (TextView) view1
+					.findViewById(R.id.wuliuguocheng);
+			TextView wuliutime = (TextView) view1.findViewById(R.id.wuliutime);
+			wuliuguocheng.setText("第" + j + "站");
+			wuliutime.setText(MyFormat.getTimeFormat(new Date()));
+			// wuliutime.setText(MyFormat.getTimeFormat(new Date().toString()));
+			if (j == 10) {
+				View v1 = view1.findViewById(R.id.v1);
+				v1.setVisibility(View.VISIBLE);
+				View v2 = view1.findViewById(R.id.v2);
+				LayoutParams lp = (LayoutParams) v2.getLayoutParams();
+				lp.height = 83;
+				wuliuguocheng.setTextColor(context.getResources().getColor(
+						R.color.orange1));
+				wuliutime.setTextColor(context.getResources().getColor(
+						R.color.orange1));
+				iv.setBackgroundResource(R.drawable.wdedingdan_process_orange);
+				v2.setLayoutParams(lp);
+
+			}
+			if (j == 1) {
+				View v1 = view1.findViewById(R.id.v1);
+				v1.setVisibility(View.VISIBLE);
+				v1.setBackgroundDrawable(((context.getResources()
+						.getDrawable(R.drawable.stroke_vertical_xuxian_c6))));
+				View v2 = view1.findViewById(R.id.v2);
+				v2.setVisibility(View.INVISIBLE);
+				LayoutParams lp = (LayoutParams) v2.getLayoutParams();
+				lp.height = 83;
+				v2.setLayoutParams(lp);
+			}
+			ll_wuliu.addView(view1);
+		}
+
+	}
+
+	/** 订单详情 */
+	private void testOrderDetail() {
+		setContentView(R.layout.orderstatus_orderdetail);
+		ImageView turn = (ImageView) findViewById(R.id.turn);
+		TextView head_tilte = (TextView) findViewById(R.id.head_tilte);
+		head_tilte.setText("订单详情");
+		turn.setOnClickListener(this);
+		LinearLayout ll_product = (LinearLayout) findViewById(R.id.ll_product);
+		for (int i = 1; i < 4; i++) {
+			View view = View.inflate(context,
+					R.layout.order_gridview_item_item, null);
+			ImageView product_img = (ImageView) view
+					.findViewById(R.id.product_img);
+			TextView product_dsc = (TextView) view
+					.findViewById(R.id.product_dsc);
+			TextView product_price = (TextView) view
+					.findViewById(R.id.product_price);
+			TextView product_count = (TextView) view
+					.findViewById(R.id.product_count);
+			View v = (View) view.findViewById(R.id.view);
+
+			product_img.setBackgroundResource(R.drawable.welcome);
+			product_dsc.setText("这里是商品描述信息");
+			product_price.setText("￥" + MyFormat.getPriceFormat("122".trim()));
+			product_count.setText("X" + i);
+			view.setTag(i);
+			if (i == 3) {
+				v.setVisibility(View.GONE);
+			}
+			ll_product.addView(view);
+
+		}
+	}
+
+	/*** 上传评价图片 */
+	void initHead() {
+		setContentView(R.layout.orderstatus_pinglun_shangchuantupian_dialog);
+		ImageView turn = (ImageView) findViewById(R.id.turn);
+		TextView bendishangchuan = (TextView) findViewById(R.id.bendishangchuan);
+		TextView paizhaoshangchuan = (TextView) findViewById(R.id.paizhaoshangchuan);
+		turn.setOnClickListener(this);
+		bendishangchuan.setOnClickListener(this);
+		paizhaoshangchuan.setOnClickListener(this);
+
+	}
+
+	/** 交易成功提示 */
+	private void jiaoYichenggong() {
+		setContentView(R.layout.orderstatus_jiaoyichenggong_hint);
+		ImageView turn = (ImageView) findViewById(R.id.turn);
+		TextView lijipingjia = (TextView) findViewById(R.id.lijipingjia);
+		TextView dingdanxiangqing = (TextView) findViewById(R.id.dingdanxiangqing);
+		turn.setOnClickListener(this);
+		lijipingjia.setOnClickListener(this);
+		dingdanxiangqing.setOnClickListener(this);
+
+	}
+
+	/** 获取传图片按钮 */
+	public ImageView getChuantupian() {
+		return chuantupian;
+	}
+
+	/** 获取评价图片布局LinearLayout */
+	public LinearLayout getll_pics() {
+		return ll_pics;
+	}
+
+	/** 版本更新提示 */
+	private void versionCheck() {
+		setContentView(R.layout.orderstatus_weipingjiawan);
+		TextView tv_title = (TextView) findViewById(R.id.tv_title);
+		TextView tv_hint = (TextView) findViewById(R.id.tv_hint);
+		TextView turn = (TextView) findViewById(R.id.turn);
+		TextView queding = (TextView) findViewById(R.id.queding);
+		tv_hint.setVisibility(View.GONE);
+		tv_title.setText("检测到新版,是否更新?");
+		turn.setText("更新");
+		queding.setText("不更新");
+		turn.setOnClickListener(this);
+		queding.setOnClickListener(this);
+
+	}
+
+	/** 未完成订单提示 */
+	private void weiWanchenghint() {
+		setContentView(R.layout.orderstatus_weipingjiawan);
+		TextView turn = (TextView) findViewById(R.id.turn);
+		TextView queding = (TextView) findViewById(R.id.queding);
+		turn.setOnClickListener(this);
+		queding.setOnClickListener(this);
+
+	}
+
+	/** 删除订单 */
+	private void deleteOrder() {
+		setContentView(R.layout.orderstatus_weipingjiawan);
+		TextView tv_title = (TextView) findViewById(R.id.tv_title);
+		TextView tv_hint = (TextView) findViewById(R.id.tv_hint);
+		TextView turn = (TextView) findViewById(R.id.turn);
+		TextView queding = (TextView) findViewById(R.id.queding);
+		turn.setOnClickListener(this);
+		queding.setOnClickListener(this);
+		tv_title.setText("删除订单");
+		tv_hint.setText("亲确认删除该订单吗？");
+		turn.setText("删除");
+		queding.setText("取消");
+	}
+
+	/** 退货进度对话框 */
+	private void returnStatus() {
+		setContentView(R.layout.orderstatus_return_status);
+		ImageView turn = (ImageView) findViewById(R.id.turn);
+		TextView head_tilte = (TextView) findViewById(R.id.head_tilte);
+		head_tilte.setText("退款进度");
+		turn.setOnClickListener(this);
+		ll_wuliu = (LinearLayout) findViewById(R.id.ll_return_status);
+		ll_wuliu.removeAllViews();
+		for (int j = 10; j > 0; j--) {
+			View view1 = View.inflate(context,
+					R.layout.orderstatus_wuliuguocheng_item, null);
+			ImageView iv = (ImageView) view1.findViewById(R.id.iv);
+			TextView wuliuguocheng = (TextView) view1
+					.findViewById(R.id.wuliuguocheng);
+			TextView wuliutime = (TextView) view1.findViewById(R.id.wuliutime);
+			wuliuguocheng.setText("进度" + j + "");
+			wuliutime.setText(MyFormat.getTimeFormat(new Date()));
+			// wuliutime.setText(MyFormat.getTimeFormat(new Date().toString()));
+			if (j == 10) {
+				View v1 = view1.findViewById(R.id.v1);
+				v1.setVisibility(View.VISIBLE);
+				View v2 = view1.findViewById(R.id.v2);
+				LayoutParams lp = (LayoutParams) v2.getLayoutParams();
+				lp.height = 83;
+				wuliuguocheng.setTextColor(context.getResources().getColor(
+						R.color.orange1));
+				wuliutime.setTextColor(context.getResources().getColor(
+						R.color.orange1));
+				iv.setBackgroundResource(R.drawable.wdedingdan_process_orange);
+				v2.setLayoutParams(lp);
+
+			}
+			if (j == 1) {
+				View v1 = view1.findViewById(R.id.v1);
+				v1.setVisibility(View.VISIBLE);
+				v1.setBackgroundDrawable(((context.getResources()
+						.getDrawable(R.drawable.stroke_vertical_xuxian_c6))));
+				View v2 = view1.findViewById(R.id.v2);
+				v2.setVisibility(View.INVISIBLE);
+				LayoutParams lp = (LayoutParams) v2.getLayoutParams();
+				lp.height = 83;
+				v2.setLayoutParams(lp);
+			}
+			ll_wuliu.addView(view1);
+		}
+	}
+
+	/**
+	 * 用户等级特色功能介绍对话框 * @param grade:用户等级 1 普通会员,2VIP用户 ,3创业者,4付款升级说明
+	 */
+	private void tesegongnengDialog(int grade) {
+		setContentView(R.layout.huiyuandengji_dialog);
+		ImageView turn = (ImageView) findViewById(R.id.turn);
+		TextView huiyuanjianjie = (TextView) findViewById(R.id.huiyuanjianjie);
+		ListView lv = (ListView) findViewById(R.id.lv);
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		switch (grade) {
+		case 1:// 普通会员
+			huiyuanjianjie.setText("普通会员功能简介");
+			for (int i = 0; i < 3; i++) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("name", "功能" + i);
+				map.put("dsc", "这里是功能描述" + i);
+				list.add(map);
+			}
+			break;
+		case 2:// vip会员
+
+			huiyuanjianjie.setText("VIP会员功能简介");
+			for (int i = 0; i < 4; i++) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("name", "功能" + i);
+				map.put("dsc", "这里是功能描述" + i);
+				list.add(map);
+			}
+			break;
+		case 3:// 创业者
+			huiyuanjianjie.setText("创业者功能简介");
+			for (int i = 0; i < 5; i++) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("name", "功能" + i);
+				map.put("dsc", "这里是功能描述" + i);
+				list.add(map);
+			}
+			break;
+		case 4:// 付款升级说明
+			huiyuanjianjie.setText("会员付款升级说明");
+			for (int i = 0; i < 5; i++) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("name", "升级说明" + i);
+				map.put("dsc", "这里是升级说明描述" + i);
+				list.add(map);
+			}
+			break;
+
+		default:
+			break;
+		}
+		UserGradeInstructionAdapter adapter = new UserGradeInstructionAdapter(
+				context, list);
+		lv.setAdapter(adapter);
+		turn.setOnClickListener(this);
+
+	}
+
+	/** 我的会员 */
+	private void wodeHuiyuan() {
+		setContentView(R.layout.yaoqinghuiyuanshuoming);
+
+		ScrollView sv = (ScrollView) findViewById(R.id.sv);
+		View v1 = (View) findViewById(R.id.v1);
+		View v2 = (View) findViewById(R.id.v2);
+		LinearLayout l1 = (LinearLayout) findViewById(R.id.l1);
+		ListView lv = (ListView) findViewById(R.id.lv);
+		TextView wodehuiyuan = (TextView) findViewById(R.id.wodehuiyuan);
+		TextView tv_hint = (TextView) findViewById(R.id.tv_hint);
+		TextView tv_huiyuan = (TextView) findViewById(R.id.tv_huiyuan);
+		TextView tv_chenggonghuiyuan = (TextView) findViewById(R.id.tv_chenggonghuiyuan);
+		SpannableStringBuilder ssbBuilder = new SpannableStringBuilder(
+				tv_huiyuan.getText().toString());
+		SpannableStringBuilder ssbBuilder1 = new SpannableStringBuilder(
+				tv_chenggonghuiyuan.getText().toString());
+		ForegroundColorSpan fensColorSpan = new ForegroundColorSpan(context
+				.getResources().getColor(R.color.fen));
+		ssbBuilder.setSpan(fensColorSpan, 0, 6,
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		ssbBuilder1.setSpan(fensColorSpan, 0, 9,
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		tv_huiyuan.setText(ssbBuilder);
+		tv_chenggonghuiyuan.setText(ssbBuilder1);
+		wodehuiyuan.setText("我邀请的会员");
+
+		List<Quan> list = new ArrayList<Quan>();
+		for (int i = 0; i < 15; i++) {
+			Quan quan = new Quan("123456789" + i, "昵称" + i,
+					MyFormat.getTimeFormat1(new Date()), "会员等级" + i);
+			list.add(quan);
+		}
+
+		if (list.size() < 1) {
+			v1.setVisibility(View.GONE);
+			v2.setVisibility(View.GONE);
+			l1.setVisibility(View.GONE);
+			tv_hint.setVisibility(View.VISIBLE);
+		}
+		QuanAdapter adapter = new QuanAdapter(context, list);
+		lv.setAdapter(adapter);
+		sv.smoothScrollTo(0, 0);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.turn:// 返回
+			cancel();
+			if (dialog3 != null) {
+				dialog3.cancel();
+				;
+			}
+			if (type == 6) {
+				Toast.makeText(context, "delete", Toast.LENGTH_SHORT).show();
+			}
+			if (type == 10) {
+				context.startActivity(new Intent(context, NewAppDown.class));
+			}
+			break;
+		case R.id.chuantupian:// 上传图片
+			// if(dialog3==null)
+			//
+			// { dialog3=new OrderStatusDialog(context, 4,picListener,null);
+			// Log.e("my",
+			// "new OrderStatusDialog(context, 4,(PicListener) context,null)");
+			// }
+			//
+			// dialog3.show();
+			// Window window3=dialog3.getWindow();
+			// WindowManager.LayoutParams lp3=window3.getAttributes();
+			// lp3.width=AppContext.getScreenWidth()*4/5;
+			// lp3.height=lp3.WRAP_CONTENT;
+			//
+			// dialog3.getWindow().setAttributes(lp3);
+
+			break;
+		case R.id.bendishangchuan:// 本地上传
+			// Log.e("my", "picListener"+picListener+"ll_pics"+ll_pics);
+			if (picListener != null) {
+				picListener.setPictrue(1);
+			}
+			cancel();
+
+			break;
+		case R.id.paizhaoshangchuan:// 拍照上传
+			if (picListener != null) {
+				picListener.setPictrue(2);
+			}
+			cancel();
+			break;
+		case R.id.ll_product:// 商品
+			if (ll_product != null) {
+
+				if (dialog2 == null) {
+					dialog2 = new OrderStatusDialog(context, 2);
+				}
+				dialog2.show();
+				Window window = dialog2.getWindow();
+				android.view.WindowManager.LayoutParams lp = window
+						.getAttributes();
+				lp.width = AppContext.getScreenWidth();
+				lp.height = lp.MATCH_PARENT;
+				dialog2.getWindow().setAttributes(lp);
+			}
+			break;
+		case R.id.confirm:// 提交
+			Toast.makeText(context, "提交评论", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.lijipingjia:// 立即评价
+			Intent intent = new Intent(context, OrderStatuspingjia.class);
+			context.startActivity(intent);
+			cancel();
+			Toast.makeText(context, "立即评论", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.dingdanxiangqing:// 订单详情
+			if (dialog2 == null) {
+				dialog2 = new OrderStatusDialog(context, 2);
+			}
+			dialog2.show();
+			Window window = dialog2.getWindow();
+			android.view.WindowManager.LayoutParams lp = window.getAttributes();
+			lp.width = AppContext.getScreenWidth();
+			lp.height = lp.MATCH_PARENT;
+			dialog2.getWindow().setAttributes(lp);
+			cancel();
+
+			Toast.makeText(context, "订单详情", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.queding:// 返回
+			if (finishListener != null) {
+				finishListener.callBack(1);
+			}
+			cancel();
+
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public Bundle onSaveInstanceState() {
+		// TODO Auto-generated method stub
+		return super.onSaveInstanceState();
+	}
+}

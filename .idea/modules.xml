@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/FGQQ_Gradle_Project.iml" filepath="$PROJECT_DIR$/FGQQ_Gradle_Project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PrivateLLG/PrivateLLG.iml" filepath="$PROJECT_DIR$/PrivateLLG/PrivateLLG.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SmartAndroid/SmartAndroid.iml" filepath="$PROJECT_DIR$/SmartAndroid/SmartAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base_library_pullToRefresh_chenyoca/base_library_pullToRefresh_chenyoca.iml" filepath="$PROJECT_DIR$/base_library_pullToRefresh_chenyoca/base_library_pullToRefresh_chenyoca.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,221 @@
+package com.llg.privateproject.actvity;
+
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.NetworkInfo.State;
+import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
+
+import com.android.http.HttpUtil;
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.llg.help.Util;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.fragment.BaseActivity;
+
+public class WebLoginActivity extends BaseActivity {
+	@ViewInject(R.id.mwebView)
+	private WebView webView;
+	private String mredirect_uri = "http://www.baidu.com";
+	private String response_type = "code";
+	private String scope = "read+write";
+	private String client_id = "mobile-client";
+	private String client_secret = "mobile";
+	private String state = "002681f3-41fc-43fb-a254-eb75e87d5677";
+	private String url = "http://192.168.0.220:8083/buyapp/oauth/authorize?response_type="
+			+ response_type
+			+ "&scope="
+			+ scope
+			+ "&client_id="
+			+ client_id
+			+ "&redirect_uri=" + mredirect_uri + "&state=" + state + "";
+	private String tokenUrl = "http://192.168.0.220:8083/buyapp"
+			+ "/oauth/token";
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aty_weblogin);
+		initWebviewSetting();
+		webView.setWebViewClient(new WebViewClient() {
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				// 使用自己的WebView组件来响应Url加载事件，而不是使用默认浏览器器加载页面
+				view.loadUrl(url);
+				// Log.i("tag", "-------------shouldOverrideUrlLoading");
+				// 相应完成返回true
+				return true;
+				// return super.shouldOverrideUrlLoading(view, url);
+			}
+
+			// 页面开始加载
+			@Override
+			public void onPageStarted(WebView view, String url, Bitmap favicon) {
+				super.onPageStarted(view, url, favicon);
+				// Log.i("tag", "------------------onPageStarted");
+				Log.i("tag", url + "------------------url");
+				if (url.startsWith(mredirect_uri)) {// 判断是不是成功回调了
+					Map<String, String> mapRequest = Util.URLRequest(url);
+					String state = mapRequest.get("state");// 取得状态码
+					if (state.equals("002681f3-41fc-43fb-a254-eb75e87d5677")) {// 状态码和传入的state相等才可以
+						String code = mapRequest.get("code");// 取得code,可以换取token值
+						Log.i("tag",
+								code
+										+ "--------**********---code----code---*********------");
+						RequestParams params = initRequestParams(code);
+						HttpUtils httpUtils = new HttpUtils();
+						httpUtils.send(HttpMethod.POST, tokenUrl, params,
+								new RequestCallBack<String>() {
+									public void onFailure(
+											com.lidroid.xutils.exception.HttpException arg0,
+											String msg) {
+										Log.i("tag",
+												msg
+														+ "--------**************-----******---msgmsgmsg------*****---***************------");
+										getSharePrefence().edit().clear();
+									};
+
+									public void onSuccess(
+											com.lidroid.xutils.http.ResponseInfo<String> arg0) {
+										String json = arg0.result;
+										savaToken(json);
+										Log.i("tag",
+												json
+														+ "--------********************---json-------********************------");
+										finish();
+										Toast.makeText(WebLoginActivity.this,
+												"登录成功", Toast.LENGTH_LONG)
+												.show();
+									};
+								});
+					}
+				}
+
+			}
+
+			// 页面加载完成
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				super.onPageFinished(view, url);
+				Log.i("tag", "------------------加载完毕");
+				// webView.loadUrl("https://www.baidu.com");
+			}
+
+			// WebView加载的所有资源url
+			@Override
+			public void onLoadResource(WebView view, String url) {
+				super.onLoadResource(view, url);
+				// Log.i("tag", "------------------onLoadResource");
+			}
+
+			@Override
+			public void onReceivedError(WebView view, int errorCode,
+					String description, String failingUrl) {
+				super.onReceivedError(view, errorCode, description, failingUrl);
+				Log.i("tag", "------------------onReceivedError");
+			}
+		});
+
+	}
+
+	private void initWebviewSetting() {
+		ViewUtils.inject(this);
+		// 设置支持JavaScript脚本
+		Log.i("tag", (webView == null) + "-------webView----");
+		WebSettings webSettings = webView.getSettings();
+		webSettings.setJavaScriptEnabled(true);
+		// 设置可以访问文件
+		webSettings.setAllowFileAccess(true);
+		// 设置可以支持缩放
+		webSettings.setSupportZoom(true);
+		// 设置默认缩放方式尺寸是far
+		webSettings.setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
+		// 设置出现缩放工具
+		webSettings.setBuiltInZoomControls(true);
+		webSettings.setDefaultFontSize(20);
+		webView.loadUrl(url);
+	}
+
+	/**
+	 * 拦截返回键
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// 是否触发按键为back键
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			back();
+			return true;
+			// 如果不是back键正常响应
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
+	}
+
+	private void back() {
+		finish();
+	}
+
+	/**
+	 * 保存token到本地sharedPrefences
+	 * 
+	 * @param json
+	 *            获取登录成功后返回的json
+	 */
+	private void savaToken(String json) {
+		String access_token;
+		String refresh_token;
+		try {
+			access_token = new JSONObject(json).optString("access_token");
+			refresh_token = new JSONObject(json).optString("refresh_token");
+			// 存放token的时间
+			getSharePrefence()
+					.edit()
+					.putLong("tokenTime", SystemClock.currentThreadTimeMillis())
+					.putString("access_token", access_token)
+					.putString("refresh_token", refresh_token)
+					.putBoolean("isLogin", true).commit();
+			AppContext.getUserInformation().setAccess_token(access_token);
+			AppContext.getUserInformation().setRefreshToken(refresh_token);
+			AppContext.getUserInformation().setLogin(true);
+			// RefeshToken();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 初始化params
+	 * 
+	 * @param code
+	 *            返回的code，获取token的参数
+	 * @return params
+	 */
+	private RequestParams initRequestParams(String code) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("grant_type", "authorization_code");
+		params.addQueryStringParameter("code", code);
+		params.addQueryStringParameter("client_id", client_id);
+		params.addQueryStringParameter("client_secret", client_secret);
+		params.addQueryStringParameter("redirect_uri", mredirect_uri);
+		return params;
+	}
+}

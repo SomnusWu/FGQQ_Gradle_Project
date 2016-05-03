@@ -1,0 +1,590 @@
+package com.llg.privateproject.actvity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.GetProgressBar;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.view.ProductDetailEllipsisPoPuWindow;
+import com.llg.privateproject.view.ProductDetailEllipsisPoPuWindow.SelecetListener;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.SendMessageToWX;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.mm.sdk.openapi.WXMediaMessage;
+import com.tencent.mm.sdk.openapi.WXWebpageObject;
+
+/** 获取红包界面 */
+public class GetRedPackage extends BaseActivity implements SelecetListener {
+	/** 标题 */
+	@ViewInject(R.id.head_tilte)
+	private TextView head_tilte;
+	/** 分享 */
+	@ViewInject(R.id.head_tilte2)
+	private TextView head_tilte2;
+	/** 问题 */
+	@ViewInject(R.id.question)
+	public TextView question;
+	/** 答案 */
+	@ViewInject(R.id.answer)
+	public TextView answer;
+	/** 验证码 */
+	@ViewInject(R.id.eanswer)
+	public EditText eanswer;
+	/** 评论内容 */
+	@ViewInject(R.id.et_comment)
+	public EditText et_comment;
+	/** 提交评论内容 */
+	@ViewInject(R.id.tv_comment)
+	public TextView tv_comment;
+	/** 领取红包金额提示 */
+	@ViewInject(R.id.red_package_hint)
+	private TextView red_package_hint;
+	/** 红包入账提示金额提示 */
+	@ViewInject(R.id.fgqqg)
+	private TextView fgqqg;
+	/** 离开 */
+	@ViewInject(R.id.turn)
+	private ImageView turn;
+	/** 查看更多 */
+	@ViewInject(R.id.to_see)
+	private TextView to_see;
+	/** 布局背景广告图片 */
+	@ViewInject(R.id.ll)
+	private ImageView ll;
+	private ProductDetailEllipsisPoPuWindow ellipticalsisWindow;
+	//
+	// @ViewInject(R.id.v1)
+	// private View v1;
+	// @ViewInject(R.id.v2)
+	// private View v2;
+	private String objectId = "";
+	private String img = "";
+	private String objectType = "";
+	private String id;
+	String co = "";
+	String money = "";
+	String mesg = "";
+	AppContext appContext;
+	String questionStr = "";
+	String adForwardId = "";
+	private IWXAPI api;
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 0:// 失败
+
+				break;
+
+			case 1:// 领取红包成功
+				if (co.length() > 0 && money.length() > 0) {
+					red_package_hint.setText("恭喜你获取红包:"
+							+ MyFormat.getPriceFormat(money) + "元,获取CO:" + co
+							+ "个!");
+				} else if (co.length() > 0 && money.length() < 1) {
+					red_package_hint.setText("恭喜你获取CO:" + co + "个!");
+
+				} else if (co.length() < 1 && money.length() > 0) {
+					red_package_hint.setText("恭喜你获取红包:"
+							+ MyFormat.getPriceFormat(money) + "元!");
+
+				} else if (mesg != null && mesg.length() > 0) {
+					fgqqg.setTextColor(getResources().getColor(R.color.black2));
+					fgqqg.setText(mesg);
+				}
+				if (getIntent().getBooleanExtra("isDialog", false)) {
+					new CountDownTimer(5 * 1000, 1000) {
+
+						@Override
+						public void onTick(long millisUntilFinished) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void onFinish() {
+							// TODO Auto-generated method stub
+							finish();
+						}
+					}.start();
+				}
+				eanswer.setText("");
+				break;
+			case 2:// 获取问题
+				question.setText(questionStr);
+				break;
+			case 3:// 清空 评论类容
+				et_comment.setText("");
+				break;
+			}
+		};
+	};
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.getredpackage);
+		ViewUtils.inject(this);
+		init();
+	}
+
+	private void init() {
+		// if(getIntent().getBooleanExtra("isDialog", false)){
+		// getPushAds();
+		// }
+		api = WXAPIFactory.createWXAPI(this,
+				com.llg.privateproject.utils.Constants.APP_ID, true);
+		api.registerApp(com.llg.privateproject.utils.Constants.APP_ID);
+		head_tilte2.setBackgroundResource(R.drawable.threestagepage_ellipsis_yuan);
+		head_tilte2.setVisibility(View.VISIBLE);
+		head_tilte2.setText("");
+		head_tilte.setText("");
+		appContext = getAppContext();
+		to_see.setVisibility(View.GONE);
+		objectId = getIntent().getStringExtra("objectId");
+		img = getIntent().getStringExtra("img");
+		objectType = getIntent().getStringExtra("objectType");
+		adForwardId = getIntent().getStringExtra("adForwardId");
+		id = getIntent().getStringExtra("id");
+		LayoutParams params = new LayoutParams(AppContext.getScreenWidth(),
+				AppContext.getScreenWidth() * 2 / 3);
+		ll.setLayoutParams(params);
+		MyFormat.setBitmap(this, ll, img, AppContext.getScreenWidth(),
+				AppContext.getScreenWidth() * 2 / 3);
+
+		if (objectId != null && objectId.length() > 5) {
+			to_see.setVisibility(View.VISIBLE);
+			View view = findViewById(R.id.v);
+			view.setVisibility(View.VISIBLE);
+		}
+		// MyFormat.setBitmap(ProductDetailActivity.this,commenter_head,map.get("avatar").toString(),
+		// 0,0);
+		// setBitmap(ll, img);
+		red_package_hint.setText("");
+		red_package_hint.setTextColor(getMyColor(R.color.meihong));
+		fgqqg.setText("");
+		fgqqg.setTextColor(getMyColor(R.color.black3));
+		fgqqg.setTextSize(getDimen(R.dimen.dimen_12sp) / 2);
+		// v1.setVisibility(View.INVISIBLE);
+		// v2.setVisibility(View.INVISIBLE);
+		if (objectId == null || objectId.equals("null")) {
+			to_see.setVisibility(View.GONE);
+		}
+		new CountDownTimer(1000 * 10, 1000) {
+
+			@Override
+			public void onTick(long times) {
+				// TODO Auto-generated method stub
+				fgqqg.setTextColor(getResources().getColor(R.color.meihong));
+				fgqqg.setText(times / 1000 + "   一大波红包正在向你靠近...");
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				fgqqg.setText("");
+				// getRedPackage();
+			}
+		}.start();
+		if (appContext.isNetworkConnected()) {
+			getVQ();
+		} else {
+			toast(R.string.t_Connection);
+		}
+	}
+
+	@OnClick({ R.id.turn, R.id.to_see, R.id.head_tilte2, R.id.answer,
+			R.id.tv_comment })
+	public void myClick(View v) {
+		switch (v.getId()) {
+		case R.id.turn:
+			finish();
+			break;
+		case R.id.to_see:
+			if (appContext.isNetworkConnected()) {
+
+				toSomeWhere();
+			} else {
+				toast(R.string.t_Connection);
+			}
+			break;
+
+		case R.id.head_tilte2:
+			if (appContext.isNetworkConnected()) {
+				if (ellipticalsisWindow == null) {
+					ellipticalsisWindow = new ProductDetailEllipsisPoPuWindow(this, this, 5, head_tilte2);
+				}
+
+				head_tilte2.setVisibility(View.VISIBLE);
+				ellipticalsisWindow.showAsDropDown(head_tilte2);
+//				
+			} else {
+				toast(R.string.t_Connection);
+			}
+			break;
+		case R.id.answer:
+			if (appContext.isNetworkConnected()) {
+				saveAttentionAd();
+				getRedPackage();
+			} else {
+				toast(R.string.t_Connection);
+			}
+
+			break;
+		case R.id.tv_comment:// 提交评论
+			if (appContext.isNetworkConnected()) {
+				if (et_comment.length() < 1) {
+					toast("亲,还没有评论内容哦!");
+					return;
+				} else {
+					saveAdComment();
+				}
+			} else {
+				toast(R.string.t_Connection);
+			}
+			break;
+
+		}
+
+	}
+
+	/** 收藏广告 */
+	private void saveAttentionAd() {
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("adInfoId",
+				getIntent().getStringExtra("adInfoId"));
+		params.addBodyParameter("adForwardId",
+				getIntent().getStringExtra("adForwardId"));
+		params.addQueryStringParameter("access_token", AppContext
+				.getUserInformation().getAccess_token());
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/ad/saveAttentionAd", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						// myLogShow("my", "json:"+json);
+					}
+				});
+	}
+
+	/** 提交广告评论 */
+	private void saveAdComment() {
+		// GetProgressBar.getProgressBar(this);
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("text", et_comment.getText().toString());// 评论内容
+
+		params.addQueryStringParameter("adInfoId",
+				getIntent().getStringExtra("adInfoId"));// 广告id
+		params.addQueryStringParameter("access_token", AppContext
+				.getUserInformation().getAccess_token());
+		params.addHeader(MyFormat.HEADER_KEY, MyFormat.HEADER_VALUE);
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.GET,
+				"m/ad/saveAdComment", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						try {
+							if (json.getBoolean("success")) {
+								toast("评论已提交");
+								handler.sendEmptyMessage(3);
+							} else {
+								if (json.getString("errorCode").equals(
+										MyFormat.NOT_LOGIN)) {
+									toast(json.getString("msg"));
+									GetRedPackage.this
+											.startActivity(new Intent(
+													GetRedPackage.this,
+													WebLoginActivity.class));
+								}
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+
+	/** 转发广告 */
+	private void doForwardAd() {
+		// GetProgressBar.getProgressBar(this);
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("parentId",
+				getIntent().getStringExtra("adForwardId"));// 转发id
+
+		params.addQueryStringParameter("adInfoId",
+				getIntent().getStringExtra("adInfoId"));// 广告id
+		params.addQueryStringParameter("access_token", AppContext
+				.getUserInformation().getAccess_token());
+		params.addHeader(MyFormat.HEADER_KEY, MyFormat.HEADER_VALUE);
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.GET,
+				"m/ad/doForwardAd", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						try {
+							if (json.getBoolean("success")) {
+								toast("转发成功");
+								// handler.sendEmptyMessage(3);
+							} else {
+								if (json.getString("errorCode").equals(
+										MyFormat.NOT_LOGIN)) {
+									toast(json.getString("msg"));
+									GetRedPackage.this
+											.startActivity(new Intent(
+													GetRedPackage.this,
+													WebLoginActivity.class));
+								}
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+
+	/** 到店铺/商品也/专题/URL等 */
+	private void toSomeWhere() {
+		finish();
+		if (objectType.equals("1") && objectId != null
+				&& !objectId.equals("null") && objectId.length() > 0) {// 跳转到店铺
+			Intent intent = new Intent(this, ShopActivity.class);
+			intent.putExtra("shopId", objectId);
+
+			startActivity(intent);
+		} else if (objectType.equals("2") && objectId != null
+				&& !objectId.equals("null") && objectId.length() > 0) {// 跳转到商品
+			Intent intent = new Intent(this, ProductDetailActivity.class);
+			intent.putExtra("prodspecId", objectId);
+			startActivity(intent);
+		} else if (objectType.equals("3") && objectId != null
+				&& !objectId.equals("null") && objectId.length() > 0) {// 专题
+
+		} else if (objectType.equals("4") && objectId != null
+				&& !objectId.equals("null") && objectId.length() > 0) {// url
+
+		} else {// 其他
+
+		}
+	}
+
+	/** 获取红包验证码 */
+	private void getVQ() {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", AppContext
+				.getUserInformation().getAccess_token());
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/customer/getVQ", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						try {
+							if (json.getBoolean("success")) {
+								questionStr = json.getString("obj");
+								handler.sendEmptyMessage(2);
+							} else {
+								if (json.getString("errorCode").equals(
+										"NOT_LOGIN")) {
+									toast(json.getString("msg"));
+									GetRedPackage.this
+											.startActivity(new Intent(
+													GetRedPackage.this,
+													WebLoginActivity.class));
+								}
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+
+	/** 获取红包 */
+	public void getRedPackage() {
+		if (eanswer.getText().length() < 1) {
+			toast("输入答案收红包");
+			return;
+		}
+		RequestParams params = new RequestParams();
+
+		params.addQueryStringParameter("answer", eanswer.getText().toString());
+		params.addQueryStringParameter("access_token", AppContext
+				.getUserInformation().getAccess_token());
+		params.addQueryStringParameter("adredId",
+				getIntent().getStringExtra("adRedEnvelopId"));
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/ad/getRedPackage", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						handler.sendEmptyMessage(0);
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						try {
+							if (json.getBoolean("success")) {
+								if (json.getJSONObject("attributes")
+										.getJSONObject("adRedEnvelopItem") != null) {
+									if (json.getJSONObject("attributes")
+											.getJSONObject("adRedEnvelopItem")
+											.getString("co") != null
+											&& json.getJSONObject("attributes")
+													.getJSONObject(
+															"adRedEnvelopItem")
+													.getString("co").length() > 0) {
+
+										co = json
+												.getJSONObject("attributes")
+												.getJSONObject(
+														"adRedEnvelopItem")
+												.getString("co");
+									}
+									if (json.getJSONObject("attributes")
+											.getJSONObject("adRedEnvelopItem")
+											.getString("money") != null
+											&& json.getJSONObject("attributes")
+													.getJSONObject(
+															"adRedEnvelopItem")
+													.getString("money")
+													.length() > 0) {
+
+										money = json
+												.getJSONObject("attributes")
+												.getJSONObject(
+														"adRedEnvelopItem")
+												.getString("money");
+									}
+
+								}
+							} else {
+								if (json.getString("errorCode").equals(
+										MyFormat.NOT_LOGIN)) {
+									toast(json.getString("msg"));
+									GetRedPackage.this
+											.startActivity(new Intent(
+													GetRedPackage.this,
+													WebLoginActivity.class));
+								}
+								toast(json.getString("msg"));
+								mesg = json.getString("msg");
+
+							}
+							handler.sendEmptyMessage(1);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+	/**
+	 * url
+	 * 
+	 * @param type
+	 *            :1 微信,2朋友圈
+	 */
+	private void shareUrl(int type) {
+		WXWebpageObject webpage = new WXWebpageObject();
+		webpage.webpageUrl = "http://www.fgqqg.com";
+		WXMediaMessage msg = new WXMediaMessage(webpage);
+		msg.title = "风购全球--";
+		msg.description = "这是一个非常神奇的网站--测试内容";
+		Bitmap thumb = BitmapFactory.decodeResource(getResources(),
+				R.drawable.dengluzhuce_logo);
+		msg.thumbData = com.llg.help.Util.bmpToByteArray(thumb, true);
+
+		SendMessageToWX.Req req = new SendMessageToWX.Req();
+		req.transaction = buildTransaction("webpage");
+		req.message = msg;
+		if (type == 1) {
+			req.scene = SendMessageToWX.Req.WXSceneSession;
+		} else if (type == 2) {
+			req.scene = SendMessageToWX.Req.WXSceneTimeline;
+		}
+		// req.scene = isTimelineCb.isChecked() ?
+		// SendMessageToWX.Req.WXSceneTimeline :
+		// SendMessageToWX.Req.WXSceneSession;
+		boolean reqd = api.sendReq(req);
+		Log.d("my", "api.sendReq(req)" + reqd);
+		// finish();
+	}
+	private String buildTransaction(final String type) {
+		return (type == null) ? String.valueOf(System.currentTimeMillis())
+				: type + System.currentTimeMillis();
+	}
+	@Override
+	public void setMessage(String message, int type) {
+		// TODO Auto-generated method stub
+		
+		if(message.equals("分享到朋友圈")){
+			toast(message);
+ 			shareUrl(2);
+		}else if(message.equals("分享给微信好友")){
+			toast(message);
+			shareUrl(1);
+		}else  if(message.equals("转发为我的广告")){
+			doForwardAd();
+		}
+	}
+
+}

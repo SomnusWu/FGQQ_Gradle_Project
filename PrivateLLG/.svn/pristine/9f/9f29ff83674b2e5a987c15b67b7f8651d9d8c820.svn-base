@@ -1,0 +1,455 @@
+package com.llg.privateproject.actvity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.util.LogUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.Code;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+
+/**
+ * 注册页面 yh
+ * */
+public class RegisterActivity extends BaseActivity {
+	/** 用户输入框 */
+	@ViewInject(R.id.r_et_username)
+	private EditText r_et_username;
+	/** 注册密码输入框 */
+	@ViewInject(R.id.r_et_password)
+	private EditText r_et_password;
+	/** 注册用户输入框 */
+	@ViewInject(R.id.r_et_passwordconfirm)
+	private EditText r_et_passwordconfirm;
+	/** 邀请码输入框 */
+	@ViewInject(R.id.invitecode)
+	private EditText invitecode;
+	/** 短信验证码输入框 */
+	@ViewInject(R.id.r_et_smscode)
+	private EditText r_et_smscode;
+	@ViewInject(R.id.r_cb_isagree)
+	private CheckBox r_cb_isagree;// 选择是否同意注册协议
+	/** 登录界面 */
+	@ViewInject(R.id.sv_l)
+	private LinearLayout sv_l;
+	/** 注册界面 */
+	@ViewInject(R.id.sv_r)
+	private LinearLayout sv_r;
+	@ViewInject(R.id.r_tv_register)
+	private TextView r_tv_register;// 注册
+	@ViewInject(R.id.ll_r_p)
+	private LinearLayout ll_r_p;// 注册协议
+	/** 刷新验证码 */
+	@ViewInject(R.id.fresh_code)
+	private ImageView fresh_code;// 刷新验证码
+	/** 获取短信验证码 */
+	@ViewInject(R.id.r_tv_smscode)
+	private TextView r_tv_smscode;// 获取短信验证码
+	/** 默认2,注册页面 */
+	int type = 2;
+	/** 账号验证码 */
+	private String verifyCode = "";
+	/** 再次验证码 */
+	private String smscode = "";
+	/** 用于修改密码验证码 */
+	private String newkey = "";
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 0:// 失败
+
+				break;
+			case 1:// 账号验证码成功
+
+				if (verifyCode.length() > 0) {
+					addSmsForRestPwd();
+				}
+				break;
+			case 2:// 进一步验证成功
+				if (smscode.length() > 0) {
+					r_et_smscode.setText(smscode);
+
+				}
+				break;
+			case 3:// 修改密码
+				if (newkey.length() > 0) {
+					updatePwdByRestKey();
+				}
+				break;
+			default:
+				break;
+			}
+		};
+	};
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.loginregister);
+		ViewUtils.inject(this);
+		type = getIntent().getIntExtra("type", 1);
+
+		init(type);
+
+	}
+
+	/**
+	 * @param type
+	 *            1 找回密码,2注册
+	 */
+	private void init(int type) {
+		sv_l.setVisibility(View.GONE);
+		sv_r.setVisibility(View.VISIBLE);
+		if (type == 1) {// 忘记密码
+			r_tv_register.setText("提交");
+			ll_r_p.setVisibility(View.INVISIBLE);
+			invitecode.setVisibility(View.GONE);
+		} else if (type == 2) {
+			r_tv_register.setText("注册");
+			ll_r_p.setVisibility(View.VISIBLE);
+			invitecode.setVisibility(View.VISIBLE);
+		}
+	}
+
+	/**
+	 * 注册
+	 * 
+	 * @param
+	 * 
+	 */
+	private void registerAndGetPassword() {
+		if (!regex()) {
+			return;
+		}
+
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", AppContext
+				.getUserInformation().getAccess_token());
+		params.addQueryStringParameter("mobile", r_et_username.getText()
+				.toString());
+		params.addQueryStringParameter("password", r_et_password.getText()
+				.toString());
+		if (isNull(invitecode.getText().toString())) {
+			params.addQueryStringParameter("inviteCode", getStr(invitecode));
+		}
+		params.addQueryStringParameter("valiCode", getStr(r_et_smscode));
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"common/register/reg", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						boolean isSuccess = json.optBoolean("success");
+						if (!isSuccess) {
+							Toast.makeText(RegisterActivity.this,
+									json.optString("msg"), Toast.LENGTH_SHORT)
+									.show();
+						} else {
+							// //登录成功
+							// DialogRegist dialogRegist = new DialogRegist(
+							// RegisterActivity.this);
+							// dialogRegist.show();
+						}
+					}
+				});
+		// sv_r.setVisibility(View.GONE);
+		// sv_l.setVisibility(View.VISIBLE);
+	}
+
+	/**
+	 * 正则验证
+	 */
+	private boolean regex() {
+		if (!conditionalVerification()) {
+			return false;
+		}
+		if (!r_cb_isagree.isChecked()) {
+			Toast.makeText(this, "亲同意注册协议才可注册哦!", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
+	}
+
+	/** 找回密码条件验证 */
+	public boolean conditionalVerification() {
+		if (r_et_username.getText().length() != 11) {
+			Toast.makeText(this, "请输入11位手机号", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		if (r_et_password.getText().length() < 6) {
+
+			Toast.makeText(this, "请输入不小于6位的密码", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		if (r_et_passwordconfirm.getText().length() < 6) {
+
+			Toast.makeText(this, "请输入不小于6位的密码", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		if (!r_et_password.getText().toString()
+				.equals(r_et_passwordconfirm.getText().toString())) {
+			Toast.makeText(this, "两次输入密码不一致", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		if (r_et_smscode.getText().toString().length() < 4) {
+			Toast.makeText(this, "请输入手机验证码", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
+	}
+
+	/** 点击按钮 */
+	@OnClick({ R.id.iv_back, R.id.fresh_code, R.id.tv_wangjimima,
+			R.id.tv_login, R.id.iv_qqlogin, R.id.iv_weibologin,
+			R.id.r_tv_smscode, R.id.r_cb_isagree, R.id.r_tv_agreement,
+			R.id.r_tv_register, R.id.rb_register })
+	public void myClick(View v) {
+		// int type = 1;
+		switch (v.getId()) {
+		case R.id.iv_back:
+			finish();
+			break;
+
+		case R.id.fresh_code:// 刷新验证码
+			fresh_code.setImageBitmap(Code.getInstance().getBitmap());
+			LogUtils.d("" + Code.getInstance().getCode());
+			Toast.makeText(this, "刷新验证码", Toast.LENGTH_SHORT).show();
+			break;
+
+		case R.id.r_tv_smscode:// 获取短信验证码
+			if (r_et_username.getText().length() != 11) {
+				Toast.makeText(this, "请输入11位手机号", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			Toast.makeText(this, "已向您手机发了一条验证码,请查收", Toast.LENGTH_SHORT).show();
+
+			RequestParams params = new RequestParams();
+			String method = "common/register/getInviteCode";// 默认获取注册验证码方法
+			if (type == 2) {// 注册
+				params.addQueryStringParameter("access_token", AppContext
+						.getUserInformation().getAccess_token());
+
+				params.addQueryStringParameter("mobile", r_et_username
+						.getText().toString());
+
+			} else if (type == 1) {// 忘记密码
+				params.addQueryStringParameter("phone", r_et_username.getText()
+						.toString());
+
+				method = "common/phoneupdatePwd";// 获取忘记密码验证码方法
+			}
+			AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST, method,
+					params, new HttpCallback() {
+
+						@Override
+						public void onError(String msg) {
+							// TODO Auto-generated method stub
+							Log.i("tag", "----------失败了短信------");
+						}
+
+						@Override
+						public void onBack(JSONObject json) {
+							// TODO Auto-generated method stub
+							Log.i("tag", "----------成功了短信------" + json);
+							try {
+								if (json.getBoolean("success")) {
+
+									if (json.getString("msg").trim()
+											.equals("输入的信息不存在。")) {
+
+										toast("该用户不存在");
+									} else {
+
+										verifyCode = json.getString("msg");// 获取验证码
+										handler.sendEmptyMessage(1);
+									}
+								} else {
+								}
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							// {"errorCode":"null","result":[],"obj":null,"attributes":null,"level":"info","msg":"验证用户信息已失效,请进入找回密码首页重新操作","success":false}
+						}
+					});
+			r_tv_smscode.setClickable(false);
+			// 倒计时
+			CountDownTimer timer = new CountDownTimer(1000 * 60, 1000) {
+
+				@Override
+				public void onTick(long m) {
+					// TODO Auto-generated method stub
+					r_tv_smscode.setText("" + m / 1000 + "s重发");
+					// Log.e("my","m:"+ m);
+				}
+
+				@Override
+				public void onFinish() {
+					// TODO Auto-generated method stub
+					r_tv_smscode.setText("获取验证码");
+					r_tv_smscode.setClickable(true);
+
+				}
+			};
+			timer.start();
+			break;
+
+		case R.id.r_cb_isagree:// 是否同意注册协议#fbc16d
+			// if (!r_cb_isagree.isChecked()) {
+			// // r_tv_register.setEnabled(true);
+			// // r_tv_register.setBackgroundResource(R.color.login_checked);
+			// Toast.makeText(this, "亲同意注册协议才可注册哦!", Toast.LENGTH_SHORT)
+			// .show();
+			// return;
+			// }
+			break;
+		case R.id.r_tv_agreement:// 注册协议按钮
+			Intent intent = new Intent(this, MyDialog.class);
+			intent.putExtra("type", 1);
+			intent.putExtra("title", "风购全球注册协议");
+			startActivity(intent);
+
+			break;
+		case R.id.r_tv_register:// 注册提交或忘记密码提交按钮
+			if (type == 1) {// 忘记密码
+				validateSms();
+				// updatePwdByRestKey();
+			} else if (type == 2) {// 注册
+
+				registerAndGetPassword();
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	/** 用户存在获取短信验证码 */
+	private void addSmsForRestPwd() {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("key", verifyCode);
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.GET,
+				"common/addSmsForRestPwd", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						Log.d("my", "进一步验证:" + msg);
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						Log.d("my", "进一步验证:" + json);
+						try {
+							if (json.getBoolean("success")) {
+
+								smscode = json.getString("msg");
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						handler.sendEmptyMessage(2);
+					}
+				});
+	}
+
+	/** 获取第三次验证 */
+	private void validateSms() {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("key", verifyCode);
+		params.addQueryStringParameter("validateCode", smscode);
+
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.GET,
+				"common/validateSms", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						Log.e("my", "第三次验证:" + msg);
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						Log.d("my", "进第三次验证:" + json);
+						try {
+							if (json.getBoolean("success")) {
+
+								newkey = json.getString("msg");
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						handler.sendEmptyMessage(3);
+					}
+				});
+	}
+
+	/*** 修改密码 */
+	private void updatePwdByRestKey() {
+		if (!conditionalVerification()) {
+			return;
+		}
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("key", newkey);
+		params.addQueryStringParameter("password", r_et_password.getText()
+				.toString());
+
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.GET,
+				"common/updatePwdByRestKey", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						Log.e("my", "第三次验证:" + msg);
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						Log.d("my", "进第三次验证:" + json);
+						try {
+							if (json.getBoolean("success")) {
+
+								newkey = json.getString("msg");
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						handler.sendEmptyMessage(3);
+					}
+				});
+	}
+}

@@ -1,0 +1,355 @@
+package com.llg.privateproject.fragment;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.IntentFilter;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.actvity.WebLoginActivity;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.LogManag;
+import com.llg.privateproject.view.CustomProgressSmall;
+import com.smartandroid.sa.view.AutoLoading;
+
+/**
+ * Fragment 基类
+ * 
+ * @author gongyibing
+ * @version 1.0
+ * @created 2015-05-07
+ */
+public abstract class BaseFragment extends Fragment {
+	boolean isShow = true;
+	AppContext appContext;
+	private Refresh refresh;
+	public AutoLoading autoLoading;
+	private String client_id = "mobile-client";
+	private String client_secret = "mobile";
+	public CustomProgressSmall customProgressSmall;
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		LogManag.i(getFragmentName(), " onAttach()");
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		appContext = (AppContext) getActivity().getApplication();
+		LogManag.i(getFragmentName(), " onCreate()");
+		customProgressSmall = CustomProgressSmall.initDialog(getActivity(),
+				"正在加载中", true, new OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface arg0) {
+						// TODO Auto-generated method stub
+						customProgressSmall.dismiss();
+					}
+				});
+	}
+
+	public BroadcastReceiver receiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			ConnectivityManager connectivityManager = (ConnectivityManager) context
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo mobNetInfo = connectivityManager
+					.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+			NetworkInfo wifiNetInfo = connectivityManager
+					.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+			if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
+				// BSToast.showLong(context, "网络不可以用");
+				// 改变背景或者 处理网络的全局变量
+				doAction1();
+			} else {
+				// 改变背景或者 处理网络的全局变量
+				doAction2();
+			}
+		}
+
+	};
+
+	public void registerReceiver() {
+		IntentFilter filter = new IntentFilter(
+				ConnectivityManager.CONNECTIVITY_ACTION);
+		getActivity().registerReceiver(receiver, filter);
+	}
+
+	protected void doAction1() {
+		Log.i("tag", "执行了父");
+	};
+
+	protected void doAction2() {
+		Log.i("tag", "执行了父");
+	};
+
+	/**
+	 * 刷新token
+	 */
+	public void RefeshToken() {
+		// final SharedPreferences sharedPreferences = AppContext.get);
+		String refresh_token = AppContext.getUserInformation()
+				.getRefreshToken();
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("client_id", client_id);
+		params.addBodyParameter("client_secret", client_secret);
+		params.addBodyParameter("grant_type", "refresh_token");
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		if (refresh_token != null && refresh_token.length() > 0) {
+			params.addBodyParameter("refresh_token", refresh_token);
+			AppContext.getHtmlUitls().xUtilsm(getActivity(), HttpMethod.POST,
+					"oauth/token", params, new HttpCallback() {
+
+						@Override
+						public void onError(String msg) {
+							// TODO Auto-generated method stub
+							if (msg.equals("404")) {
+								// toast("BaseFragment 404" +
+								// "-**-WebLoginActivity");
+								Intent intent = new Intent(getActivity(),
+										WebLoginActivity.class);
+								startActivity(intent);
+								getActivity().finish();
+							} else {
+								if (autoLoading != null) {
+									autoLoading.showExceptionLayout();
+								}
+							}
+						}
+
+						@Override
+						public void onBack(JSONObject json) {
+							// TODO Auto-generated method stub
+							String access_token = json
+									.optString("access_token");
+							String refresh_token = json
+									.optString("refresh_token");
+							if (access_token != null && refresh_token != null
+									&& access_token.length() > 0
+									&& refresh_token.length() > 0) {
+								refresh.refreshRequst(access_token);
+								getSharePrefence()
+										.edit()
+										.putString("access_token", access_token)
+										.putString("refresh_token",
+												refresh_token).commit();
+								UserInformation.setAccess_token(access_token);
+								UserInformation.setRefreshToken(refresh_token);
+								refresh.refreshRequst(access_token);
+								AppContext.isLogin = true;
+							} else {
+								// toast("RefeshToken onBack" +
+								// "-**-WebLoginActivity");
+								Intent intent = new Intent(getActivity(),
+										WebLoginActivity.class);
+								startActivity(intent);
+								autoLoading.hideAll();
+								// getActivity().finish();
+							}
+						}
+					});
+		}
+	}
+
+	/**
+	 * @return 返回一个sharePrefences对象
+	 */
+	public SharedPreferences getSharePrefence() {
+		return getActivity().getSharedPreferences("userInformation1",
+				Context.MODE_PRIVATE);
+	}
+
+	public void setRefreshListtener(Refresh refresh) {
+		this.refresh = refresh;
+	}
+
+	public interface Refresh {
+		void refreshRequst(String access_token);
+	}
+
+	public void initAutoLoading(View view) {
+		autoLoading = new AutoLoading(getActivity(), view);
+		autoLoading.showLoadingLayout();
+	}
+
+	public void initAutoLoad(View view) {
+		autoLoading = new AutoLoading(getActivity(), view);
+	}
+
+	/**
+	 * @param timeNumber
+	 * @return 获取当前时间多少分钟后的时间戳
+	 */
+	public static Long getDate(int timeNumber, Long tokenTime) {
+		// Date d = new Date();
+		// d.setTime(tokenTime);
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(tokenTime);
+		cal.set(Calendar.HOUR, cal.get(Calendar.HOUR));
+		cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) + timeNumber);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Long time = Long.parseLong(date2TimeStamp(sdf.format(cal.getTime())));
+		return time;
+	}
+
+	/**
+	 * 日期格式字符串转换成时间戳
+	 * 
+	 * @param date
+	 *            字符串日期
+	 * @param format
+	 *            如：yyyy-MM-dd HH:mm:ss
+	 * @return
+	 */
+	public static String date2TimeStamp(String date_str) {
+		String format = "yyyy-MM-dd HH:mm:ss";
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			return String.valueOf(sdf.parse(date_str).getTime() / 1000);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	/**
+	 * 取得当前时间戳（精确到秒）
+	 * 
+	 * @return
+	 */
+	public static String timeStamp() {
+		long time = System.currentTimeMillis();
+		String t = String.valueOf(time / 1000);
+		return t;
+	}
+
+	public void isGoLogin(String msg) {
+		boolean isLogin = AppContext.getUserInformation().isLogin();
+		if (!isLogin) {
+			toast("BaseFragment isLogin" + "-**-WebLoginActivity");
+			Intent intent = new Intent(getActivity(), WebLoginActivity.class);
+			startActivity(intent);
+		}
+	}
+
+	public void myLogShow(String tag, String message) {
+		if (isShow) {
+			Log.i(tag, message);
+		}
+	}
+
+	public void toast(String str) {
+		Toast.makeText(getActivity(), str, Toast.LENGTH_LONG).show();
+	}
+
+	public void toast(int id) {
+		Toast.makeText(getActivity(), id, Toast.LENGTH_SHORT).show();
+
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		LogManag.i(getFragmentName(), " onCreateView()");
+		return super.onCreateView(inflater, container, savedInstanceState);
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		LogManag.i(getFragmentName(), " onViewCreated()");
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		LogManag.i(getFragmentName(), " onActivityCreated()");
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		LogManag.i(getFragmentName(), " onStart()");
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		LogManag.i(getFragmentName(), " onResume()");
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		LogManag.i(getFragmentName(), " onPause()");
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		LogManag.i(getFragmentName(), " onStop()");
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		LogManag.i(getFragmentName(), " onDestroyView()");
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		LogManag.i(getFragmentName(), " onDestroy()");
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		LogManag.i(getFragmentName(), " onDetach()");
+	}
+
+	/**
+	 * fragment name
+	 */
+	public abstract String getFragmentName();
+
+	/**
+	 * 获取屏幕宽高
+	 * 
+	 * @param activity
+	 * @return
+	 */
+	public DisplayMetrics getScreen(Activity activity) {
+		DisplayMetrics outMetrics = new DisplayMetrics();
+		activity.getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+		return outMetrics;
+	}
+
+}

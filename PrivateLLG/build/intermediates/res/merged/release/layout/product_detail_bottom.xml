@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_120px"
+    android:layout_gravity="bottom"
+    android:orientation="horizontal"
+    android:id="@+id/ll_button"
+    android:visibility="gone" >
+
+    <TextView
+        android:id="@+id/buy"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="#cc383838"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="去购物车"
+      
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/collect"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="#FF8A00"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="加入购物车"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+</LinearLayout>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/llife"
+    android:padding="10dp" >
+     <RelativeLayout android:layout_width="match_parent"
+	     android:layout_height="wrap_content"
+	     android:orientation="horizontal">
+	 <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/kuai_03"
+        android:padding="5dp"
+        android:textColor="@color/black1"
+        android:text=" 邻邻狗主题馆"/>
+	 <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:padding="5dp"
+        android:layout_alignParentRight="true"
+        android:text=""
+        android:textColor="@color/black2"
+       />
+	 </RelativeLayout>
+	
+	 <com.llg.privateproject.view.LineGridView android:layout_width="wrap_content"
+	    
+	     android:layout_height="wrap_content"
+	     android:numColumns="4"
+	       android:verticalSpacing="0dp"
+	         android:horizontalSpacing="0dp"
+	         android:paddingLeft="1dp"
+	         android:paddingTop="1dp"
+	         android:paddingBottom="1dp"
+	         android:paddingRight="1dp"
+	        
+	         android:listSelector="@null"
+	     android:id="@+id/linlingouzhutiguan_gv"></com.llg.privateproject.view.LineGridView>
+	
+</LinearLayout>

@@ -1,0 +1,555 @@
+package com.bjg.lcc.alipay.pay;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Toast;
+
+import com.alipay.sdk.app.PayTask;
+import com.bjg.lcc.alipay.pay.payfragment.Mydismiss;
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.Constants;
+import com.tencent.mm.sdk.modelpay.PayReq;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
+
+public class PayActivity extends FragmentActivity implements Mydismiss {
+
+	public static final String PARTNER = "2088911132152085";
+	public static final String SELLER = "2855793518@qq.com";
+
+	public static final String RSA_PRIVATE = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBANJ0iPk+xpDQgVWY5xzofsLYagWAMn6kfsvOf7OMx4xcjsxPu0KrcukLh13ljpVqSBz/2Iwn7iLQcC9WUkZ9RUJvRYbaHyf1FV5WqPPIkm3ixlbwNVSkZN8WlnCk8RFt/U4agnr2VN1xGHeZlQpcZ/CYsdZKlTiw9gtnUa0mEYGrAgMBAAECgYBHNzoWpcCJxpTNg2VJqf8jLhqKa/wqUL27d9BM0OnBvJxx1NU4VU4YQFd5VbHvK7zlW0pK+0QhMcmUqzBCPCfQGzXFXpERLzOD9MNsKljeAfB4bRAinOVf5H0BFEDMlEGVTdzYIn2RakDprahvDgR6v8RfAgGiSDpX8+dsAeykCQJBAO3cjshTB/RkrCTRvyOungKFzN2owl79thpPbyfLr+AV6sRC9SNK1OPgZWesUePaTg42ELUk1HQeuVxOzd+hOA0CQQDigPYUhD8e8AiMXzNI3WPF/ycdkRDGnva6B8x0gFiA6mIEC5O6/GnF4dqAqE+shBFsxOcFWIQrJjTkkSt4QLqXAkBOsXODjwTItC3HmKT19yVLjFy00MpNhv6iQblynw62wkmDWOulG3LHWUvzOq11BppgVT69z0uCh0+n3GJ8I+hZAkEAxXK6EYR/Kc8BBKzwnfIwSad1R7bvstVcKyslNeG0RR0MuI4HCBeFdTS/LyyJ18+BCRpUcTqKbLrvnNhX1opGnQJBAOD/aph7x2IqQIAgZBJXPC61qF1pOut+GOSxeywUQu7CHQfLJ1R2zrOOsXmkfIKSR0xpN0uKO0Fi+ztZVdDUFMU=";
+
+	public static final String RSA_PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB";
+
+	private static final int SDK_PAY_FLAG = 1;
+	private static final int SDK_CHECK_FLAG = 2;
+	private String payCode;
+	private String payPrice;
+	private String totalFee = "";
+	private String out_trade_no;
+	private double totalBalances;// 需要支付的价格-使用余额部分后剩余的实际支付价格
+	private boolean cbisChecked = true;
+	private boolean iszhi = true;
+
+	private IWXAPI msgApi;
+	private Handler mHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case SDK_PAY_FLAG: {
+				Result resultObj = new Result((String) msg.obj);
+				String resultStatus = resultObj.resultStatus;
+
+				SharedPreferences sp = getSharedPreferences("user",
+						Context.MODE_PRIVATE);
+				if (TextUtils.equals(resultStatus, "9000")) {
+					String[] myresultParams = resultObj.result.split("&");
+					for (String string : myresultParams) {
+						if (string.startsWith("out_trade_no")) {
+							out_trade_no = getValue(string, "out_trade_no");
+						}
+						PayActivity.this.finish();
+					}
+
+					Toast.makeText(PayActivity.this, "支付成功", Toast.LENGTH_SHORT)
+							.show();
+				} else if (TextUtils.equals(resultStatus, "8000")) {
+					Toast.makeText(PayActivity.this, "支付结果确认中",
+							Toast.LENGTH_SHORT).show();
+				} else if (TextUtils.equals(resultStatus, "4000")) {
+					Toast.makeText(PayActivity.this, "系统异常", Toast.LENGTH_SHORT)
+							.show();
+				} else if (TextUtils.equals(resultStatus, "4001")) {
+					Toast.makeText(PayActivity.this, "数据格式不正确",
+							Toast.LENGTH_SHORT).show();
+				} else if (TextUtils.equals(resultStatus, "4003")) {
+					Toast.makeText(PayActivity.this, "该用户绑定的支付宝账户被冻结或不允许支付",
+							Toast.LENGTH_SHORT).show();
+				} else if (TextUtils.equals(resultStatus, "4004")) {
+					Toast.makeText(PayActivity.this, "该用户已解除绑定",
+							Toast.LENGTH_SHORT).show();
+				} else if (TextUtils.equals(resultStatus, "4005")) {
+					Toast.makeText(PayActivity.this, "绑定失败或没有绑定",
+							Toast.LENGTH_SHORT).show();
+				} else if (TextUtils.equals(resultStatus, "4006")) {
+					Toast.makeText(PayActivity.this, "订单支付失败",
+							Toast.LENGTH_SHORT).show();
+				} else if (TextUtils.equals(resultStatus, "4010")) {
+					Toast.makeText(PayActivity.this, "重新绑定账户",
+							Toast.LENGTH_SHORT).show();
+				} else if (TextUtils.equals(resultStatus, "6000")) {
+					Toast.makeText(PayActivity.this, "支付服务正在进行升级操作",
+							Toast.LENGTH_SHORT).show();
+				} else if (TextUtils.equals(resultStatus, "6001")) {
+					Toast.makeText(PayActivity.this, "用户中途取消支付操作",
+							Toast.LENGTH_SHORT).show();
+					PayActivity.this.finish();
+				} else if (TextUtils.equals(resultStatus, "7001")) {
+					Toast.makeText(PayActivity.this, "网页支付失败",
+							Toast.LENGTH_SHORT).show();
+
+				}
+				break;
+			}
+			case SDK_CHECK_FLAG: {
+				Toast.makeText(PayActivity.this, "检查结果为：" + msg.obj,
+						Toast.LENGTH_SHORT).show();
+				break;
+			}
+			default:
+				break;
+			}
+		};
+	};
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		// getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		// WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		setContentView(R.layout.pay_main);
+		Window myWindow = getWindow();
+		myWindow.setBackgroundDrawableResource(R.color.transparent);
+		WindowManager.LayoutParams lp = getWindow().getAttributes();
+		WindowManager wm = getWindowManager();
+		Display display = wm.getDefaultDisplay();
+		myWindow.setGravity(Gravity.BOTTOM);
+		// lp.width = (int) (display.getWidth() * 0.8);
+		// lp.height = (int) (display.getHeight() * 0.8);
+		lp.width = (int) (AppContext.getScreenWidth());
+		lp.height = (int) (AppContext.getScreenHeight());
+		myWindow.setAttributes(lp);
+		payPrice = getIntent().getStringExtra("price");
+		payCode = getIntent().getStringExtra("code");
+		msgApi = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
+		// 将该app注册到微信
+		// msgApi.registerApp(Constants.APP_ID);
+
+		// mypay();
+		// toapliay();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		if (AppContext.weixinErrorCode == 0) {
+			finish();
+		} else if (AppContext.weixinErrorCode == -2) {
+			finish();
+		} else if (AppContext.weixinErrorCode == -1) {
+			finish();
+		}
+		AppContext.weixinErrorCode = 10;
+	}
+
+	/** 余额支付 */
+	private void mypay(String price) {
+		// WebView wv = new WebView(this);
+		// wv.loadUrl(R.string.test_data_server_urlm + "common/alipay/pay?"
+		// + "id=" + getIntent().getStringExtra("code") + "&asset="
+		// + getIntent().getStringExtra("price"));
+		RequestParams params = new RequestParams();
+		if (getIntent().getStringExtra("id") == null) {
+			params.addQueryStringParameter("id",
+					getIntent().getStringExtra("code"));
+		} else {
+			params.addQueryStringParameter("id",
+					getIntent().getStringExtra("id"));
+
+		}
+		params.addQueryStringParameter("access_token",
+				UserInformation.getAccess_token());
+		params.addQueryStringParameter("asset", price);
+		// params.addQueryStringParameter("asset",
+		// getIntent().getStringExtra("price"));
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/alipay/pay", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						Toast.makeText(PayActivity.this, "支付失败" + msg,
+								Toast.LENGTH_SHORT).show();
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						try {
+							if (json.getBoolean("success")) {
+								JSONObject attributes = json
+										.getJSONObject("attributes");
+								totalFee = attributes.getString("totalFee");
+
+								if (totalFee.length() > 0
+										&& Float.parseFloat(totalFee) > 0) {
+									payPrice = totalFee;
+									if (iszhi) {// 支付宝支付
+										toapliay();
+										// }else{//微信支付
+										// toweixin();
+									}
+
+								} else if (totalFee.length() > 0
+										&& Float.parseFloat(totalFee) <= 0) {
+									Toast.makeText(PayActivity.this, "支付成功",
+											Toast.LENGTH_SHORT).show();
+									finish();
+								}
+							} else {
+								Toast.makeText(PayActivity.this,
+										"余额支付失败,请用现金支付", Toast.LENGTH_SHORT)
+										.show();
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+				});
+		// finish();
+	}
+
+	/**
+	 * call alipay sdk pay. 调用SDK支付
+	 * 
+	 */
+	public void pay(View v) {
+
+		if (cbisChecked) {
+			if (iszhi) {// 支付宝
+				/**
+				 * 当用户余额大于==支付价格,直接把价格设置为支付价格传过去 小于的时候,把余额保留两位传进去
+				 */
+				if (totalBalances == 0) {// Double.parseDouble(payPrice)
+					// mypay(getIntent().getStringExtra("price"));
+					mypay(payPrice);
+				} else {
+					// payPrice = String.valueOf(Double.parseDouble(getIntent()
+					// .getStringExtra("price")) - totalBalances);
+					mypay(String.valueOf(totalBalances));
+					// toapliay();
+				}
+			} else {// 微信
+				if (totalBalances == 0) {// >= Double.parseDouble(payPrice)
+					// mypay(getIntent().getStringExtra("price"));
+					mypay(payPrice);
+				} else {
+					// payPrice = String.valueOf(Double.parseDouble(getIntent()
+					// .getStringExtra("price")) - totalBalances);
+					// mypay(String.valueOf(totalBalances));
+					toweixin("" + totalBalances);
+					// toapliay();
+				}
+
+				// toweixin();
+			}
+
+		} else {
+			payPrice = getIntent().getStringExtra("price");
+			if (iszhi) {// 支付宝支付
+				toapliay();
+			} else {// 微信支付
+				toweixin("0");
+			}
+		}
+	}
+
+	/**
+	 * 微信支付
+	 * 
+	 * @param asset
+	 *            余额数量
+	 * @param osType
+	 *            1位android
+	 * */
+	public void toweixin(String asset) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("id", getIntent().getStringExtra("id"));
+		params.addQueryStringParameter("access_token",
+				UserInformation.getAccess_token());
+
+		params.addQueryStringParameter("asset", asset);
+		params.addQueryStringParameter("osType", String.valueOf("1"));
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST, "m/wxpay/pay",
+				params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						Toast.makeText(PayActivity.this, "支付失败" + msg,
+								Toast.LENGTH_SHORT).show();
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						PayReq req = new PayReq();
+						try {
+							if (json.getBoolean("success")) {
+								JSONObject obj = json
+										.getJSONObject("attributes");
+								if (obj.has("totalFee")
+										&& obj.getString("totalFee")
+												.equals("0")) {
+									Toast.makeText(PayActivity.this, "支付成功",
+											Toast.LENGTH_SHORT).show();
+									return;
+								}
+								req.appId = obj.getString("appid");
+								req.partnerId = obj.getString("partnerid");
+								req.prepayId = obj.getString("prepayid");
+								req.nonceStr = obj.getString("noncestr");
+								req.timeStamp = obj.getString("timestamp");
+								req.packageValue = obj.getString("package");
+								req.sign = obj.getString("sign");
+								// req.extData = "app data"; // optional
+								boolean is = msgApi.sendReq(req);
+								System.out.println("isoooooooooooooo" + is);
+								Toast.makeText(PayActivity.this, "正在调起微信支付",
+										Toast.LENGTH_SHORT).show();
+							} else {
+								if (json.get("msg") != null) {
+									Toast.makeText(PayActivity.this,
+											json.getString("msg"),
+											Toast.LENGTH_SHORT).show();
+								}
+							}
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						// 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
+					}
+				});
+
+	}
+
+	/** 支付宝支付 */
+	public void toapliay() {
+		Intent intent = getIntent();
+
+		String name;
+		if (intent.getStringExtra("name") == null) {
+			name = "支付金额" + payPrice;
+		} else {
+			name = intent.getStringExtra("name");
+		}
+
+		String orderInfo = getOrderInfo(name, "1",// intent.getStringExtra("singlePrice")
+				payPrice.toString());
+		// "0.01");
+
+		String sign = sign(orderInfo);
+		try {
+			// 仅需对sign 做URL编码
+			sign = URLEncoder.encode(sign, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		final String payInfo = orderInfo + "&sign=\"" + sign + "\"&"
+				+ getSignType();
+
+		Runnable payRunnable = new Runnable() {
+
+			@Override
+			public void run() {
+				// 构造PayTask 对象
+				PayTask alipay = new PayTask(PayActivity.this);
+				// 调用支付接口
+				String result = alipay.pay(payInfo);
+
+				Message msg = new Message();
+				msg.what = SDK_PAY_FLAG;
+				msg.obj = result;
+				mHandler.sendMessage(msg);
+			}
+		};
+
+		Thread payThread = new Thread(payRunnable);
+		payThread.start();
+	}
+
+	/**
+	 * check whether the device has authentication alipay account.
+	 * 查询终端设备是否存在支付宝认证账户
+	 * 
+	 */
+	public void check(View v) {
+
+		Runnable checkRunnable = new Runnable() {
+
+			@Override
+			public void run() {
+				PayTask payTask = new PayTask(PayActivity.this);
+				boolean isExist = payTask.checkAccountIfExist();
+
+				Message msg = new Message();
+				msg.what = SDK_CHECK_FLAG;
+				msg.obj = isExist;
+				mHandler.sendMessage(msg);
+			}
+		};
+
+		Thread checkThread = new Thread(checkRunnable);
+		checkThread.start();
+
+	}
+
+	/** 隐藏 */
+	public void back(View v) {
+		this.finish();
+	}
+
+	/**
+	 * get the sdk version. 获取SDK版本号
+	 * 
+	 */
+	public void getSDKVersion() {
+		PayTask payTask = new PayTask(this);
+		String version = payTask.getVersion();
+		Toast.makeText(this, version, Toast.LENGTH_SHORT).show();
+	}
+
+	/**
+	 * create the order info. 创建订单信息
+	 * 
+	 */
+	public String getOrderInfo(String subject, String body, String price) {
+		// 合作者身份ID
+		String orderInfo = "partner=" + "\"" + PARTNER + "\"";
+
+		// 卖家支付宝账号
+		orderInfo += "&seller_id=" + "\"" + SELLER + "\"";
+
+		// 商户网站唯一订单号
+		orderInfo += "&out_trade_no=" + "\"" + payCode + "\"";
+
+		// 商品名称
+		orderInfo += "&subject=" + "\"" + subject + "\"";
+		// 商品详情
+		orderInfo += "&body=" + "\"" + body + "\"";
+
+		// 商品金额
+		orderInfo += "&total_fee=" + "\"" + price + "\"";
+
+		// 服务器异步通知页面路径
+
+		orderInfo += "&notify_url=" + "\""
+				+
+				// "http://113.205.154.144:8090/llgweb/"+
+				getResources().getString(R.string.buyserver)
+				+ "common/alipay/mobnotify"
+
+				+ "\"";
+
+		// 接口名称， 固定值
+		orderInfo += "&service=\"mobile.securitypay.pay\"";
+
+		// 支付类型， 固定值
+		orderInfo += "&payment_type=\"1\"";
+		// 参数编码， 固定值
+		orderInfo += "&_input_charset=\"utf-8\"";
+
+		// 设置未付款交易的超时时间
+		// 默认30分钟，一旦超时，该笔交易就会自动被关闭。
+		// 取值范围：1m～15d。
+		// m-分钟，h-小时，d-天，1c-当天（无论交易何时创建，都在0点关闭）。
+		// 该参数数值不接受小数点，如1.5h，可转换为90m。
+		orderInfo += "&it_b_pay=\"30m\"";
+		// 支付宝处理完请求后，当前页面跳转到商户指定页面的路径，可空
+		orderInfo += "&return_url=\"m.alipay.com\"";
+		// 调用银行卡支付，需配置此参数，参与签名， 固定值
+		// orderInfo += "&paymethod=\"expressGateway\"";
+
+		return orderInfo;
+	}
+
+	/**
+	 * get the out_trade_no for an order. 获取外部订单号
+	 * 
+	 */
+	public String getOutTradeNo() {
+		SimpleDateFormat format = new SimpleDateFormat("MMddHHmmss",
+				Locale.getDefault());
+		Date date = new Date();
+		String key = format.format(date);
+
+		Random r = new Random();
+		key = key + r.nextInt();
+		key = key.substring(0, 15);
+		return key;
+	}
+
+	/**
+	 * sign the order info. 对订单信息进行签名
+	 * 
+	 * @param content
+	 *            待签名订单信息
+	 */
+	public String sign(String content) {
+
+		return SignUtils.sign(content, RSA_PRIVATE);
+	}
+
+	/**
+	 * get the sign type we use. 获取签名方式
+	 * 
+	 */
+	public String getSignType() {
+		return "sign_type=\"RSA\"";
+	}
+
+	@Override
+	public boolean mDismiss(boolean isDismiss) {
+		// TODO Auto-generated method stub
+		PayActivity.this.finish();
+		return false;
+	}
+
+	private String getValue(String content, String key) {
+
+		String prefix = key + "=\"";
+		return content.substring(content.indexOf(prefix) + prefix.length(),
+				content.lastIndexOf("\""));
+	}
+
+	@Override
+	public void setPrice(double totalBalances, boolean cbisChecked,
+			boolean iszhi) {
+		// TODO Auto-generated method stub
+		this.totalBalances = totalBalances;
+		this.cbisChecked = cbisChecked;
+		this.iszhi = iszhi;
+	}
+
+}

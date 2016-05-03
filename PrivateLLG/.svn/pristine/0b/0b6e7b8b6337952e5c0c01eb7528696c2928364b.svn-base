@@ -1,0 +1,543 @@
+package com.llg.privateproject.actvity;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+
+import org.apache.http.impl.cookie.DateUtils;
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.king.photo.util.Bimp;
+import com.king.photo.util.ImageItem;
+import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.MyFormat;
+import com.llg.help.ScreenManager;
+import com.llg.privateproject.AppContext;
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.llg.privateproject.camera.PopupSelectImage;
+import com.llg.privateproject.entities.Customer;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.fragment.BaseActivity.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.ActivitiesManager;
+import com.llg.privateproject.utils.CommonUtils;
+import com.llg.privateproject.utils.Constants;
+import com.llg.privateproject.view.CustomProgressSmall;
+import com.llg.privateproject.view.Gerenziliao_Dialog;
+import com.mob.tools.utils.Data;
+import com.smartandroid.sa.avatars.AvatarDrawableFactory;
+import com.smartandroid.sa.bitmap.BitmapInfo;
+import com.smartandroid.sa.tag.select.Evaluator.IsEmpty;
+import com.smartandroid.sa.view.AutoLoading;
+
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.SharedPreferences.Editor;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+/**
+ * 个人资料 yh 2015.6.13
+ * 
+ * */
+public class GeRenZiLiao extends BaseActivity implements Serializable {
+	/** 返回 */
+	@ViewInject(R.id.turn)
+	private ImageView turn;
+	/** 用户头像 */
+	@ViewInject(R.id.userhead)
+	private ImageView userhead;
+	/** 上传头像 */
+	@ViewInject(R.id._sendhead)
+	private TextView _sendhead;
+	/** 姓名 */
+	@ViewInject(R.id.username)
+	private TextView username;
+	/** 昵称 */
+	@ViewInject(R.id.petname)
+	private EditText petname;
+	/** 性别 */
+	@ViewInject(R.id.sex)
+	private EditText sex;
+	/** 生日 */
+	@ViewInject(R.id.birthday)
+	private TextView birthday;
+	/** 个人资料对话框 */
+	private Dialog gerenziliao_dialog;
+	LayoutParams params;
+	/** 根布局 */
+	private RelativeLayout root;
+	/** 本地上传头像 */
+	TextView bendishangchuan;
+	/** 拍照上传头像 */
+	TextView paizhaoshangchuan;
+	private Customer customer;// 个人用户资料
+	@ViewInject(R.id.ly_load)
+	private LinearLayout lyLoad;// 需要加载数据的linearlayout
+
+	@ViewInject(R.id.radiogroup)
+	private RadioGroup radioGroup;
+	private CustomProgressSmall customProgressSmall;
+	private File file;
+	private Bitmap bitmap;// 用户头像
+	private String imgID;// 用户头像
+
+	// private Drawable roundedAvatarDrawable;// 用户头像
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.gerenziliao);
+		ViewUtils.inject(this);
+		root = (RelativeLayout) findViewById(R.id.rool);
+		params = new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT);
+		initUI();
+		requestNet(UserInformation.getAccess_token());
+	}
+
+	protected void onDestroy() {
+		super.onDestroy();
+		// 回收图片对象
+		if (bitmap != null) {
+			bitmap.recycle();
+		}
+	};
+
+	protected void onRestart() {
+		super.onRestart();
+		Log.i("he", autoLoading.getVisibelyLoad()
+				+ "=======getVisibelyLoad====onRestart==1=====");
+		if (autoLoading.getVisibelyLoad()) {
+			Log.i("he", "===========onRestart==2=====");
+			finish();
+			return;
+		}
+	};
+
+	Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case Constants.SUCCESS:
+				initData();
+				autoLoading.hideAll();
+				break;
+
+			default:
+				break;
+			}
+		};
+	};
+
+	/**
+	 * 初始化界面
+	 */
+	private void initUI() {
+		initAutoLoading(lyLoad);
+		autoLoading.setClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				autoLoading.showLoadingLayout();
+				requestNet(AppContext.getUserInformation().getAccess_token());
+			}
+		});
+	}
+
+	/**
+	 * 网络请求成功后设置数据
+	 */
+	private void initData() {
+		Log.i("tag", customer.getPictureUrl() + "=====customer.getPictureUrl()");
+		if (customer.getPictureUrl() != null) {
+			MyFormat.setBitmap(this, userhead, customer.getPictureUrl(), 0, 0);
+		}
+		username.setText(customer.getName());
+		petname.setText(customer.getAppellation());
+		if (customer.getSex().equals("2")) {
+			((RadioButton) radioGroup.getChildAt(1)).setChecked(true);
+		} else if (customer.getSex().equals("1")) {
+			((RadioButton) radioGroup.getChildAt(0)).setChecked(true);
+		}
+		Log.i("tag", customer.getAppellation() + "");
+		if (customer.getBirthday() != null) {
+			birthday.setText(MyFormat.getTimeFormat2(customer.getBirthday()));
+		}
+	}
+
+	/**
+	 * 进入个人资料页面时的发起网络请求
+	 */
+	private void requestNet(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		// params.addHeader("Content-Type", "application/json");
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		// Log.i("tag", getSharePrefence().getString("access_token", "")
+		// + "-发起个人请求requestNet的--Access_token------");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/customer/getCustomer", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						// dealError(msg);
+						autoLoading.showExceptionLayout();
+						Log.i("tag", msg
+								+ "-------requestNet--onError-msg------");
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						// Log.i("tag", json.toString()
+						// + "------requestNet---json--onBack--------");
+						Map<String, Object> map = ParseJson.getParseJson()
+								.parseIsSuccess(json);
+						// Log.i("tag", (Boolean) map.get("isSuccess")
+						// + "---发送个人请求判断isSuccess------onBack------");
+						// Log.i("tag",
+						// map.get("errorCode")+"---errorCode------onBack------");
+						// Log.i("tag",
+						// map.get("errorCode").equals("NOT_LOGIN")+"---errorCode-是否相等----onBack------");
+						if ((Boolean) map.get("isSuccess")) {
+							Log.i("tag", "");
+							customer = ParseJson.getParseJson().parseCustomer(
+									json);
+							handler.sendEmptyMessage(Constants.SUCCESS);
+						} else {
+							if (map.get("errorCode").equals("NOT_LOGIN")) {
+								// Log.i("tag", json.toString()
+								// + "------监听上一句--------");
+								setRefreshListtener(new Refresh() {
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+										Log.i("tag", "------监听里-------");
+										requestNet(access_token);
+									}
+								});
+								RefeshToken();
+							} else {
+								autoLoading.showExceptionLayout();
+								toast(json.optString("msg"));
+							}
+						}
+					}
+				});
+	}
+
+	private static final int REQUEST_SELECT_TX_IMG_ID = 10003;
+	
+	@OnClick({ R.id.turn, R.id._sendhead, R.id.username, R.id.petname,
+			R.id.sex, R.id.birthday, R.id.bendishangchuan,
+			R.id.paizhaoshangchuan, R.id.tv_modify })
+	public void mclick(View v) {
+		switch (v.getId()) {
+		case R.id.turn:
+			// Toast.makeText(this, "返回", Toast.LENGTH_SHORT).show();
+			finish();
+			break;
+		case R.id._sendhead:
+			Intent intent = new Intent(this, PopupSelectImage.class);
+			// intent.putExtra("height", getAppContext().getScreenWidth() * 2 /
+			// 9);
+			// intent.putExtra("width", getAppContext().getScreenWidth() * 2 /
+			// 9);
+//			startActivityForResult(intent, 3);
+			// gerenziliao_dialog = new Gerenziliao_Dialog(this, 1);
+			// gerenziliao_dialog.show();
+			
+			intent.putExtra("type_s", "002");
+			startActivityForResult(intent, REQUEST_SELECT_TX_IMG_ID);
+			break;
+		case R.id.username:
+			break;
+		case R.id.petname:
+			break;
+		// 提交修改的个人资料网络请求
+		case R.id.tv_modify:
+			regex();
+			customProgressSmall = CustomProgressSmall.initDialog(this, "正在加载中",
+					true, new OnCancelListener() {
+
+						@Override
+						public void onCancel(DialogInterface arg0) {
+							// TODO Auto-generated method stub
+							customProgressSmall.dismiss();
+						}
+					});
+			customProgressSmall.show();
+			commitDataRequst(AppContext.getUserInformation().getAccess_token());
+			break;
+		case R.id.sex:
+
+			break;
+		case R.id.birthday:
+			Toast.makeText(this, "生日", Toast.LENGTH_SHORT).show();
+			showDatePickerDialog();
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_SELECT_TX_IMG_ID && resultCode == RESULT_OK) {
+			Log.i("Tag", "=======onActivityResult===");
+			Bitmap bitmap = null;
+			try {
+				file = new File(data.getStringExtra("ImageFilePath"));
+				bitmap = BitmapFactory.decodeFile(data
+						.getStringExtra("ImageFilePath"));
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			// bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+			// AvatarDrawableFactory avatarDrawableFactory = new
+			// AvatarDrawableFactory(
+			// getResources(), this);
+			// roundedAvatarDrawable = avatarDrawableFactory
+			// .getRoundedAvatarDrawable(bitmap);
+			// BitmapUtils bitmapUtils = new BitmapUtils(this,
+			// CommonUtils.createSDCardDir());
+			Log.i("tag", (file.getAbsolutePath() == null)
+					+ "--file.getAbsolutePath()---");
+			Log.i("tag", (file == null) + "--file---");
+			// userhead.setImageDrawable(roundedAvatarDrawable);
+			// MyFormat.setBitmap(this, userhead, file.getAbsolutePath(), 0, 0);
+			// bitmapUtils.display(userhead, file.getAbsolutePath());
+			// new BitmapUtils(this).display(userhead, file.getAbsolutePath());
+			userhead.setImageBitmap(bitmap);
+			setRefreshListener(new RefreshImgID() {
+
+				@Override
+				public void refreshImgID(String imgID,String name) {
+					// TODO Auto-generated method stub
+					GeRenZiLiao.this.imgID = imgID;
+				}
+			});
+			uploadPhotoSign(file,
+					AppContext.getUserInformation().getAccess_token(), this);
+		}
+		
+//		BitmapUtils bitmapUtils = new BitmapUtils(this);
+//		if (requestCode == REQUEST_SELECT_IMG_ID && resultCode == RESULT_OK
+//				&& data != null) {
+//			if (data.getStringExtra("ImageFilePath") == null) {
+//				return;
+//			}
+//			file = new File(data.getStringExtra("ImageFilePath"));
+//			if (file != null) {
+//			}
+//		} else if (requestCode == REQUEST_SELECT_FM_IMG_ID
+//				&& resultCode == RESULT_OK && data != null) {
+//			if (data.getStringExtra("ImageFilePath") == null) {
+//				return;
+//			}
+//			file = new File(data.getStringExtra("ImageFilePath"));
+//			if (file != null) {
+//				bitmapUtils.display(ivFenmian, file.getAbsolutePath());
+//			}
+//			/**
+//			 * 赋值封面广告的url
+//			 */
+//			ImageItem item = new ImageItem();
+//			item.setImagePath(data.getStringExtra("ImageFilePath"));
+//			Bimp.setmFMImgItem(item);
+//			
+//		}
+	}
+
+	/**
+	 * 个人资料数据是否合法验证
+	 */
+	private void regex() {
+		if (getStr(petname).isEmpty()) {
+			Toast.makeText(this, "昵称不能为空", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (birthday.getText().toString().isEmpty()) {
+			Toast.makeText(this, "生日不能为空", Toast.LENGTH_SHORT).show();
+			return;
+		}
+	}
+
+	/**
+	 * 展示日期dialog
+	 */
+	private void showDatePickerDialog() {
+		final Calendar c = Calendar.getInstance();
+		long time = System.currentTimeMillis();
+		try {
+			Log.i("tag", customer.getBirthday() + "===long===long=long====long");
+			time = Long.parseLong(customer.getBirthday());
+			Log.i("tag", MyFormat.getTimeFormat2(time + "")
+					+ "===myear===myear=myear====myear");
+			Log.i("tag", time + "===time===time=time====time");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		Log.i("tag", new Date(time).toString() + "===************");
+		Date date = new Date(time);
+		final String myear = DateUtils.formatDate(date, "yyyy");
+		final String mmonth = DateUtils.formatDate(date, "MM");
+		final String mday = DateUtils.formatDate(date, "dd");
+		int gyear = Integer.parseInt(myear);
+		int gmonth = Integer.parseInt(mmonth);
+		int gday = Integer.parseInt(mday);
+		Log.i("tag", gyear + "===========gyear");
+		Log.i("tag", gmonth + "===========gday");
+		Log.i("tag", gday + "===========mday");
+		DatePickerDialog dialog = new DatePickerDialog(this,
+				R.style.agreemdialog, new OnDateSetListener() {
+					@Override
+					public void onDateSet(DatePicker view, int year,
+							int monthOfYear, int dayOfMonth) {
+						// TODO Auto-generated method stub
+
+						birthday.setText("" + year + "-" + (monthOfYear + 1)
+								+ "-" + dayOfMonth);
+					}
+				}, gyear, (gmonth - 1), gday);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.show();
+	}
+
+	/**
+	 * 修改个人资料的网络请求
+	 */
+	private void commitDataRequst(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		Log.i("tag", getStr(petname).toString() + "----***petname--***--");
+		params.addQueryStringParameter("appellation", getStr(petname));
+		if (imgID != null) {
+			params.addQueryStringParameter("iconId", imgID);
+		}
+		if (((RadioButton) radioGroup.getChildAt(0)).isChecked()) {
+			params.addQueryStringParameter("sex", "1");
+		} else if (((RadioButton) radioGroup.getChildAt(1)).isChecked()) {
+			params.addQueryStringParameter("sex", "2");
+		}
+		params.addQueryStringParameter("birthday", birthday.getText()
+				.toString());
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/customer/updateCustomer", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						customProgressSmall.dismiss();
+						Toast.makeText(GeRenZiLiao.this, "加载页面异常",
+								Toast.LENGTH_SHORT).show();
+						Log.i("tag", msg + "----------msg------");
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						Map<String, Object> map = ParseJson.getParseJson()
+								.parseIsSuccess(json);
+						Log.i("tag", (Boolean) map.get("isSuccess")
+								+ "----------isSuccess------" + json.toString());
+						
+						if ((Boolean) map.get("isSuccess")) {
+							customProgressSmall.dismiss();
+							Toast.makeText(GeRenZiLiao.this, "修改成功",
+									Toast.LENGTH_SHORT).show();
+							Intent intent = new Intent();
+							if (file != null) {
+								intent.putExtra("imgUrl",
+										file.getAbsolutePath());
+							}
+							
+							JSONObject customerJson = json.optJSONObject("obj");
+							Gson gson = new Gson();
+							Customer customer = gson.fromJson(customerJson.toString(), Customer.class);
+							SharedPreferences userPreferences = getSharedPreferences(
+									"userInformation1", Context.MODE_PRIVATE);
+							Editor editor = userPreferences.edit();
+							editor.putString("userType", customer.getUserType());
+							editor.putString("userTypeStr",
+									customer.getUserTypeStr());
+							editor.putString("appellation",
+									customer.getAppellation());
+							editor.putString("pictureUrl",
+									customer.getPictureUrl());
+							editor.commit();
+							
+							AppContext.userTypeStr = customer.getUserTypeStr();
+							AppContext.appellation = customer.getAppellation();
+						 
+							setResult(RESULT_OK, intent);
+							finish();
+						} else if (map.get("errorCode").equals("NOT_LOGIN")) {
+							// Log.i("tag", json.toString()
+							// + "------监听上一句--------");
+							setRefreshListtener(new Refresh() {
+								@Override
+								public void refreshRequst(String access_token) {
+									// TODO Auto-generated method stub
+									Log.i("tag", "------监听里-------");
+									commitDataRequst(access_token);
+								}
+							});
+							RefeshToken();
+						} else if (!(Boolean) map.get("isSuccess")) {
+							toast("修改失败");
+							customProgressSmall.dismiss();
+						}
+					}
+				});
+	}
+}

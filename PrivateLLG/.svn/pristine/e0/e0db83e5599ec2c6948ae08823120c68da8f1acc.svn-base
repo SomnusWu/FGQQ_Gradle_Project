@@ -1,0 +1,492 @@
+package com.llg.privateproject.actvity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.GetProgressBar;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.adapters.DeliveryAdapter;
+import com.llg.privateproject.adapters.NewHomeViewPagerAdapter;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.ActivitiesManager;
+import com.llg.privateproject.utils.CommonUtils;
+import com.llg.privateproject.view.IndictorView;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.Toast;
+
+/**
+ * 新版首页 yh 2015.9.15
+ * */
+public class NewHomeActivity extends BaseActivity {
+	/** 初始化时间 */
+	private long mExitTime = 0;
+	@ViewInject(R.id.fl)
+	private FrameLayout fl;
+	@ViewInject(R.id.newhome_ivIndictor)
+	private IndictorView indictor;
+	@ViewInject(R.id.homebanner)
+	private ViewPager banner;
+	@ViewInject(R.id.redpackage)
+	private ImageView redpackage;
+
+	private NewHomeViewPagerAdapter viewPagerAdapter;
+	// private List<View> listBanner;
+	List<Map<String, Object>> listBanner;
+	AppContext appContext;
+	AnimationDrawable anim;
+
+	Handler handler = new Handler() {
+
+		public void handleMessage(android.os.Message msg) {
+			GetProgressBar.dismissMyProgressBar();
+			switch (msg.what) {
+			case 0:// 访问失败
+				// Toast.makeText(NewHomeActivity.this, "访问失败",
+				// Toast.LENGTH_SHORT)
+				// .show();
+				break;
+			case 1:// 访问成功
+				LayoutParams params = new LayoutParams(
+						AppContext.getScreenWidth(),
+						AppContext.getScreenWidth() * 280 / 640);
+				banner.setLayoutParams(params);
+				viewPagerAdapter.notifyDataSetChanged();
+				banner.setAdapter(viewPagerAdapter);
+				int type = 0;
+				if (listBanner.size() > 0) {
+					setIndicator();
+
+					if (listBanner.get(0).get("type").toString() != null) {
+						if (listBanner.get(0).get("type").toString()
+								.equals("null")) {
+							type = 0;
+						} else {
+							type = Integer.parseInt(listBanner.get(0)
+									.get("type").toString());
+
+						}
+					}
+					if (type == 1 || type == 3) {
+						redpackage.setBackgroundResource(R.drawable.redpackage);
+						redpackage.setVisibility(View.VISIBLE);
+						anim.stop();
+						anim = (AnimationDrawable) redpackage.getBackground();
+						anim.start();
+					} else if (type == 2) {
+						redpackage
+								.setBackgroundResource(R.drawable.yellowpackage);
+						redpackage.setVisibility(View.VISIBLE);
+						anim.stop();
+						anim = (AnimationDrawable) redpackage.getBackground();
+						anim.start();
+					} else if (type == 0) {
+						redpackage.setBackgroundResource(R.color.transparent);
+						redpackage.setVisibility(View.GONE);
+
+					}
+					if (redpackage.isShown() && anim != null) {
+						anim.start();
+					} else if (!redpackage.isShown() && anim != null) {
+						anim.stop();
+					}
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+
+	};
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.newhomelayout);
+		ViewUtils.inject(this);
+		init();
+	}
+
+	private void init() {
+
+		appContext = (AppContext) getApplication();
+		listBanner = new ArrayList<Map<String, Object>>();
+
+		viewPagerAdapter = new NewHomeViewPagerAdapter(this, listBanner);
+		anim = (AnimationDrawable) redpackage.getBackground();
+		if (appContext.isNetworkConnected()) {
+			loginAdRedPackage(1, "m/ad/loginAdRedPackage");
+			loginAdRedPackage(0, "common/getAdRedPackage");
+			getPushAds();
+		} else {
+			toast(R.string.t_Connection);
+		}
+	}
+
+	/** 获取定时抢红包广告 */
+	private void getPushAds() {
+		GetProgressBar.getProgressBar(this);
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("appType", "2");// 2android
+		params.addQueryStringParameter("appId", appContext.appId());// 手机标识码
+		params.addQueryStringParameter("type", "0");// 0首页广告1弹窗广告
+		params.addQueryStringParameter("lng",
+				String.valueOf(AppContext.myLongitude));// 经度
+		params.addQueryStringParameter("lat",
+				String.valueOf(AppContext.myLatitude));// 纬度
+		params.addQueryStringParameter("cusId", "admin");// 用户名
+
+		AppContext.getHtmlUitls().xUtils(this, HttpMethod.GET, "getPushAds",
+				params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						handler.sendEmptyMessage(0);
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						getAdRedPackageParse(json, 1);
+					}
+				});
+	}
+
+	/**
+	 * 获取广告数据登录才能获取的广告 type=0:获取未登录的数据 type=1:获取已登录的数据
+	 * */
+	private void loginAdRedPackage(int type, String methodName) {
+		indictor.setIndictorColor(getResources().getColor(R.color.transparent8));
+		indictor.setIndictorSelectedColor(getResources()
+				.getColor(R.color.white));
+		RequestParams params = null;
+		if (type == 1) {
+			params = new RequestParams();
+			params.addQueryStringParameter("access_token", AppContext
+					.getUserInformation().getAccess_token());
+		} else if (type == 0) {
+			params = new RequestParams();
+		}
+		if (appContext.isNetworkConnected()) {
+			appContext.getHtmlUitls().xUtilsm(this, HttpMethod.GET, methodName,
+					params, new HttpCallback() {
+
+						@Override
+						public void onError(String msg) {
+							// TODO Auto-generated method stub
+							handler.sendEmptyMessage(0);
+						}
+
+						@Override
+						public void onBack(JSONObject json) {
+							// TODO Auto-generated method stub
+							getAdRedPackageParse(json, 0);
+						}
+
+					});
+		} else {
+			Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
+		}
+
+	}
+
+	/***
+	 * 解析 common/getAdRedPackage m/ad/loginAdRedPackage 解析 getPushAds type=1
+	 * 表示都是红包广告 默认type 为零
+	 * */
+	public void getAdRedPackageParse(JSONObject json, int type) {
+		try {
+			if (json.getBoolean("success")) {
+				JSONArray array = new JSONArray();
+				if (type == 1) {
+					if (json.getJSONObject("attributes").getJSONObject(
+							"APP_START_PAGE") != null) {
+
+						parseObj(type, json.getJSONObject("attributes")
+								.getJSONObject("APP_START_PAGE"));
+
+					}
+				} else {
+					if (json.getJSONObject("attributes").getJSONArray(
+							"redPackageAdList") != null) {
+						array = json.getJSONObject("attributes").getJSONArray(
+								"redPackageAdList");
+					}
+				}
+				if (array.length() > 0) {
+
+					for (int i = 0; i < array.length(); i++) {
+						JSONObject object;
+
+						object = array.getJSONObject(i);
+
+						parseObj(type, object);
+					}
+				}
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		handler.sendEmptyMessage(1);
+	}
+
+	public void parseObj(final int type, JSONObject object) throws JSONException {
+		android.support.v4.view.ViewPager.LayoutParams params = new android.support.v4.view.ViewPager.LayoutParams();
+		params.width = AppContext.getScreenWidth();
+		params.height = AppContext.getScreenWidth() * 280 / 640;
+		final Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("adid", object.get("id"));
+
+		map.put("name", object.get("name"));
+
+		map.put("imageUrl", object.get("imageUrl"));
+		map.put("objectType", object.get("objectType"));
+		map.put("objectId", object.get("objectId"));
+		map.put("adRedEnvelopId", object.get("adRedEnvelopId"));
+
+		if (type == 1) {// 整点抢红包是设置type为1
+			map.put("type", String.valueOf(type));
+		} else {
+			if (object.get("type") != null) {
+				if (object.get("type").toString().equals("null")) {
+					map.put("type", 0);
+				} else {
+					map.put("type", object.get("type"));
+				}
+			} else {
+
+				map.put("type", 0);
+			}
+		}
+
+		ImageView ivImageView = new ImageView(NewHomeActivity.this);
+		ivImageView.setScaleType(ScaleType.FIT_XY);
+		ivImageView.setLayoutParams(params);
+		ivImageView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO
+				// Auto-generated
+				// method stub
+				Intent intent=new Intent();
+				if(type!=0){
+					intent= new Intent(NewHomeActivity.this,
+						GetRedPackage.class);
+				intent.putExtra("img", map.get("imageUrl").toString());
+				intent.putExtra("objectId", map.get("objectId").toString());
+				intent.putExtra("objectType", map.get("objectType").toString());
+				intent.putExtra("adRedEnvelopId", map.get("adRedEnvelopId").toString());
+				startActivity(intent);
+				}
+				else{
+			
+					toSomeWhere(map.get("objectType").toString(), map.get("objectId").toString());
+				}
+			}
+		});
+		map.put("iv", ivImageView);
+
+		listBanner.add(map);
+
+		MyFormat.setBitmap(NewHomeActivity.this, ivImageView, map.get("imageUrl").toString(), params.width, params.height);
+	}
+	/**
+	 * 到店铺/商品也/专题/URL等
+	 * 
+	 * */
+	private void toSomeWhere(String objectType, String objectId) {
+		
+		Log.d("my", "objectType" + objectType);
+		Log.d("my", "objectId" + objectId);
+		if (objectType.equals("1") && objectId != null
+				&& !objectId.equals("null")&&objectId.length()>0) {// 跳转到店铺
+			Intent intent = new Intent(this, ShopActivity.class);
+			intent.putExtra("shopId", objectId);
+
+			startActivity(intent);
+		} else if (objectType.equals("2") && objectId != null
+				&& !objectId.equals("null")&&objectId.length()>0) {// 跳转到商品
+			Intent intent = new Intent(this, ProductDetailActivity.class);
+			intent.putExtra("prodspecId", objectId);
+			startActivity(intent);
+		} else if (objectType.equals("3") && objectId != null
+				&& !objectId.equals("null")&&objectId.length()>0) {// 专题
+
+		} else if (objectType.equals("4") && objectId != null
+				&& !objectId.equals("null")&&objectId.length()>0) {// url
+
+		} else {// 其他
+
+		}
+	}
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		GetProgressBar.dismissMyProgressBar();
+	}
+
+	/** 设置指示剂 */
+	void setIndicator() {
+		// LayoutParams params=new LayoutParams(AppContext.getScreenWidth(),
+		// AppContext.getScreenWidth()/5);
+		// params.gravity=Gravity.BOTTOM ;
+		// indictor.setLayoutParams(params);
+		fl.setVisibility(View.VISIBLE);
+		indictor.setIndictorMargin(4);
+		indictor.setIndictorCount(listBanner.size());
+
+		indictor.setData(listBanner);
+		banner.setOnPageChangeListener(new OnPageChangeListener() {
+
+			@Override
+			public void onPageSelected(int arg0) {
+				// TODO Auto-generated method stub
+				indictor.setIndictorSelectedIndex(arg0);
+				// Toast.makeText(NewHomeActivity.this, ""+arg0,
+				// Toast.LENGTH_SHORT).show();
+				int type = Integer.parseInt(listBanner.get(arg0).get("type")
+						.toString());
+				setRedPackage(type);
+			}
+
+			/** type=0不显示,type=1显示红包,type=2 显示黄包 */
+			public void setRedPackage(int type) {
+				Log.d("type", "" + type);
+				if (type == 1) {
+					redpackage.setBackgroundResource(R.drawable.redpackage);
+					redpackage.setVisibility(View.VISIBLE);
+					anim.stop();
+					anim = (AnimationDrawable) redpackage.getBackground();
+					anim.start();
+				} else if (type == 2) {
+					redpackage.setBackgroundResource(R.drawable.yellowpackage);
+					redpackage.setVisibility(View.VISIBLE);
+					anim.stop();
+					anim = (AnimationDrawable) redpackage.getBackground();
+					anim.start();
+
+				} else {
+					redpackage.setBackgroundResource(R.color.transparent);
+					redpackage.setVisibility(View.GONE);
+
+				}
+				if (redpackage.isShown() && anim != null) {
+					anim.start();
+				} else if (!redpackage.isShown() && anim != null) {
+					anim.stop();
+				}
+			}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		;
+	}
+
+	/** 物理按键返回退出系统 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if ((System.currentTimeMillis() - mExitTime) < 2000) {
+				android.os.Process.killProcess(android.os.Process.myPid());
+			} else {
+				Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+				ActivitiesManager.getAppManager().AppExit(NewHomeActivity.this);
+				mExitTime = System.currentTimeMillis();
+			}
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@OnClick({ R.id.tongchengdaigou, R.id.xianchangxiaofei, R.id.shangpinhui,
+			R.id.tuangou, R.id.xuqiufabu, R.id.woyaojianzhi, R.id.wodehoutai,
+			R.id.haoyoufazhan, R.id.yewulianxi })
+	public void myclick(View v) {
+		switch (v.getId()) {
+		case R.id.tongchengdaigou:// 同城购物
+			Toast.makeText(this, "正在开发中...", Toast.LENGTH_SHORT).show();
+//			startActivity(new Intent(this, MainActivity.class));
+			break;
+		case R.id.xianchangxiaofei:// 现场消费
+			startActivity(new Intent(this, BusinessListAty.class));
+			Toast.makeText(this, "现场消费", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.shangpinhui:// 商品汇
+			startActivity(new Intent(this, MainActivity.class));
+			break;
+		case R.id.tuangou:// 团购
+			Toast.makeText(this, "正在开发中...", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.xuqiufabu:// 需求发布
+//			startActivity(new Intent(this, DemandReleaseActivity.class));
+			Toast.makeText(this, "正在开发中...", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.woyaojianzhi:// 我要兼职
+			startActivity(new Intent(this, IWantPartTimeJob.class));
+//			Toast.makeText(this, "正在开发中...", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.wodehoutai:// 我的后台
+			startActivity(new Intent(this, MyHome.class));
+			Toast.makeText(this, "我的后台", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.haoyoufazhan:// 好友发展
+			Intent intent=new Intent (this,Huiyuandengji.class);
+			intent.putExtra("type", 2);
+			startActivity(intent);
+			Toast.makeText(this, "好友发展", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.yewulianxi:// 业务联系
+			Toast.makeText(this, "业务联系", Toast.LENGTH_SHORT).show();
+			break;
+
+		}
+	}
+}

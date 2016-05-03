@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:orientation="vertical" >
+
+    <!-- title bar -->
+
+    <include layout="@layout/shoppingcard_head" />
+
+    <LinearLayout
+        android:id="@+id/login_hint"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_100px"
+        android:background="@color/orange1"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="您还没有登录，登录即可同步购物车哦"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:drawableRight="@drawable/erji_xiafan_white"
+            android:singleLine="true"
+            android:text="我要登录"
+            android:textColor="@color/white" />
+    </LinearLayout>
+<LinearLayout 
+         android:id="@+id/fl_shoppingcart"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+     android:layout_weight="1"
+    android:orientation="vertical">
+    <FrameLayout
+   
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <!-- 购物车列表 -->
+
+        <ListView
+            android:id="@+id/lv_gouwuche"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen_100px"
+            android:listSelector="@color/white"
+            android:scrollbars="none" >
+        </ListView>
+        <!-- 购物车为空 -->
+
+        <LinearLayout
+            android:id="@+id/ll_noproduct"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom|center_horizontal"
+            android:visibility="gone"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gouwuche_weizhaodao" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:text="购物车是空的哦，快去挑选吧"
+                android:textColor="@color/black2" />
+
+            <TextView
+                android:id="@+id/quguangguang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/stroke_orange1_r_val"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp"
+                android:text="去逛逛"
+                android:textColor="@color/orange1" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/dian_line_product_e8" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="10dp"
+                android:padding="5dp"
+                android:text="猜你喜欢"
+                android:textColor="@color/black1" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:scrollbars="none" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <com.llg.privateproject.view.MyGridView
+                        android:id="@+id/mayby_youlike_lv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fadingEdge="none"
+                        android:fadingEdgeLength="0dp"
+                        android:horizontalSpacing="5dp"
+                        android:listSelector="@color/white"
+                        android:overScrollMode="never"
+                        android:scrollbars="none" />
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+        <!-- 全选、结算 -->
+
+        <LinearLayout
+            android:id="@+id/ll_select_all"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_100px"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_weight="1" >
+
+                <CheckBox
+                    android:id="@+id/cb_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/cb_gouwuche"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="全选"
+                    android:textColor="@color/black2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/totalprice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/orange1"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/totalsave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="为您节省0元"
+                    android:textColor="@color/black2"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/qujiesuan"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/orange1"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="去结算"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>
+</LinearLayout>

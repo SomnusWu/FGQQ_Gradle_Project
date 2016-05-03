@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <include layout="@layout/order_clear_head" />
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
+
+        <TextView
+            android:id="@+id/title_tv"
+            style="@style/title_text_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="关注的商品"
+            android:textColor="@color/black2"
+            android:textSize="12sp" />
+
+        <View
+            style="@style/small_divider"
+            android:layout_gravity="center"
+            android:background="@color/black8" />
+
+        <TextView
+            android:id="@+id/title_tv1"
+            style="@style/title_text_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="关注的店铺"
+            android:textColor="@color/black2"
+            android:textSize="12dp" />
+
+        <View
+            style="@style/small_divider"
+            android:layout_gravity="center"
+            android:background="@color/black8" />
+
+        <TextView
+            android:id="@+id/title_tv2"
+            style="@style/title_text_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="浏览记录"
+            android:textColor="@color/black2"
+            android:textSize="12sp" />
+    </LinearLayout>
+    <!-- 指示剂 -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black8" />
+
+        <RelativeLayout
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/orange1" />
+        </RelativeLayout>
+    </RelativeLayout>
+    <!-- 商品展示 -->
+
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        style="@style/layout_full"
+        android:id="@+id/attention_pulls_v"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        android:scrollbars="none"
+        ptr:ptrHeaderTextColor="@color/black3"
+        ptr:ptrMode="both" >
+     <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        
+        <!-- 关注的商品 -->
+
+        <com.llg.privateproject.view.MyGridView
+            android:id="@+id/commodity_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@android:color/transparent"
+            android:horizontalSpacing="-10dp"
+            android:listSelector="@color/white"
+            android:scrollbars="none" />
+
+   
+            <!-- 关注的店铺 -->
+
+            <com.llg.privateproject.view.MyGridView
+                android:id="@+id/gv_shop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:cacheColorHint="@android:color/transparent"
+                android:horizontalSpacing="-10dp"
+                android:listSelector="@color/white"
+                android:scrollbars="none"
+                android:visibility="gone" />
+            <!-- 浏览记录 -->
+
+            <com.llg.privateproject.view.MyGridView
+                android:id="@+id/gv_product_history"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:cacheColorHint="@android:color/transparent"
+                android:horizontalSpacing="-10dp"
+                android:listSelector="@color/white"
+                android:scrollbars="none"
+                android:visibility="gone" />
+        </LinearLayout>
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+
+</LinearLayout>

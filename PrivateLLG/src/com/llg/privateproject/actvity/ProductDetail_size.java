@@ -1,0 +1,15 @@
+package com.llg.privateproject.actvity;
+
+import com.bjg.lcc.privateproject.R;
+
+import android.app.Activity;
+import android.os.Bundle;
+
+public class ProductDetail_size extends Activity {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.product_detail_size);
+	}
+}

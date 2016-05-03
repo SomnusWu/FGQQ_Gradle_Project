@@ -1,0 +1,323 @@
+package com.llg.privateproject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONObject;
+
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Environment;
+import android.provider.Settings.Secure;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.WindowManager;
+
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.html.HtmlUitls;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.Constants;
+import com.llg.privateproject.utils.StringUtils;
+import com.tencent.android.tpush.XGIOperateCallback;
+import com.tencent.android.tpush.XGPushClickedResult;
+import com.tencent.android.tpush.XGPushManager;
+
+/**
+ * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
+ * 
+ * @author gongyibing
+ * @version 1.0
+ * @created 2015-05-08
+ */
+public class AppContext extends Application {
+	/** 网络请求工具 */
+	private static HtmlUitls htmlUitls;
+	/**
+	 * 用户信息
+	 */
+	private static UserInformation userInformation;
+	// /**购物车列表*/
+	// private static List<Map<String,Object>> listGouwuche;
+	/** 屏幕宽度 */
+	private static int SCREEN_WIDTH;
+	/** 屏幕高度 */
+	private static int SCREEN_HEIGHT;
+	/** 接收推送字符串 */
+	public static String testMessage;
+	/** 登录引导页 */
+	private List<Map<String, Object>> list;
+	/** 是否为第一次登录 */
+	boolean isInstall;
+	/** appid */
+	private String appid;
+
+	/** bitmap 临时列表 */
+	public static List<Bitmap> listbt;
+	/** 我的纬度 */
+	public static double myLatitude = 0;
+	/** 我的经度 */
+	public static double myLongitude = 0;
+	public static String myCity = "";
+	public static String myAddress = "";
+	public static String myCityCode = "132";// 5001
+	public static String username = "";
+	public static String userid = "";
+	public static boolean isLogin = false;
+	public static String userType = "0";
+	public static String appellation = "";
+	public static boolean isOpen = true;
+	public static String isShop;
+	public static String userTypeStr;
+	private String path;
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		SharedPreferences myLoction = getSharedPreferences("myLoction",
+				Context.MODE_PRIVATE);
+		myLatitude = (double) myLoction.getFloat("myLatitude",
+				(float) 29.530532);
+		myLongitude = (double) myLoction.getFloat("myLongitude",
+				(float) 106.574087);
+		myCity = myLoction.getString("myCity", "重庆市");
+		myAddress = myLoction.getString("myAddress", "重庆市南岸区万达广场");
+		myCityCode = myLoction.getString("myCityCode", "132");
+		init();
+	}
+
+	/** 初始化 */
+	private void init() {
+		// 开启logcat输出，方便debug，发布时请关闭
+		// XGPushConfig.enableDebug(this, true);
+		// 如果需要知道注册是否成功，请使用registerPush(getApplicationContext(),
+		// XGIOperateCallback)带callback版本
+		// 如果需要绑定账号，请使用registerPush(getApplicationContext(),account)版本
+		// 具体可参考详细的开发指南
+		// 传递的参数为ApplicationContext
+		Context context = getApplicationContext();
+		// XGPushManager.registerPush(context);
+		isOpen= getSharedPreferences("userInformation1",
+				Context.MODE_PRIVATE).getBoolean("isOpen", true);
+		username = getSharedPreferences("userInformation1",
+				Context.MODE_PRIVATE).getString("username", "");
+		userid = getSharedPreferences("userInformation1", Context.MODE_PRIVATE)
+				.getString("userid", "");
+		isShop = getSharedPreferences("userInformation1", Context.MODE_PRIVATE)
+				.getString("isShop", "N");
+		userTypeStr = getSharedPreferences("userInformation1", Context.MODE_PRIVATE)
+				.getString("userTypeStr", "会员");
+		appellation = getSharedPreferences("userInformation1",
+				Context.MODE_PRIVATE).getString("appellation", "");
+		
+
+		XGPushManager.registerPush(context, userid, new XGIOperateCallback() {
+
+			@Override
+			public void onSuccess(Object data, int flag) {
+				// TODO Auto-generated method stub
+				 Log.d("my", "token:"+data+"\nflag:"+flag);
+			}
+
+			@Override
+			public void onFail(Object arg0, int arg1, String arg2) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		// XGPushManager.setTag(context, "重庆市");
+		// 2.36（不包括）之前的版本需要调用以下2行代码
+		// Intent service = new Intent(context, XGPushService.class);
+		// context.startService(service);
+
+		// 其它常用的API：ff
+		// 绑定账号（别名）注册：registerPush(context,account)或registerPush(context,account,
+		// XGIOperateCallback)，其中account为APP账号，可以为任意字符串（qq、openid或任意第三方），业务方一定要注意终端与后台保持一致。
+		// 取消绑定账号（别名）：registerPush(context,"*")，即account="*"为取消绑定，解绑后，该针对该账号的推送将失效
+		// 反注册（不再接收消息）：unregisterPush(context)
+		// 设置标签：setTag(context, tagName)
+		// 删除标签：deleteTag(context, tagName)
+		// XGPushManager.registerPush(context,"ct0001");
+
+		// TelephonyManager tManager=(TelephonyManager)
+		// getSystemService(Context.TELEPHONY_SERVICE);
+		//
+		// Log.d("my", "tManager.getDeviceId():"+tManager.getDeviceId());
+		// Log.d("my",
+		// "tManager.getSimSerialNumber():"+tManager.getSimSerialNumber());//tManager.getSimSerialNumber():89014103211118510720
+		SharedPreferences sharedPreferences = getShareprefence();
+		htmlUitls = new HtmlUitls(getApplicationContext());
+		userInformation = UserInformation.getUserInformation();
+		UserInformation
+				.setLogin(sharedPreferences.getBoolean("isLogin", false));
+		isLogin = UserInformation.isLogin();
+		UserInformation.setRefreshToken(sharedPreferences.getString(
+				"refresh_token", ""));
+		UserInformation.setAccess_token(sharedPreferences.getString(
+				"access_token", ""));
+		UserInformation.setId(sharedPreferences.getString("id", ""));
+		Log.i("tag", UserInformation.isLogin()
+				+ "=============== UserInformation.isLogin()===");
+		Log.i("tag", UserInformation.isLogin()
+				+ "===UserInformation.isLogin()===");
+		// AppContext.getUserInformation().setLogin(
+		// sharedPreferences.getBoolean("isLogin", false));
+		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+		SCREEN_WIDTH = wm.getDefaultDisplay().getWidth();
+		SCREEN_HEIGHT = wm.getDefaultDisplay().getHeight();
+		// setIntall();
+	}
+
+	public static UserInformation getUserInformation() {
+
+		return userInformation;
+	}
+
+	public static HtmlUitls getHtmlUitls() {
+		return htmlUitls;
+	}
+
+	public SharedPreferences getShareprefence() {
+		return getSharedPreferences("userInformation1", Context.MODE_PRIVATE);
+	}
+
+	public static void setHtmlUitls(HtmlUitls htmlUitls) {
+		AppContext.htmlUitls = htmlUitls;
+	}
+
+	// /**获取购物车列表*/
+	// public static List<Map<String,Object>> getListGouwuche(){
+	// if(listGouwuche==null){
+	// listGouwuche=new ArrayList<Map<String,Object>>();
+	// }
+	// return listGouwuche;
+	// }
+	/** 手机屏幕宽度 */
+	public static int getScreenWidth() {
+		return SCREEN_WIDTH;
+	}
+
+	/** 手机屏幕高度 */
+	public static int getScreenHeight() {
+		return SCREEN_HEIGHT;
+	}
+
+	/**
+	 * 检测网络是否可用
+	 * 
+	 * @return
+	 */
+	public boolean isNetworkConnected() {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo ni = cm.getActiveNetworkInfo();
+		return ni != null && ni.isConnectedOrConnecting();
+	}
+
+	/**
+	 * 获取当前网络类型
+	 * 
+	 * @return 0：没有网络 1：WIFI网络 2：WAP网络 3：NET网络
+	 */
+	public int getNetworkType() {
+		int netType = 0;
+
+		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+		if (networkInfo == null) {
+			return Constants.NETTYPE_NO;
+		}
+		int nType = networkInfo.getType();
+		if (nType == ConnectivityManager.TYPE_MOBILE) {
+			String extraInfo = networkInfo.getExtraInfo();
+			if (!StringUtils.isEmpty(extraInfo)) {
+				if (extraInfo.toLowerCase().equals("cmnet")) {
+					netType = Constants.NETTYPE_CMNET;
+				} else {
+					netType = Constants.NETTYPE_CMWAP;
+				}
+			}
+		} else if (nType == ConnectivityManager.TYPE_WIFI) {
+			netType = Constants.NETTYPE_WIFI;
+		}
+		return netType;
+	}
+
+	public static String setLogurl() {
+
+		String httpUrl = "oauth/token";// http://localhost:8080/server/login.jsp
+
+		return httpUrl;
+	}
+
+	/** 登录 */
+	private List<Map<String, Object>> setIntall() {
+		if (isInstall()) {
+			if (list == null) {
+				list = new ArrayList<Map<String, Object>>();
+			}
+			String methodName = "firstInstall";
+			final String listName = "adinfoFirstInstallList";
+			// TODO Auto-generated method stub
+			AppContext.getHtmlUitls().xUtils(this, HttpMethod.GET, methodName,
+					null, new HttpCallback() {
+
+						@Override
+						public void onError(String msg) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void onBack(JSONObject json) {
+							// TODO Auto-generated method stub
+
+							ParseJson.getParseJson().getFirstInstall(listName,
+									json, list);
+
+						}
+					});
+			return list;
+		}
+		return null;
+	}
+
+	/** 判断是不是第一次安装 */
+	public boolean isInstall() {
+		SharedPreferences sPreferences = getSharedPreferences("isInstall",
+				Context.MODE_PRIVATE);
+		isInstall = sPreferences.getBoolean("isInstall", true);
+		if (isInstall) {
+			// sPreferences.edit().putBoolean("isInstall", false).commit();
+		}
+		return isInstall;
+	}
+
+	/** 获取appid */
+	public String appId() {
+		TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		appid = tManager.getDeviceId();
+		String m_szAndroidID = Secure.getString(getContentResolver(),
+				Secure.ANDROID_ID);
+		// Log.d("my",
+		// "tManager.getDeviceId():"+tManager.getDeviceId());//模拟器返回一串零000000000000000//864375020853942
+		// Log.d("my",
+		// "tManager.getSimSerialNumber():"+tManager.getSimSerialNumber());
+		// Log.d("my", "Secure.ANDROID_ID:"+m_szAndroidID);
+		return appid;
+	}
+
+}

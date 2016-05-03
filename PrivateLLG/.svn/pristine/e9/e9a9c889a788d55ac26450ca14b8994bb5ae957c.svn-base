@@ -1,0 +1,228 @@
+package com.llg.privateproject.actvity;
+
+import com.bjg.lcc.privateproject.R;
+import com.bjg.lcc.privateproject.R.color;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+
+import android.app.Activity;
+import android.graphics.drawable.ShapeDrawable;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+public class BuyTopActivity extends Activity {
+
+	@ViewInject(R.id.tv_1)
+	private TextView tv1;
+	@ViewInject(R.id.tv_3)
+	private TextView tv3;
+	@ViewInject(R.id.ly_5)
+	private LinearLayout ly5;
+	@ViewInject(R.id.ly_10)
+	private LinearLayout ly10;
+	@ViewInject(R.id.ly_15)
+	private LinearLayout ly15;
+	@ViewInject(R.id.ly_30)
+	private LinearLayout ly30;
+	@ViewInject(R.id.ly_60)
+	private LinearLayout ly60;
+	@ViewInject(R.id.ly_90)
+	private LinearLayout ly90;
+
+	@ViewInject(R.id.tv_5)
+	private TextView tv5;
+	@ViewInject(R.id.tv_10)
+	private TextView tv10;
+	@ViewInject(R.id.tv_15)
+	private TextView tv15;
+	@ViewInject(R.id.tv_30)
+	private TextView tv30;
+	@ViewInject(R.id.tv_60)
+	private TextView tv60;
+	@ViewInject(R.id.tv_90)
+	private TextView tv90;
+
+	@ViewInject(R.id.tv_dazhe_5)
+	private TextView tvDazhe5;
+	@ViewInject(R.id.tv_dazhe_10)
+	private TextView tvDazhe10;
+	@ViewInject(R.id.tv_dazhe_15)
+	private TextView tvDazhe15;
+	@ViewInject(R.id.tv_dazhe_30)
+	private TextView tvDazhe30;
+	@ViewInject(R.id.tv_dazhe_60)
+	private TextView tvDazhe60;
+	@ViewInject(R.id.tv_dazhe_90)
+	private TextView tvDazhe90;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aty_buytop);
+		ViewUtils.inject(this);
+	}
+
+	@OnClick({ R.id.tv_1, R.id.tv_3, R.id.ly_5, R.id.ly_10, R.id.ly_15,
+			R.id.ly_30, R.id.ly_60, R.id.ly_90,R.id.iv_back })
+	public void OnClick(View view) {
+		switch (view.getId()) {
+		case R.id.tv_1:
+			tv1.setBackgroundResource(R.drawable.bg_yuanjiao_1_3_green);
+			tv3.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+
+			tv5.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv10.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv15.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv30.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv60.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv90.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+
+			tvDazhe5.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe10.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe15.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe30.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe60.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe90.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			break;
+		case R.id.tv_3:
+			tv1.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+			tv3.setBackgroundResource(R.drawable.bg_yuanjiao_1_3_green);
+
+			tv5.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv10.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv15.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv30.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv60.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv90.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+
+			tvDazhe5.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe10.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe15.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe30.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe60.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe90.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			break;
+		case R.id.ly_5:
+			tv1.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+			tv3.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+
+			tv5.setBackgroundResource(R.drawable.bg_yuanjiao_green);
+			tv10.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv15.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv30.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv60.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv90.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+
+			tvDazhe5.setBackgroundResource(R.drawable.bg_yuanjiao_dazhe_green);
+			tvDazhe10.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe15.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe30.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe60.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe90.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			break;
+		case R.id.ly_10:
+			tv1.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+			tv3.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+
+			tv5.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv10.setBackgroundResource(R.drawable.bg_yuanjiao_green);
+			tv15.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv30.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv60.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv90.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+
+			tvDazhe5.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe10.setBackgroundResource(R.drawable.bg_yuanjiao_dazhe_green);
+			tvDazhe15.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe30.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe60.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe90.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			break;
+		case R.id.ly_15:
+			tv1.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+			tv3.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+
+			tv5.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv10.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv15.setBackgroundResource(R.drawable.bg_yuanjiao_green);
+			tv30.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv60.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv90.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+
+			tvDazhe5.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe10.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe15.setBackgroundResource(R.drawable.bg_yuanjiao_dazhe_green);
+			tvDazhe30.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe60.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe90.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			break;
+		case R.id.ly_30:
+			tv1.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+			tv3.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+
+			tv5.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv10.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv15.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv30.setBackgroundResource(R.drawable.bg_yuanjiao_green);
+			tv60.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv90.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+
+			tvDazhe5.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe10.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe15.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe30.setBackgroundResource(R.drawable.bg_yuanjiao_dazhe_green);
+			tvDazhe60.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe90.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			break;
+		case R.id.ly_60:
+			tv1.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+			tv3.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+
+			tv5.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv10.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv15.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv30.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv60.setBackgroundResource(R.drawable.bg_yuanjiao_green);
+			tv90.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+
+			tvDazhe5.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe10.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe15.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe30.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe60.setBackgroundResource(R.drawable.bg_yuanjiao_dazhe_green);
+			tvDazhe90.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			break;
+		case R.id.ly_90:
+			tv1.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+			tv3.setBackgroundResource(R.drawable.bg_yuanjiao_1_3);
+
+			tv5.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv10.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv15.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv30.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv60.setBackgroundResource(R.drawable.bg_yuanjiao_biankuang);
+			tv90.setBackgroundResource(R.drawable.bg_yuanjiao_green);
+
+			tvDazhe90.setBackgroundResource(R.drawable.bg_yuanjiao_dazhe_green);
+			tvDazhe5.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe10.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe15.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe30.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			tvDazhe60.setBackgroundResource(R.drawable.bg_dazhe_yuanjiao);
+			Log.i("tag", "+++++++啪啪啪啪啪啪啪啪啪啪啪啪+++++++");
+			Log.i("tag", "+++++啪啪啪啪啪啪啪+++++++++");
+			break;
+		case R.id.iv_back:
+			finish();
+			break;
+		default:
+			break;
+		}
+	}
+
+}

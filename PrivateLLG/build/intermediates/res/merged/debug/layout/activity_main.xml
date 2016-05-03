@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="com.llg.privateproject.actvity.GeRenZiLiao" >
+
+    <FrameLayout
+        android:id="@+id/center_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1.0" >
+    </FrameLayout>
+
+    <com.llg.privateproject.view.MyTabWidget
+        android:id="@+id/tab_widget"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        app:bottom_labels="@array/bottom_bar_labels"
+        app:tab_name="@string/tab_shop_main" />
+
+</LinearLayout>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:ignore="InefficientWeight,NestedWeights,ContentDescription" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <CheckBox
+            android:id="@+id/cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/cb_gouwuche"
+            android:button="@null"
+            android:checked="true"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/shopHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:scaleType="fitXY" />
+
+        <RelativeLayout
+            style="@style/layout_wrap"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="10dp" >
+
+            <!-- 店铺名 -->
+
+            <TextView
+                android:id="@+id/commodity_name_tv"
+                style="@style/company_text_font_style"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:paddingBottom="0dp"
+                android:text="这里是店铺名"
+                android:textColor="@color/black2"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/commenter_grade"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_below="@id/v6"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/commodity_name_tv"
+                android:src="@drawable/collect_selected"
+                android:visibility="gone" />
+            <!-- 商品价格 -->
+
+            <TextView
+                android:id="@+id/commodity_price_tv"
+                style="@style/company_text_font_style"
+                android:layout_below="@id/commodity_name_tv"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:singleLine="true"
+                android:text="主营：凤毛麟角"
+                android:textColor="@color/black3"
+                android:textSize="12sp" />
+            <!-- 好评10% 5200人 -->
+
+            <TextView
+                android:id="@+id/company_intro_tv"
+                style="@style/company_text_font_style"
+                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/dingdanzhifu_xiafan"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:singleLine="true"
+                android:text="人关注"
+                android:textColor="@color/black3"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/shop_trends"
+                style="@style/company_text_font_style"
+                android:layout_toLeftOf="@id/company_intro_tv"
+                android:layout_weight="1"
+                android:drawablePadding="5dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:singleLine="true"
+                android:text="44"
+                android:textColor="@color/fen"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/commodity_price_tv" >
+
+                <TextView
+                    android:id="@+id/company_price"
+                    style="@style/company_text_font_style"
+                    android:layout_below="@id/company_intro_tv"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@id/ll_"
+                    android:paddingBottom="1dp"
+                    android:paddingTop="1dp"
+                    android:singleLine="true"
+                    android:text="好评率99%"
+                    android:textColor="@color/fen"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_"
+                    android:layout_width="103dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/stroke_fen"
+                    android:orientation="horizontal"
+                    android:padding="1dp" >
+
+                    <ImageView
+                        android:id="@+id/company_gouwuche"
+                        android:layout_width="30dp"
+                        android:layout_height="10dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/company_intro_tv"
+                        android:background="@drawable/solid_fen_re" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        style="@style/line_style4"
+        android:layout_width="match_parent"
+        android:layout_height="3dp" />
+
+</LinearLayout>

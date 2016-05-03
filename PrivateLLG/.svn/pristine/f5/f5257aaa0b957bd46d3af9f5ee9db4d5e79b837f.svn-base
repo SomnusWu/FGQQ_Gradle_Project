@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 首页导航 -->
+    <string-array name="bottom_bar_labels">
+        <item>@string/home</item>
+        <item>@string/category</item>
+        <item>@string/shopping</item>
+        <item>@string/setting</item>
+    </string-array>
+   <!-- 用户信息列表图片数组 -->
+    <array name="userinformationimages">
+        <item >@drawable/personer</item>
+        <item >@drawable/guanzhu</item>
+        <item >@drawable/money</item>
+        <item >@drawable/safe</item>
+        <item >@drawable/help</item>
+        <item >@drawable/level</item>
+        <item >@drawable/shake</item>
+        <item >@drawable/suggest</item>
+        <item >@drawable/contact</item>
+    </array>
+   <!-- 用户信息列表说明数组 -->
+    <string-array name="userinformation">
+        <item >我的订单状态</item>
+        <item >我的任务</item>
+        <item >我的关注</item>
+        <item >我的发布</item>
+        <item >我的广告</item>
+     
+        <item >会员等级</item>
+        <item >安全中心</item>
+        <item >摇一摇</item>
+        <item >反馈意见</item>
+        <item >联系我们</item>
+        <item >系统设置</item>
+    </string-array>
+    <string-array name="userinformationdescribe">
+        <item >待收款、待收货、待评价、全部订单</item>
+        <item >同城代购送货上门、入驻平台就可以做物流</item>
+        <item >关注的店铺、关注的商品、浏览记录</item>
+        <item >需求发布中心</item>
+        <item >上传广告,红包广告</item>
+      
+        <item >会员等级查询及升级管理</item>
+        <item >实名认证、邮箱认证、手机绑定、修改密码</item>
+        <item >手动摇一摇，礼品收到手</item>
+        <item >您有好的建议或投诉请点击这里</item>
+        <item >企业地址、地图查询、联系电话</item>
+        <item >检查更新、退出账户、推送开启</item>
+    </string-array>
+    <!-- 首页分类数组 -->
+    <string-array name="home_fenlei">
+        <item >美妆</item>
+        <item >数码</item>
+        <item >果蔬</item>
+        <item >耗材</item>
+        <item >服装</item>
+        <item >美食</item>
+        <item >家居</item>
+        <item >母婴</item>
+        <item >品牌专区</item>
+        <item >帮帮团</item>
+        <item >折扣专区</item>
+        <item >全部分类</item>
+    </string-array>
+
+</resources>

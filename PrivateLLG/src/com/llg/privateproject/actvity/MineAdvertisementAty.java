@@ -1,0 +1,502 @@
+package com.llg.privateproject.actvity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONObject;
+
+import android.content.ComponentCallbacks2;
+import android.content.Intent;
+import android.graphics.Paint;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.adapters.AdvertisementAdapter;
+//import com.llg.privateproject.adapters.AttentionAdvertisementAdapter;
+import com.llg.privateproject.entities.Advertisement;
+import com.llg.privateproject.entities.AdvertisementSeeHistory;
+import com.llg.privateproject.entities.AttentionAdvertisement;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+
+/**
+ * 我的广告
+ * @author Administrator
+ *
+ */
+public class MineAdvertisementAty extends BaseActivity implements
+		OnRefreshListener2<ListView> {
+	@ViewInject(R.id.listview)
+	private PullToRefreshListView listView;
+
+	@ViewInject(R.id.ly_listview)
+	private LinearLayout ly;
+
+	@ViewInject(R.id.empty)
+	private LinearLayout lyEmpty;
+
+	@ViewInject(R.id.iv)
+	private ImageView iv;
+
+	@ViewInject(R.id.tv1)
+	private TextView tv;
+
+	@ViewInject(R.id.tv2)
+	private TextView tv2;
+
+	@ViewInject(R.id.tv3)
+	private TextView tv3;
+
+	@ViewInject(R.id.line_orange1)
+	private View line1;
+
+	@ViewInject(R.id.relayout_top)
+	private RelativeLayout relayoutTop;
+
+	@ViewInject(R.id.line_orange2)
+	private View line2;
+
+	@ViewInject(R.id.line_orange3)
+	private View line3;
+
+	@ViewInject(R.id.tv_more)
+	private TextView tvMore;
+	private int page = 1;
+	private AdvertisementAdapter adapter;
+	// private AttentionAdvertisementAdapter attentionAdapter;
+	private List<Advertisement> tlist;
+	private List<AttentionAdvertisement> attentionlist;
+	private List<AdvertisementSeeHistory> historylist;
+	private int flag = 1;
+	private boolean isAttention = false;
+	private boolean isSee = false;
+	private int oldPosition;
+	private int oldAttentionPositon;
+	private int oldhistoryPostion;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aty_mine_advertisement);
+		ViewUtils.inject(this);
+		initAutoLoadingNoShow(ly);
+		initUI();
+		autoLoading.showLoadingLayout();
+		requestHttp(UserInformation.getAccess_token());
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == 1 && resultCode == RESULT_OK) {
+			page = 1;
+			requestHttp(UserInformation.getAccess_token());
+		} else if (requestCode == 100 && resultCode == RESULT_OK) {
+			finish();
+		}
+	}
+
+	protected void onRestart() {
+		super.onRestart();
+		if (autoLoading.getVisibelyLoad()) {
+			finish();
+			return;
+		}
+	}
+
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			if (msg.what == 1) {
+				adapter.upData(tlist);
+				if (customProgressSmall.isShowing()) {
+					customProgressSmall.dismiss();
+				}
+			} else if (msg.what == 2) {
+				// listView.setAdapter(attentionAdapter);
+				adapter.upData(attentionlist);
+			} else if (msg.what == 3) {
+				adapter.upData(historylist);
+			}
+			listView.onRefreshComplete();
+			autoLoading.hideAll();
+			if (flag == 1) {
+				listView.getRefreshableView().setSelectionFromTop(oldPosition,
+						TRIM_MEMORY_BACKGROUND);
+			} else if (flag == 2) {
+				listView.getRefreshableView().setSelectionFromTop(
+						oldAttentionPositon,
+						TRIM_MEMORY_BACKGROUND);
+			} else if (flag == 3) {
+				listView.getRefreshableView().setSelectionFromTop(
+						oldhistoryPostion,
+						TRIM_MEMORY_BACKGROUND);
+			}
+		}
+	};
+
+	/**
+	 * 初始化界面
+	 */
+	private void initUI() {
+		// super.setChildActvity(this);
+		tvMore.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); // 下划线
+		tlist = new ArrayList<Advertisement>();
+		attentionlist = new ArrayList<AttentionAdvertisement>();
+		historylist = new ArrayList<AdvertisementSeeHistory>();
+		listView.setOnRefreshListener(this);
+		int width = (AppContext.getScreenWidth() - MyFormat.dip2px(this, 30)) / 2;
+		adapter = new AdvertisementAdapter(this, tlist);
+		adapter.setWidth(width);
+		listView.setOnRefreshListener(this);
+		listView.setEmptyView(lyEmpty);
+		listView.setAdapter(adapter);
+		autoLoading.setClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				autoLoading.showLoadingLayout();
+				requestHttp(UserInformation.getAccess_token());
+			}
+		});
+	}
+
+	@OnClick({ R.id.iv_back, R.id.iv_put, R.id.ly1, R.id.ly2, R.id.ly3,
+			R.id.tv_more })
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.tv_more:
+			startActivity(new Intent(this, MoreFunction.class));
+			break;
+		case R.id.iv_back:
+			finish();
+			break;
+		case R.id.iv_put://投放广告
+			if (UserInformation.isLogin()) {
+				startActivityForResult(new Intent(this,
+						PutAdvertisementAty.class), 1);
+			} else {
+				goWebLoginActivity();
+			}
+			break;
+		case R.id.ly1:
+			flag = 1;
+			line2.setVisibility(View.GONE);
+			line1.setVisibility(View.VISIBLE);
+			tv.setTextColor(getResources().getColor(R.color.orange1));
+			tv3.setTextColor(getResources().getColor(R.color.black1));
+			tv2.setTextColor(getResources().getColor(R.color.black1));
+			line1.setBackgroundColor(getResources().getColor(R.color.orange1));
+			line2.setVisibility(View.GONE);
+			line3.setVisibility(View.GONE);
+			adapter.upData(tlist);
+			break;
+		case R.id.ly2:
+			flag = 2;
+			line1.setVisibility(View.GONE);
+			line2.setVisibility(View.VISIBLE);
+			line3.setVisibility(View.GONE);
+			tv2.setTextColor(getResources().getColor(R.color.orange1));
+			tv3.setTextColor(getResources().getColor(R.color.black1));
+			tv.setTextColor(getResources().getColor(R.color.black1));
+			line2.setBackgroundColor(getResources().getColor(R.color.orange1));
+			if (!isAttention) {
+				autoLoading.showLoadingLayout();
+				page = 1;
+				requesAttentionAdvertisement(UserInformation.getAccess_token());
+			} else {
+				adapter.upData(attentionlist);
+			}
+			isAttention = true;
+			break;
+		case R.id.ly3:
+			flag = 3;
+			line1.setVisibility(View.GONE);
+			line2.setVisibility(View.GONE);
+			line3.setVisibility(View.VISIBLE);
+			tv2.setTextColor(getResources().getColor(R.color.black1));
+			tv3.setTextColor(getResources().getColor(R.color.orange1));
+			tv.setTextColor(getResources().getColor(R.color.black1));
+			line3.setBackgroundColor(getResources().getColor(R.color.orange1));
+			// 是否已经点击过 true点击过
+			if (!isSee) {
+				autoLoading.showLoadingLayout();
+				page = 1;
+				requesAdvertisementHistory(UserInformation.getAccess_token());
+			} else {
+				adapter.upData(historylist);
+			}
+			isSee = true;
+			break;
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * 发起广告列表请求
+	 */
+	private void requestHttp(String access_token) {
+		RequestParams params = new RequestParams();
+		Log.i("tag", access_token + "-----requestHttp---access_token------");
+		params.addQueryStringParameter("access_token", access_token);
+		params.addQueryStringParameter("pageNo", page + "");
+		params.addQueryStringParameter("title", page + "");
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/ad/getMyPubAndForwardAdList", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						if (customProgressSmall.isShowing()) {
+							customProgressSmall.dismiss();
+							toast("刷新失败");
+						} else {
+							autoLoading.showExceptionLayout();
+						}
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						ParseJson parseJson = ParseJson.getParseJson();
+						Map<String, Object> map = ParseJson.getParseJson()
+								.parseIsSuccess(json);
+						Log.i("tag", map.get("isSuccess")
+								+ "--------------isSuccess-----" + json);
+						customProgressSmall.dismiss();
+						if ((Boolean) map.get("isSuccess")) {
+							List<Advertisement> list = parseJson
+									.parseAdvertisementList(json);
+							if (list != null && list.size() > 0) {
+								connectData(list);
+							} else {
+								handler.sendEmptyMessage(1);
+							}
+						} else if (map.get("errorCode").equals("NOT_LOGIN")) {
+							// Log.i("tag", json.toString()
+							// + "------监听上一句--------");
+							setRefreshListtener(new Refresh() {
+								@Override
+								public void refreshRequst(String access_token) {
+									// TODO Auto-generated method stub
+									requestHttp(access_token);
+								}
+							});
+							RefeshToken();
+						}
+					}
+				});
+	}
+
+	/**
+	 * 发起关注广告列表请求
+	 */
+	private void requesAttentionAdvertisement(String access_token) {
+		RequestParams params = new RequestParams();
+		Log.i("tag", access_token + "-----requestHttp---access_token------");
+		params.addQueryStringParameter("access_token", access_token);
+		params.addQueryStringParameter("pageNo", page + "");
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/ad/getAttentionAd", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						if (customProgressSmall.isShowing()) {
+							customProgressSmall.dismiss();
+						} else {
+							autoLoading.showExceptionLayout();
+						}
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						ParseJson parseJson = ParseJson.getParseJson();
+						Map<String, Object> map = ParseJson.getParseJson()
+								.parseIsSuccess(json);
+						customProgressSmall.dismiss();
+						if ((Boolean) map.get("isSuccess")) {
+							List<AttentionAdvertisement> list = parseJson
+									.parseAttentionAdvertisementList(json);
+							if (list != null && list.size() > 0) {
+								connectAttentionData(list);
+							} else {
+								handler.sendEmptyMessage(2);
+							}
+						} else {
+							if (map.get("errorCode").equals("NOT_LOGIN")) {
+								// Log.i("tag", json.toString()
+								// + "------监听上一句--------");
+								setRefreshListtener(new Refresh() {
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+										requesAttentionAdvertisement(access_token);
+									}
+								});
+								RefeshToken();
+							} else {
+								autoLoading.showExceptionLayout();
+							}
+						}
+					}
+				});
+	}
+
+	/**
+	 * 发起浏览历史列表请求
+	 */
+	private void requesAdvertisementHistory(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addQueryStringParameter("pageNo", page + "");
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/ad/getAdHistroy", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						autoLoading.showExceptionLayout();
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						ParseJson parseJson = ParseJson.getParseJson();
+						Map<String, Object> map = ParseJson.getParseJson()
+								.parseIsSuccess(json);
+						if ((Boolean) map.get("isSuccess")) {
+							List<AdvertisementSeeHistory> list = parseJson
+									.parseAdvertisemntHistory(json);
+							if (list != null && list.size() > 0) {
+								connectHistoryData(list);
+							} else {
+								handler.sendEmptyMessage(3);
+							}
+						} else if (map.get("errorCode").equals("NOT_LOGIN")) {
+							// Log.i("tag", json.toString()
+							// + "------监听上一句--------");
+							setRefreshListtener(new Refresh() {
+								@Override
+								public void refreshRequst(String access_token) {
+									// TODO Auto-generated method stub
+									requesAdvertisementHistory(access_token);
+								}
+							});
+							RefeshToken();
+						}
+					}
+				});
+	}
+
+	/**
+	 * @param list
+	 *            根据page拼接数据
+	 */
+	private void connectData(List<Advertisement> list) {
+		if (list != null) {
+			if (page == 1) {
+				tlist.clear();
+				tlist.addAll(list);
+			} else {
+				tlist.addAll(list);
+			}
+		}
+		handler.sendEmptyMessage(1);
+	}
+
+	/**
+	 * @param list
+	 *            根据page拼接数据
+	 */
+	private void connectAttentionData(List<AttentionAdvertisement> list) {
+		if (list != null) {
+			if (page == 1) {
+				attentionlist.clear();
+				attentionlist.addAll(list);
+			} else {
+				attentionlist.addAll(list);
+			}
+		}
+		handler.sendEmptyMessage(2);
+	}
+
+	/**
+	 * @param list
+	 *            根据page拼接数据
+	 */
+	private void connectHistoryData(List<AdvertisementSeeHistory> list) {
+		if (list != null) {
+			if (page == 1) {
+				historylist.clear();
+				historylist.addAll(list);
+			} else {
+				historylist.addAll(list);
+			}
+		}
+		handler.sendEmptyMessage(3);
+	}
+
+	// 下拉
+	@Override
+	public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+		// TODO Auto-generated method stub
+		page = 1;
+		if (flag == 1) {
+			requestHttp(UserInformation.getAccess_token());
+		} else if (flag == 2) {
+			requesAttentionAdvertisement(UserInformation.getAccess_token());
+		} else {
+			requesAdvertisementHistory(UserInformation.getAccess_token());
+		}
+	}
+
+	// 上拉
+	@Override
+	public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+		// TODO Auto-generated method stub
+		page = page + 1;
+		if (flag == 1) {
+			oldPosition = tlist.size();
+		} else if (flag == 2) {
+			oldAttentionPositon = attentionlist.size();
+		} else if (flag == 3) {
+			oldhistoryPostion = historylist.size();
+		}
+		if (flag == 1) {
+			requestHttp(UserInformation.getAccess_token());
+		} else if (flag == 2) {
+			requesAttentionAdvertisement(UserInformation.getAccess_token());
+		} else {
+			requesAdvertisementHistory(UserInformation.getAccess_token());
+		}
+	}
+
+}

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/product_detail_head_rl"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_120px"
+    android:background="#00000000"
+    android:orientation="vertical" >
+
+    <View
+        android:id="@+id/view0"
+        android:layout_width="0.01dp"
+        android:layout_height="0.01dp" >
+    </View>
+
+    <ImageView
+        android:id="@+id/turn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:src="@drawable/threestagepage_return_yuan" >
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/head_tilte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@color/black2"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/ellipsis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="3dp"
+        android:paddingTop="10dp"
+        android:src="@drawable/threestagepage_ellipsis_yuan" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0.5dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:layout_toLeftOf="@id/ellipsis"
+        android:visibility="invisible"
+        android:background="@color/white" />
+
+    <ImageView
+        android:id="@+id/fresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/view"
+        android:src="@drawable/threestagepage_refresh_yuan" />
+
+    <ImageView
+        android:id="@+id/iv_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/view"
+        android:src="@drawable/threestagepage_triangle"
+        android:visibility="invisible" />
+
+</RelativeLayout>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_solid_white_r"
+    android:orientation="vertical" >
+<TextView android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="删除地址"
+    android:layout_marginTop="20dp"
+    android:textColor="@color/black1"
+    android:layout_gravity="center_horizontal"
+    />    
+<TextView android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="亲确认删除改地址吗？"
+    android:textColor="@color/black2"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="20dp"
+    android:layout_gravity="center_horizontal"
+    />    
+    <View android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/dian_line_product_e8"/>
+
+
+ <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/rl_delete"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="25dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="0dp" >
+
+            <TextView
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="删除"
+                android:textColor="@color/black2" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="45dp"
+            android:background="@drawable/stroke_vertical_xuxian_c6" />
+
+        <RelativeLayout
+            android:id="@+id/turn"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="25dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingTop="1dp" >
+
+            <TextView
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="-1dp"
+               
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/black2" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

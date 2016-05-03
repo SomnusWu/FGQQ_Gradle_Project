@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llike"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/kuai_03"
+        android:padding="5dp"
+        android:text=" 猜你喜欢"
+        android:textColor="@color/black1" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <com.llg.privateproject.view.MyGridView
+                android:id="@+id/mayby_youlike_lv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/black8"
+                android:fadingEdge="none"
+                android:fadingEdgeLength="0dp"
+                android:horizontalSpacing="2dp"
+                android:listSelector="@color/white"
+                android:overScrollMode="never"
+                android:padding="1dp"
+                android:scrollbars="none"
+                android:stretchMode="columnWidth" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!--
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/stroke_lightgray"
+        android:orientation="horizontal"
+        android:padding="5dp" >
+
+        <ImageView
+            android:id="@+id/iv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/defaultpic" />
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="4dp"
+          
+            android:layout_marginLeft="10dp"
+            android:layout_below="@id/iv1"
+            android:ellipsize="marquee"
+            android:ems="10"
+            android:singleLine="true"
+            android:text=" " />
+
+            <TextView
+                android:id="@+id/tvt1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv1"
+                
+                android:gravity="center"
+                android:ellipsize="marquee"
+                android:layout_centerHorizontal="true"
+                android:ems="10"
+                android:singleLine="true"
+                android:text="描述" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvt1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:ellipsize="marquee"
+                    android:ems="10"
+                    android:text="价格"
+                    android:textColor="#9d9b9c"
+                    android:textSize="12sp" />
+                
+            
+    </RelativeLayout>-->
+
+</LinearLayout>

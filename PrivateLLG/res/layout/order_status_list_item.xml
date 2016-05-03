@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    
+    >
+    <include layout="@layout/xian_and_dian"
+        android:id="@+id/xian_and_dian"
+         />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+       
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+         >
+
+        <TextView
+            android:id="@+id/shop_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="店铺名"
+            android:textColor="@color/black1"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/order_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_alignParentRight="true"
+            android:text="订单状态"
+            android:textColor="@color/orange1"
+            android:textSize="12sp" />
+         </RelativeLayout>
+        <View
+           
+            android:layout_below="@id/shop_name"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginBottom="-5dp"
+        android:background="@drawable/dian_line_product_e8" />
+ <!-- 添加商品 -->
+
+    <LinearLayout
+        android:id="@+id/ll_product"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+          android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        >
+        <View android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="1dp"/>
+        <TextView
+            android:id="@+id/product_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+       
+            android:text="共3件"
+            android:textColor="@color/black2" />
+
+        <TextView
+            android:id="@+id/_xiaoji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+       
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/product_count"
+            android:text="小计："
+            android:textColor="@color/black2" />
+
+        <TextView
+            android:id="@+id/xiaoji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+        
+            android:layout_toRightOf="@id/_xiaoji"
+            android:text="小计："
+            android:textColor="@color/orange1" />
+   
+</LinearLayout>
+    
+   
+  
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@id/payment"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/dian_line_product_e8" />
+    <HorizontalScrollView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        >
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="15dp"
+        android:paddingRight="20dp"
+        >
+        <View android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+        <TextView 
+            android:id="@+id/pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="立即支付"
+            android:padding="2dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/stroke_grayline_r2"
+            android:textColor="@color/black2"/>
+        <TextView 
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消订单"
+            android:padding="2dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/stroke_grayline_r2"
+            android:textColor="@color/black2"/>
+        <TextView 
+            android:id="@+id/contact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="联系卖家"
+            android:padding="2dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/stroke_grayline_r2"
+            android:textColor="@color/black2"/>
+        <TextView 
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除订单"
+            android:padding="2dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/stroke_grayline_r2"
+            android:textColor="@color/black2"/>
+        <TextView 
+            android:id="@+id/query"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查看物流"
+            android:padding="2dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/stroke_grayline_r2"
+            android:textColor="@color/black2"/>
+        
+        <TextView 
+            android:id="@+id/confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确认收货"
+            android:padding="2dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/stroke_grayline_r2"
+            android:textColor="@color/black2"/>
+        <TextView
+            android:id="@+id/pingjia"
+             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="评价"
+            android:padding="2dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/stroke_grayline_r2"
+            android:textColor="@color/black2"/>
+        <TextView 
+            android:id="@+id/refund"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退货退款"
+            android:padding="2dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/stroke_grayline_r2"
+            android:textColor="@color/black2"/>
+        <TextView 
+            android:id="@+id/return_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退货进度"
+            android:padding="2dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/stroke_grayline_r2"
+            android:textColor="@color/black2"/>
+    </LinearLayout>
+    </HorizontalScrollView>
+    <!-- 给卖家留言 -->
+
+    <include layout="@layout/dian_and_xian" />
+
+</LinearLayout>

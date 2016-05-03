@@ -1,0 +1,119 @@
+package com.llg.privateproject.view;
+
+import java.util.List;
+import java.util.Map;
+
+import com.bjg.lcc.privateproject.R;
+import com.llg.privateproject.adapters.TabListAdapter;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+
+public class TabViewOne extends RelativeLayout {
+
+	private Context mContext;
+	private ListView listView;
+	private List<com.llg.privateproject.entities.MenuItem> menuItems;
+	private List<Map<String, String>> list;
+	private TabListAdapter adapter;
+	private boolean isFirstShow = true;
+	private int defaultId = -1;
+	private String showText;
+	private OnItemSelectListener mOnItemSelectListener;
+	private int selectResId, selectorResId;
+	private Context context;
+
+	public String getShowText() {
+		return showText;
+	}
+
+	public TabViewOne(Context context,
+			List<com.llg.privateproject.entities.MenuItem> menuItems,
+			int defaultId, int selectResId, int selectorResId) {
+		super(context);
+		this.menuItems = menuItems;
+		this.defaultId = defaultId;
+		this.selectResId = selectResId;
+		this.selectorResId = selectorResId;
+		this.context = context;
+	}
+
+	public TabViewOne(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		init(context);
+	}
+
+	public TabViewOne(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init(context);
+	}
+
+	private void init(Context context) {
+		mContext = context;
+		listView = new ListView(context);
+		listView.setCacheColorHint(Color.parseColor("#00000000"));
+		listView.setHorizontalScrollBarEnabled(false);
+		listView.setVerticalScrollBarEnabled(false);
+		listView.setDivider(new ColorDrawable(Color.parseColor("#D3D3D3")));
+		listView.setDividerHeight(1);
+		listView.setBackgroundResource(R.color.white);
+		// WindowManager manager=(WindowManager)
+		// mContext.getSystemService(mContext.WINDOW_SERVICE);
+		// int width=(int) (manager.getDefaultDisplay().getHeight()*0.6);
+		this.addView(listView, new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
+		adapter = new TabListAdapter(context, menuItems, selectResId,
+				selectorResId);
+		Log.i("tag", defaultId + "--------defaultId");
+		if (defaultId != -1) {
+			for (int i = 0; i < menuItems.size(); i++) {
+				Log.i("tag", menuItems.get(i).getId()
+						+ "--------menuItems.get(i).getId()");
+				if (menuItems.get(i).getId() == defaultId) {
+					adapter.setSelectedPositionNoNotify(i);
+					showText = menuItems.get(i).getText();
+					break;
+				}
+			}
+		}
+		listView.setAdapter(adapter);
+		adapter.setOnItemClickListener(new TabListAdapter.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(View view, int position) {
+
+				if (mOnItemSelectListener != null) {
+					showText = menuItems.get(position).getText();
+					mOnItemSelectListener.itemSelected(position);
+				}
+			}
+		});
+	}
+
+	public void setOnItemSelectListener(
+			OnItemSelectListener onItemSelectListener) {
+		mOnItemSelectListener = onItemSelectListener;
+	}
+
+	public interface OnItemSelectListener {
+		public void itemSelected(int position);
+	}
+
+	public void notifyDataSetChanged() {
+		adapter.notifyDataSetChanged();
+	}
+
+	public void setList(List<Map<String, String>> list) {
+		this.list = list;
+		if (isFirstShow = true) {
+			init(context);
+		}
+	}
+}

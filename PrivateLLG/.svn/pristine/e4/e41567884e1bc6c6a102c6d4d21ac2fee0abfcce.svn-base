@@ -1,0 +1,409 @@
+package com.llg.privateproject.actvity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bjg.lcc.privateproject.R;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.util.LogUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.lidroid.xutils.view.annotation.event.OnItemClick;
+import com.llg.help.GetProgressBar;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.adapter.CommodityAdapter;
+import com.llg.privateproject.adapters.FGQQShopAdapter;
+import com.llg.privateproject.entities.MyHistoryModel;
+import com.llg.privateproject.entities.MyShopModel;
+import com.llg.privateproject.entities.ShopModel;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.Constants;
+import com.llg.privateproject.utils.StringUtils;
+import com.llg.privateproject.view.MyGridView;
+import com.smartandroid.sa.view.AutoLoading;
+
+/**
+ * 商品列表展示
+ * 
+ * @author gongyibing
+ * @version 1.0
+ * @created 2015-05-29
+ */
+@SuppressLint("HandlerLeak")
+public class CommodityActivity extends BaseActivity {
+	/** 商品数据集合 */
+	private List<MyHistoryModel> listData = null;
+
+	/** 商品列表适配器 */
+	private CommodityAdapter adapter = null;
+	@ViewInject(R.id.commodity_id)
+	private MyGridView layoutListView;
+	/** 0综合，1销量， */
+	private int sortby;
+	/** 切换展示方式 */
+	@ViewInject(R.id.pulltorefreshscrollview)
+	private PullToRefreshScrollView pulltorefreshscrollview;
+	/** 切换展示方式 */
+	@ViewInject(R.id.home_sweep_id)
+	private ImageView home_sweep_id;
+	/** 搜索框 */
+	@ViewInject(R.id.home_search_id)
+	private TextView home_search_id;
+	/***/
+	@ViewInject(R.id.ly)
+	private LinearLayout ly;
+	private AutoLoading autoLoading;
+	/** 二级分类id */
+	private String parentId = "";
+	/** 页数 */
+	private int lengt = 0;
+	/** 条数 */
+	private int dd = 10;
+	/** 是否单列显示 */
+	private boolean isSingle = true;
+
+	/** 全局Context */
+	private AppContext appContext;
+	/** 查询当前页 */
+	private int currentPage = 1;
+	private int totalPages = 4;
+	private String name = "";
+	private Handler mHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			GetProgressBar.dismissMyProgressBar();
+			switch (msg.what) {
+			case Constants.SUCCESS:
+				/** 刷新列表 */
+				adapter.notifyDataSetInvalidated();
+				break;
+			case Constants.REFRESH:
+				/** 刷新分类产品列表 */
+				adapter.notifyDataSetInvalidated();
+				break;
+			case Constants.FAILED:
+				/** 提示显示 */
+				Toast.makeText(CommodityActivity.this, msg.obj.toString(),
+						Toast.LENGTH_SHORT).show();
+				break;
+			}
+		};
+	};
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.home_commodity);
+		ViewUtils.inject(this);
+		autoLoading = new AutoLoading(this, ly);
+		autoLoading.setClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				getCommodityData();
+			}
+		});
+		initData();
+		home_search_id
+				.setHintTextColor(getResources().getColor(R.color.black3));
+	}
+
+	/** 初始化配置 */
+	private void initData() {
+		try {
+			pulltorefreshscrollview.setMode(Mode.BOTH);
+			listData = new ArrayList<MyHistoryModel>();
+			parentId = getIntent().getStringExtra("parentId");
+			pulltorefreshscrollview
+					.setOnRefreshListener(new OnRefreshListener() {
+
+						@Override
+						public void onRefresh(PullToRefreshBase refreshView) {
+							// TODO Auto-generated method stub
+							getCommodityData();
+
+						}
+					});
+		} catch (Exception e) {
+			LogUtils.e("转换异常", e);
+		}
+		intiView();
+		if (!StringUtils.isEmpty(parentId)) {
+			initDisplay();
+		} else {
+			LogUtils.e("获取产品ID失败" + parentId);
+		}
+
+	}
+
+	/** 初始化界面 */
+	private void intiView() {
+		// testCommodityData();
+		adapter = new CommodityAdapter(this, listData);
+		layoutListView.setAdapter(adapter);
+	}
+
+	/** 网络验证数据请求 */
+	private void initDisplay() {
+
+		appContext = (AppContext) CommodityActivity.this.getApplication();
+		if (appContext.isNetworkConnected()) {
+			autoLoading.showLoadingLayout();
+			getCommodityData();
+		} else {
+			autoLoading.showInternetOffLayout();
+			Message _Msg = mHandler.obtainMessage(Constants.FAILED,
+					getResources().getString(R.string.t_Connection));
+			mHandler.sendMessage(_Msg);
+		}
+	}
+
+	/***
+	 * 查询产品数据
+	 * 
+	 */
+	private void getCommodityData() {
+		if (currentPage > totalPages) {
+			toast("暂无更多商品");
+			pulltorefreshscrollview.onRefreshComplete();
+			return;
+		}
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				RequestParams params = new RequestParams();
+				// params.addQueryStringParameter("categoryId", parentId);
+
+				params.addQueryStringParameter("sortby", "" + sortby);
+				params.addQueryStringParameter("categoryId", parentId);
+				params.addQueryStringParameter("pageNo",
+						String.valueOf(++currentPage));
+				params.addQueryStringParameter("time",
+						"" + System.currentTimeMillis());
+				AppContext.getHtmlUitls().xUtilsm(CommodityActivity.this,
+						HttpMethod.GET, Constants.APP_CHILDS_MERCHANDISE,
+						params, new HttpCallback() {
+							@Override
+							public void onBack(JSONObject json) {
+								/** 获取分类商品数据 */
+
+								autoLoading.hideAll();
+								try {
+									if (json.getBoolean("success")) {
+										totalPages = json.getJSONObject("obj")
+												.getInt("totalPages");
+										// **************************
+										// ParseJson
+										// .getParseJson()
+										// .setDataList(
+										// "result",
+										// json.getJSONObject("obj"),
+										// listData);
+
+										MyHistoryModel mModel = new MyHistoryModel();
+										listData.addAll(mModel.mJsonData(json
+												.getJSONObject("obj")
+												.getString("result")));
+										Message _Msgs = mHandler.obtainMessage(
+												Constants.REFRESH, listData);
+										mHandler.sendMessage(_Msgs);
+										pulltorefreshscrollview
+												.onRefreshComplete();
+									}
+								} catch (JSONException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+							}
+
+							@Override
+							public void onError(String msg) {
+								autoLoading.showExceptionLayout();
+								Message _Msg = mHandler.obtainMessage(
+										Constants.FAILED,
+										getResources().getString(
+												R.string.connection_Exception));
+								mHandler.sendMessage(_Msg);
+								pulltorefreshscrollview.onRefreshComplete();
+							}
+						});
+			}
+		}).start();
+	}
+
+	@OnItemClick(R.id.commodity_id)
+	public void onItemClick(AdapterView<?> parent, View arg1, int position,
+			long arg3) {
+		if (appContext.isNetworkConnected()) {
+			// ****************************************
+//			String prodspecId = listData.get(position).get("specId").toString();
+			String prodspecId= listData.get(position).getProdspecid();
+
+//			String img = listData.get(position).get("image").toString();
+			String img = listData.get(position).getIconpath();
+
+			Intent intent = new Intent(this, ProductDetailActivity.class);
+			intent.putExtra("prodspecId", prodspecId);
+			intent.putExtra("img", img);
+			startActivity(intent);
+		} else {
+			Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
+		}
+
+	}
+
+	@OnClick({ R.id.erji_fanhui, R.id.home_search_id, R.id.home_sweep_id,
+			R.id.tv_xiaoliang, R.id.ll_jiage, R.id.ll_shaixuan, R.id.ll_zonghe,
+			R.id.price_up, R.id.price_down })
+	public void myClick(View v) {
+		setColors();
+		switch (v.getId()) {
+		case R.id.erji_fanhui:// 返回
+			finish();
+			break;
+		case R.id.home_search_id:// 搜索框
+			startActivity(new Intent(this, SearchActivity.class));
+			Toast.makeText(this, "搜索框", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.home_sweep_id:// 切换单双列显示
+			if (isSingle) {
+				isSingle = false;
+				layoutListView.setNumColumns(2);
+				home_sweep_id.setImageResource(R.drawable.erji_liebiao_fenlei);
+			} else {
+				isSingle = true;
+				layoutListView.setNumColumns(1);
+				home_sweep_id.setImageResource(R.drawable.erji_pinpu_fenlei);
+			}
+			// adapter = new CommodityAdapter(this, listData, isSingle);
+			adapter = new CommodityAdapter(this, listData);
+			layoutListView.setAdapter(adapter);
+			break;
+		// case R.id.iv_zonghe:
+		// Toast.makeText(this, "综合", Toast.LENGTH_SHORT).show();
+		// break;
+		case R.id.tv_xiaoliang:// 销量
+			tv_xiaoliang.setTextColor(getResources().getColor(R.color.orange1));
+			sortby = 1;
+			listData.clear();
+			getCommodityData();
+			Toast.makeText(this, "销量", Toast.LENGTH_SHORT).show();
+			break;
+		// case R.id.ll_jiage:// 价格
+		// tv_jiage.setTextColor(getResources().getColor(R.color.orange1));
+		// price_up.setBackgroundResource(R.drawable.erji_shangfan_fenlei_selected);
+		// price_down.setBackgroundResource(R.color.white);
+		// sortby=2;
+		// listData.clear();
+		// getCommodityData();
+		// Toast.makeText(this, "价格升", Toast.LENGTH_SHORT).show();
+		// break;
+		case R.id.price_up:// 价格升
+			tv_jiage.setTextColor(getResources().getColor(R.color.orange1));
+			price_up.setBackgroundResource(R.drawable.erji_shangfan_fenlei_selected);
+			price_down.setBackgroundResource(R.drawable.erji_xiafan_fenlei);
+			sortby = 2;
+			listData.clear();
+			getCommodityData();
+			break;
+		case R.id.price_down:// 价格降
+			tv_jiage.setTextColor(getResources().getColor(R.color.orange1));
+			price_up.setBackgroundResource(R.drawable.erji_shangfan_fenlei);
+			price_down
+					.setBackgroundResource(R.drawable.erji_xiafan_fenlei_selected);
+			sortby = 3;
+			listData.clear();
+			getCommodityData();
+			break;
+		case R.id.iv_shaixuan:// 筛选
+			// Toast.makeText(this, "筛选", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.ll_zonghe:// 综合
+			tv_zonghe.setTextColor(getResources().getColor(R.color.orange1));
+			iv_zonghe.setBackgroundResource(R.drawable.erji_xiala);
+			sortby = 0;
+			listData.clear();
+			getCommodityData();
+			break;
+		case R.id.ll_shaixuan:// 筛选
+			tv_shaixuan.setTextColor(getResources().getColor(R.color.orange1));
+			iv_shaixuan
+					.setBackgroundResource(R.drawable.erji_shaixuan_fenlei_selected);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	/** 设置标签颜色 */
+	@ViewInject(R.id.ll_zonghe)
+	private LinearLayout ll_zonghe;
+	@ViewInject(R.id.tv_zonghe)
+	private TextView tv_zonghe;
+	@ViewInject(R.id.iv_zonghe)
+	private ImageView iv_zonghe;
+
+	@ViewInject(R.id.tv_xiaoliang)
+	private TextView tv_xiaoliang;
+
+	@ViewInject(R.id.ll_jiage)
+	private LinearLayout ll_jiage;
+	@ViewInject(R.id.tv_jiage)
+	private TextView tv_jiage;
+	@ViewInject(R.id.price_up)
+	private ImageView price_up;
+	@ViewInject(R.id.price_down)
+	private ImageView price_down;
+
+	@ViewInject(R.id.ll_shaixuan)
+	private LinearLayout ll_shaixuan;
+	@ViewInject(R.id.tv_shaixuan)
+	private TextView tv_shaixuan;
+	@ViewInject(R.id.iv_shaixuan)
+	private ImageView iv_shaixuan;
+
+	/** 设置标签为灰色 */
+	void setColors() {
+
+		tv_zonghe.setTextColor(getResources().getColor(R.color.black1));
+		tv_xiaoliang.setTextColor(getResources().getColor(R.color.black1));
+		tv_jiage.setTextColor(getResources().getColor(R.color.black1));
+		tv_shaixuan.setTextColor(getResources().getColor(R.color.black1));
+
+		iv_zonghe.setBackgroundResource(R.drawable.erji_xiala_normal);
+		price_up.setBackgroundResource(R.drawable.erji_shangfan_fenlei);
+		price_down.setBackgroundResource(R.color.white);
+		iv_shaixuan.setBackgroundResource(R.drawable.erji_shaixuan_fenlei);
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		GetProgressBar.dismissMyProgressBar();
+	}
+}

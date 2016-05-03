@@ -1,0 +1,156 @@
+[
+    {
+        "outputFile": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\res\\merged\\androidTest\\debug\\values\\values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 57,
+                    "endOffset": 108
+                },
+                "from": {
+                    "file": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 113,
+                    "endColumn": 55,
+                    "endOffset": 164
+                },
+                "from": {
+                    "file": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 169,
+                    "endColumn": 52,
+                    "endOffset": 217
+                },
+                "from": {
+                    "file": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 222,
+                    "endColumn": 46,
+                    "endOffset": 264
+                },
+                "from": {
+                    "file": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 269,
+                    "endColumn": 46,
+                    "endOffset": 311
+                },
+                "from": {
+                    "file": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 316,
+                    "endColumn": 36,
+                    "endOffset": 348
+                },
+                "from": {
+                    "file": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 353,
+                    "endLine": 14,
+                    "endColumn": 12,
+                    "endOffset": 639
+                },
+                "from": {
+                    "file": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 15,
+                    "startColumn": 4,
+                    "startOffset": 644,
+                    "endLine": 17,
+                    "endColumn": 12,
+                    "endOffset": 799
+                },
+                "from": {
+                    "file": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 804,
+                    "endColumn": 29,
+                    "endOffset": 829
+                },
+                "from": {
+                    "file": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 834,
+                    "endLine": 26,
+                    "endColumn": 12,
+                    "endOffset": 1267
+                },
+                "from": {
+                    "file": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 27,
+                    "startColumn": 4,
+                    "startOffset": 1272,
+                    "endLine": 34,
+                    "endColumn": 12,
+                    "endOffset": 1707
+                },
+                "from": {
+                    "file": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 35,
+                    "startColumn": 4,
+                    "startOffset": 1712,
+                    "endLine": 37,
+                    "endColumn": 12,
+                    "endOffset": 1815
+                },
+                "from": {
+                    "file": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            }
+        ]
+    }
+]

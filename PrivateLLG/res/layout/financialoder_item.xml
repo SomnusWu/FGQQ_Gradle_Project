@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <TextView
+        android:id="@+id/order_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:text="订单编号:"
+        android:textColor="@color/black2" />
+
+    <TextView
+        android:id="@+id/order_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/order_"
+        android:padding="3dp"
+        android:text="订单编号:"
+        android:textColor="@color/orange2" />
+
+    <TextView
+        android:id="@+id/creat_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/order_"
+        android:padding="3dp"
+        android:text="创建时间:"
+        android:textColor="@color/black2" />
+
+    <TextView
+        android:id="@+id/creat_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/order_"
+        android:layout_toRightOf="@id/order_"
+        android:padding="3dp"
+        android:text="创建时间:"
+        android:textColor="@color/black2" />
+
+    <TextView
+        android:id="@+id/order_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    
+        android:padding="3dp"
+        android:text="订单状态:"
+        android:textColor="@color/orange2" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@id/creat_time"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/dian_line_product_e8" />
+
+</RelativeLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <!-- 首字母 -->
+
+    <TextView
+        android:id="@+id/alpha"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#333333"
+        android:paddingLeft="10dip"
+        android:textColor="#FFFFFF"
+        android:visibility="gone" />
+
+    <!-- 联系人信息 -->
+
+    <QuickContactBadge
+        android:id="@+id/qcb"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/alpha"
+        android:layout_marginBottom="3dip"
+        android:layout_marginTop="3dip"
+        android:src="@drawable/apptubiao" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10.0dip"
+        android:paddingBottom="5dp"
+        android:layout_toRightOf="@+id/qcb"
+        android:singleLine="true"
+        android:text="dassdfs"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="@color/black1" />
+
+    <TextView
+        android:text="dassdfs"
+        android:id="@+id/number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10.0dip"
+        android:layout_toRightOf="@+id/qcb"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/name"
+        android:singleLine="true"
+        android:textSize="16sp"
+        android:paddingBottom="5dp"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/black1" />
+
+</RelativeLayout>

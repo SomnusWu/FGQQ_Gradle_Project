@@ -1,0 +1,56 @@
+package com.llg.privateproject.fragment;
+
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.BitmapUtils;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.actvity.WelcomeActivity.IsetPic;
+import com.llg.privateproject.utils.CommonUtils;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class Guide2 extends Fragment implements IsetPic {
+	String url;
+	View v;
+	Context context;
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		View view = inflater.inflate(R.layout.welcome, null);
+		view.findViewById(R.id.welcome).setBackgroundResource(R.drawable.arrow);
+		v = view;
+		return view;
+	}
+@Override
+public void onAttach(Activity activity) {
+	// TODO Auto-generated method stub
+	super.onAttach(activity);
+	context=activity;
+}
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+
+		v.setBackgroundResource(R.drawable.index_2);
+	}
+
+	@Override
+	public void setPicId(String url) {
+		// TODO Auto-generated method stub
+		this.url = url;
+		 new BitmapUtils(context,
+					CommonUtils.createSDCardDir())
+					.configDefaultLoadFailedImage(
+							R.drawable.index_2)
+					.configDefaultLoadingImage(R.drawable.index_2).display(v, url);
+	}
+
+}

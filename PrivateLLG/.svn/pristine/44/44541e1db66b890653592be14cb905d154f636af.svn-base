@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp" >
+
+        <ImageView
+            android:id="@+id/turn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@drawable/dingdanzhifu_fanhui" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="现场消费订单"
+            android:textColor="@color/black1"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/get_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+            android:text="收费订单"
+            android:textColor="@color/black1"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black3" />
+		<RadioGroup
+		    android:visibility="gone"
+		    android:id="@+id/rg"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal" >
+
+		    
+		    <RadioButton 
+		        android:id="@+id/rb_0"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:button="@null"
+		        android:text="默认"
+		        android:layout_weight="1"
+		        android:layout_marginLeft="10dp"
+		        android:checked="true"
+		        android:textColor="@color/orange1_and_blanck2"
+		        android:padding="5dp"
+		        />
+		    <RadioButton 
+		        android:id="@+id/rb_1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:button="@null"
+		        android:text="未付款"
+		         android:layout_weight="1"
+		        android:layout_marginLeft="10dp"
+		        android:checked="false"
+		        android:textColor="@color/orange1_and_blanck2"
+		        android:padding="5dp"
+		        />
+		    <RadioButton 
+		        android:id="@+id/rb_2"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:button="@null"
+		        android:text="已付款"
+		         android:layout_weight="1"
+		          android:textColor="@color/orange1_and_blanck2"
+		        android:padding="5dp"
+		        />
+		    <RadioButton 
+		        android:id="@+id/rb_3"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:button="@null"
+		        android:padding="5dp"
+		         android:layout_weight="1"
+		        android:text="待收货"
+		          android:textColor="@color/orange1_and_blanck2"
+		        />
+		    <RadioButton 
+		        android:id="@+id/rb_4"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:button="@null"
+		        android:padding="5dp"
+		         android:layout_weight="1"
+		        android:text="交易完成"
+		          android:textColor="@color/orange1_and_blanck2"
+		        />
+		</RadioGroup>
+		 <View
+		     android:id="@+id/view"
+		     android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black3" />
+    <LinearLayout
+        android:id="@+id/ly"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            ptr:ptrHeaderTextColor="@color/black3"
+            ptr:ptrMode="pullUpFromBottom" >
+        </com.handmark.pulltorefresh.library.PullToRefreshListView>
+    </LinearLayout>
+
+</LinearLayout>

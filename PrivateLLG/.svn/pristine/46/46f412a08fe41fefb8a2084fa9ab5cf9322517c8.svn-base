@@ -1,0 +1,189 @@
+package com.llg.privateproject.entities;
+
+import java.io.Serializable;
+/**
+ * 猜你喜欢实体类
+ * yh
+ * 2015.6.16
+ * 
+ * */
+public class MaybeYouLike implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+     /**
+      * 内容
+      */
+     private String content; 
+	/**
+	 * 猜你喜欢商品id
+	 */
+	private String id; 
+	/**
+	 * 分数
+	 */
+    private String  source;
+    /**
+     * objectId
+     */
+    private String  objectId;
+    /**
+	 * 猜你喜欢标题
+	 */
+    private String  name;
+
+    /**
+	 * 图片地址
+	 */
+    private String  img;
+    /**类别*/
+    private String objectType;
+    /**url*/
+    private String url;
+    /**店铺id*/
+    private String shopId;
+    /**商品Id*/
+    private String commodityId;
+    /**店铺名*/
+    private String shopName;
+    /**商品名*/
+    private String comodityName;
+    /**商品图片*/
+    private String pic;
+    /**商品描述*/
+    private String dsc;
+    /**商品价格*/
+    private String price;
+    /**分类id*/
+    private String categoryId;
+    /**规格id*/
+    private String prodspecId;
+    
+    
+	public String getShopId() {
+		return shopId;
+	}
+	public void setShopId(String shopId) {
+		this.shopId = shopId;
+	}
+	public String getCommodityId() {
+		return commodityId;
+	}
+	public void setCommodityId(String commodityId) {
+		this.commodityId = commodityId;
+	}
+	public String getShopName() {
+		return shopName;
+	}
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+	public String getComodityName() {
+		return comodityName;
+	}
+	public void setComodityName(String comodityName) {
+		this.comodityName = comodityName;
+	}
+	public String getPic() {
+		return pic;
+	}
+	public void setPic(String pic) {
+		this.pic = pic;
+	}
+	public String getDsc() {
+		return dsc;
+	}
+	public void setDsc(String dsc) {
+		this.dsc = dsc;
+	}
+	public String getPrice() {
+		return price;
+	}
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	public String getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
+	}
+	public String getProdspecId() {
+		return prodspecId;
+	}
+	public void setProdspecId(String prodspecId) {
+		this.prodspecId = prodspecId;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getSource() {
+		return source;
+	}
+	public void setSource(String source) {
+		this.source = source;
+	}
+	public String getObjectId() {
+		return objectId;
+	}
+	public void setObjectId(String objectId) {
+		this.objectId = objectId;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
+	public String getObjectType() {
+		return objectType;
+	}
+	public void setObjectType(String objectType) {
+		this.objectType = objectType;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	/** String content, String id, String source,
+			String objectId, String name, String img, String objectType,
+			String url*/
+	public MaybeYouLike(String content, String id, String source,
+			String objectId, String name, String img, String objectType,
+			String url) {
+		super();
+		this.content = content;
+		this.id = id;
+		this.source = source;
+		this.objectId = objectId;
+		this.name = name;
+		this.img = img;
+		this.objectType = objectType;
+		this.url = url;
+	}
+	
+	public MaybeYouLike(String name,String dsc){
+		this.name=name;
+		this.dsc=dsc;
+	}
+}

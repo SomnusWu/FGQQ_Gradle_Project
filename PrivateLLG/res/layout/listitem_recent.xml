@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:padding="10dp"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
+
+        <ImageView
+            android:id="@+id/iv_jiantou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dianhuabh_dajin" />
+
+        <TextView
+            android:id="@+id/tv_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/iv_jiantou"
+            android:textColor="@color/black1"
+            android:text="13000000000" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black1"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:text="今天00:00" />
+
+        <TextView
+            android:id="@+id/tv_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black1"
+            android:layout_alignLeft="@+id/tv_phone"
+            android:layout_below="@+id/tv_phone"
+            android:layout_marginTop="5dp"
+            android:text="呼入 0分0秒" />
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black1"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_time"
+            android:layout_marginRight="10dp"
+            android:text="华华" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/dianhuabh_bohao3" />
+    
+
+</LinearLayout>

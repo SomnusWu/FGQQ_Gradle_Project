@@ -1,0 +1,149 @@
+package com.llg.privateproject.view;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
+import com.bjg.lcc.privateproject.R;
+
+public class FGQQInputKeyBoard extends LinearLayout implements OnClickListener {
+
+	private Context mContext;
+	private String mKeyString = "";
+	private Button btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8,
+			btn_9, btn_0, btn_11, btn_12;
+
+	public FGQQInputKeyBoard(Context context) {
+		super(context);
+		// TODO Auto-generated constructor stub
+		init(context);
+	}
+
+	public FGQQInputKeyBoard(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		// TODO Auto-generated constructor stub
+		init(context);
+	}
+
+	public FGQQInputKeyBoard(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		// TODO Auto-generated constructor stub
+		init(context);
+	}
+
+	private void init(Context mContext) {
+		this.mContext = mContext;
+		View view = LayoutInflater.from(mContext).inflate(
+				R.layout.view_keyboard_layout, this);
+		initView(view);
+	}
+
+	private void initView(View view) {
+		btn_1 = (Button) view.findViewById(R.id.btn_1);
+		btn_2 = (Button) view.findViewById(R.id.btn_2);
+		btn_3 = (Button) view.findViewById(R.id.btn_3);
+		btn_4 = (Button) view.findViewById(R.id.btn_4);
+		btn_5 = (Button) view.findViewById(R.id.btn_5);
+		btn_6 = (Button) view.findViewById(R.id.btn_6);
+		btn_7 = (Button) view.findViewById(R.id.btn_7);
+		btn_8 = (Button) view.findViewById(R.id.btn_8);
+		btn_9 = (Button) view.findViewById(R.id.btn_9);
+		btn_0 = (Button) view.findViewById(R.id.btn_0);
+		btn_11 = (Button) view.findViewById(R.id.btn_11);
+		btn_12 = (Button) view.findViewById(R.id.btn_12);
+
+		btn_1.setOnClickListener(this);
+		btn_2.setOnClickListener(this);
+		btn_3.setOnClickListener(this);
+		btn_4.setOnClickListener(this);
+		btn_5.setOnClickListener(this);
+		btn_6.setOnClickListener(this);
+		btn_7.setOnClickListener(this);
+		btn_8.setOnClickListener(this);
+		btn_9.setOnClickListener(this);
+		btn_0.setOnClickListener(this);
+		btn_11.setOnClickListener(this);
+		btn_12.setOnClickListener(this);
+
+	}
+
+	public iInputKey getmInputKey() {
+		return mInputKey;
+	}
+
+	public void setmInputKey(iInputKey mInputKey) {
+		this.mInputKey = mInputKey;
+	}
+
+	public interface iInputKey {
+		public void inputKey(String keyNumber);
+	}
+
+	private iInputKey mInputKey;
+
+	@Override
+	public void onClick(View view) {
+		// TODO Auto-generated method stub
+		switch (view.getId()) {
+		case R.id.btn_1:
+			mKeyString = "1";
+			break;
+		case R.id.btn_2:
+			mKeyString = "2";
+
+			break;
+		case R.id.btn_3:
+			mKeyString = "3";
+
+			break;
+		case R.id.btn_4:
+			mKeyString = "4";
+
+			break;
+		case R.id.btn_5:
+			mKeyString = "5";
+
+			break;
+		case R.id.btn_6:
+			mKeyString = "6";
+
+			break;
+		case R.id.btn_7:
+			mKeyString = "7";
+
+			break;
+		case R.id.btn_8:
+			mKeyString = "8";
+
+			break;
+		case R.id.btn_9:
+			mKeyString = "9";
+
+			break;
+		case R.id.btn_0:
+			mKeyString = "0";
+
+			break;
+		case R.id.btn_11:
+			mKeyString = "*";
+
+			break;
+		case R.id.btn_12:
+			mKeyString = "#";
+
+			break;
+
+		default:
+			break;
+		}
+
+		if (mInputKey != null) {
+			mInputKey.inputKey(mKeyString);
+		}
+	}
+
+}

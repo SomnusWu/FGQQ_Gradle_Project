@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/shangpinhui"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/one"
+            android:gravity="center"
+            android:text="商品汇" />
+
+<!--         <View -->
+<!--             android:layout_width="0.5dp" -->
+<!--             android:layout_height="match_parent" -->
+<!--             android:background="@color/orange1" /> -->
+
+        <TextView
+            android:id="@+id/xianchangxiaofei"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/xianchangxiaofei"
+            android:gravity="center"
+            android:text="特惠商家" />
+
+<!--         <View -->
+<!--             android:layout_width="0.5dp" -->
+<!--             android:layout_height="match_parent" -->
+<!--             android:background="@color/orange1" /> -->
+
+        <TextView
+            android:id="@+id/wodehoutai"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/center"
+            android:gravity="center"
+            android:text="个人中心" />
+    </LinearLayout>
+
+<!--     <View -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="0.5dp" -->
+<!--         android:background="@color/orange1" /> -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/haoyoufazhan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/haiyoufazhan"
+            android:gravity="center"
+            android:text="邀请好友" />
+
+<!--         <View -->
+<!--             android:layout_width="0.5dp" -->
+<!--             android:layout_height="match_parent" -->
+<!--             android:background="@color/orange1" /> -->
+
+        <TextView
+            android:id="@+id/yewulianxi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/advertisement"
+            android:gravity="center"
+            android:text="我的广告" />
+
+<!--         <View -->
+<!--             android:layout_width="0.5dp" -->
+<!--             android:layout_height="match_parent" -->
+<!--             android:background="@color/orange1" /> -->
+
+        <TextView
+            android:id="@+id/dianhua"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/phone"
+            android:gravity="center"
+            android:text="电话" />
+    </LinearLayout>
+
+</LinearLayout>

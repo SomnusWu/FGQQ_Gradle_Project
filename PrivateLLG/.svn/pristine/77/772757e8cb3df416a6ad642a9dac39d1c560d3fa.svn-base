@@ -1,0 +1,22 @@
+package com.llg.privateproject.entities;
+
+import java.io.Serializable;
+
+public class LinLinGouZhuTiGuanEntity implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/** id */
+	public String id;
+	/** 名称 */
+	public String name;
+	/** sortby */
+	public String sortby;
+	/** parentId */
+	public String parentId;
+	/** img */
+	public String img;
+
+}

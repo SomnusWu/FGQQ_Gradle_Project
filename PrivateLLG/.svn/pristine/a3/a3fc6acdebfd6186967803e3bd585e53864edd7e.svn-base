@@ -1,0 +1,36 @@
+package com.llg.privateproject.fragment;
+
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.ViewUtils;
+import com.llg.privateproject.actvity.PhoneActivity;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+
+public class FragmentPhoneMoney extends BaseFragment{
+private PhoneActivity context;
+	@Override
+	public String getFragmentName() {
+		// TODO Auto-generated method stub
+		return "FragmentPhoneMoney";
+	}
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		context=(PhoneActivity) activity;
+	}
+	@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+		View v=inflater.inflate(R.layout.phonemoney, null);
+		ViewUtils.inject(v);
+			return v;
+		}
+
+}

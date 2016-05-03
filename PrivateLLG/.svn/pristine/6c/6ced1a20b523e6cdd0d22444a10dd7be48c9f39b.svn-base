@@ -1,0 +1,582 @@
+package com.llg.privateproject.fragment;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.bjg.lcc.privateproject.R;
+import com.llg.privateproject.actvity.MainActivity;
+import com.llg.privateproject.actvity.OrderClearActivity;
+import com.llg.privateproject.actvity.WebLoginActivity;
+import com.llg.privateproject.adapters.MaybeYouLikerAdapter;
+import com.llg.privateproject.adapters.ShoppingCardAdapter;
+import com.llg.privateproject.adapters.ShoppingCardAdapter0;
+import com.llg.privateproject.adapters.ShoppingCardAdapter0.SetAllPrice;
+import com.llg.privateproject.entities.MaybeYouLike;
+import com.llg.privateproject.entities.ShoppingCartEntity;
+import com.llg.privateproject.entities.ShoppingCartEntity.Store;
+import com.llg.privateproject.entities.ShoppingCartEntity.Store.CartSpec;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.view.MyGridView;
+import com.smartandroid.sa.view.AutoLoading;
+
+/**
+ * 购物车页
+ * 
+ * @author gongyibing
+ * @version 1.0
+ * @created 2015-05-07
+ */
+public class ShoppingCartFragment extends BaseFragment implements
+		OnItemClickListener, OnCheckedChangeListener {
+
+	private static final String TAG = "ShoppingCartFragment";
+	MainActivity context;
+	/** 是否为编辑状态 */
+	boolean isEdit = false;
+	/** 标题 */
+	private TextView mTitleTv;
+	/** 结算价 */
+	@ViewInject(R.id.totalprice)
+	private TextView totalprice;
+	/**节省的值 */
+	@ViewInject(R.id.totalsave)
+	private TextView totalsave;
+	/** 全选按钮 */
+	@ViewInject(R.id.cb_all)
+	private CheckBox cb_all;
+	private AutoLoading autoLoading;
+	/** 购物车实体类 */
+	private ShoppingCartEntity shoppingCartEntity;
+	/** 编辑 */
+	@ViewInject(R.id.tv_edit)
+	private TextView tv_edit;
+
+	/** 购物车布局 */
+	@ViewInject(R.id.fl_shoppingcart)
+	private LinearLayout fl_shoppingcart;
+	/** 没有商品时显示提示布局 */
+	@ViewInject(R.id.ll_noproduct)
+	private LinearLayout ll_noproduct;
+	/** 猜你喜欢列表 */
+	@ViewInject(R.id.mayby_youlike_lv)
+	private MyGridView mayby_youlike_lv;
+	/** 猜你喜欢列表 */
+	private List<MaybeYouLike> list;
+	/** 猜你喜欢列表适配器 */
+	private MaybeYouLikerAdapter youLikeAdapter;
+	/** 去结算布局 */
+	@ViewInject(R.id.ll_select_all)
+	private LinearLayout ll_select_all;
+	
+	/** 总价 */
+	@ViewInject(R.id.total_price)
+	private LinearLayout total_price;
+	/** 去结算 */
+	@ViewInject(R.id.qujiesuan)
+	private TextView qujiesuan;
+	// /**购物车列表*/
+	// private List<ShoppingCartEntity> listGouwuche;
+	/** 购物车listView */
+	@ViewInject(R.id.lv_gouwuche)
+	private ListView lv_gouwuche;
+	/** 购物车列表适配器 */
+	private ShoppingCardAdapter0 shoppingCardAdapter;
+	/** 登录提示 */
+	@ViewInject(R.id.login_hint)
+	private LinearLayout login_hint;
+	private boolean isLogin = false;
+	private float checkedAllPrice=0;
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 1:// 返回数据成功
+
+				shoppingCardAdapter.notifyDataSetChanged();
+				totalprice.setText("结算价:"+MyFormat.getPriceFormat(String
+						.valueOf(shoppingCartEntity.allPrice)));
+				if(shoppingCartEntity.cutPrice>0){
+					totalsave.setVisibility(View.VISIBLE);
+				totalsave.setText("为您省了"+MyFormat.getPriceFormat(String
+						.valueOf(shoppingCartEntity.cutPrice))+"元");}
+				cb_all.setChecked(shoppingCartEntity.checked);
+				
+				break;
+
+			case 2://获取更改状态后的数据
+				Log.d("my", "***************************************");
+				getCart("getCart", AppContext.getUserInformation().getAccess_token());
+				break;
+			}
+			if(list.size()>0)
+			ll_select_all.setVisibility(View.VISIBLE);
+		};
+	};
+
+	public static ShoppingCartFragment newInstance() {
+		ShoppingCartFragment collectFragment = new ShoppingCartFragment();
+		return collectFragment;
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		context = (MainActivity) activity;
+	}
+
+
+
+	/** 获取购物车列表
+	 * @param :method=getCart快速获取购物车,method=forceGetCart强制获取购物车 */
+	private void getCart(final String method, String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+//		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST,
+				"m/Cart/" + method, params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+//						setRefreshListtener(new Refresh() {
+//							@Override
+//							public void refreshRequst(
+//									String access_token) {
+//								// TODO Auto-generated method stub
+//
+//								getCart(method, access_token);
+//							}
+//						});
+//						RefeshToken();
+						
+						autoLoading.showExceptionLayout();
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						autoLoading.hideAll();
+						try {
+							if (!json.getBoolean("success")
+									&& json.getString("errorCode").equals(
+											"NOT_LOGIN")) {
+
+								setRefreshListtener(new Refresh() {
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+
+										getCart(method, access_token);
+									}
+								});
+								RefeshToken();
+							} else if (json.getBoolean("success")) {
+								if (shoppingCartEntity == null) {
+									shoppingCartEntity = new ShoppingCartEntity();
+								}
+
+								Gson gson = new Gson();
+								// Type type=new
+								// TypeToken<ShoppingCartEntity>(){}.getType();
+								JSONObject object = json.getJSONObject("obj");
+								shoppingCartEntity.allPrice = Float
+										.parseFloat(String.valueOf(object
+												.getDouble("allPrice")));
+								shoppingCartEntity.allCount = object
+										.getInt("allCount");
+								shoppingCartEntity.cutPrice = Float
+										.parseFloat(String.valueOf(object
+												.getDouble("cutPrice")));
+								shoppingCartEntity.checked=object.getBoolean("checked");
+								JSONArray array = object
+										.getJSONArray("shopModels");
+								if (array.length() > 0) {
+									shoppingCartEntity.stores.clear();
+									for (int i = 0; i < array.length(); i++) {
+										Store store = new Store();
+										JSONObject object2 = array
+												.getJSONObject(i);
+										JSONArray array2 = object2
+												.getJSONArray("cartSpecs");
+										store = gson.fromJson(
+												object2.toString(), Store.class);
+
+										store.cartSpec = new ArrayList<ShoppingCartEntity.Store.CartSpec>();
+										for (int j = 0; j < array2.length(); j++) {
+
+											CartSpec carspec = gson.fromJson(
+													array2.getJSONObject(j)
+															.toString(),
+													CartSpec.class);
+											store.cartSpec.add(carspec);
+										}
+										shoppingCartEntity.stores.add(store);
+									}
+								}
+
+								handler.sendEmptyMessage(1);
+							}
+							autoLoading.hideAll();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+				});
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_collect, container,
+				false);
+		ViewUtils.inject(this, view);
+		initAutoLoading(fl_shoppingcart);
+		
+	
+		return view;
+	}
+
+	public void initAutoLoading(View view) {
+		autoLoading = new AutoLoading(context, fl_shoppingcart);
+		autoLoading.showLoadingLayout();
+
+	};
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		initViews(view);
+		if (appContext.isNetworkConnected()) {
+			getCart("forceGetCart", AppContext.getUserInformation()
+					.getAccess_token());
+		} else {
+			toast(R.string.t_Connection);
+			autoLoading.showExceptionLayout();
+		}
+		totalsave.setVisibility(View.GONE);
+		totalsave.setText("");
+		cb_all.setOnCheckedChangeListener(this);
+		if (shoppingCartEntity == null) {
+			shoppingCartEntity = new ShoppingCartEntity();
+			shoppingCartEntity.stores = new ArrayList<ShoppingCartEntity.Store>();
+		}
+		shoppingCardAdapter = new ShoppingCardAdapter0(context,
+				shoppingCartEntity.stores);
+		lv_gouwuche.setAdapter(shoppingCardAdapter);
+		shoppingCardAdapter.setListener(new SetAllPrice() {
+
+			@Override
+			public void setAllPrice(float allprice) {
+				// TODO Auto-generated method stub
+//				checkedAllPrice=allprice;
+//				totalprice.setText("结算价:"+MyFormat.getPriceFormat(String
+//						.valueOf(allprice)));
+			
+			}
+
+			@Override
+			public void setShopId(boolean checked, String shopId) {
+				// TODO Auto-generated method stub
+				changeChecked("changeShopChecked", checked, shopId, null, null, null);
+			}
+
+			@Override
+			public void setSpecIds(boolean checked, String specIds) {
+				// TODO Auto-generated method stub
+				changeChecked("changeProdChecked", checked, null, specIds, null, null);
+			}
+
+
+			@Override
+			public void targetCount(boolean checked, String specId,
+					String targetCount) {
+				// TODO Auto-generated method stub
+				changeChecked("changeCount", checked, null, null, specId, targetCount);
+				
+			}
+
+			@Override
+			public void remove(boolean checked, String specId) {
+				// TODO Auto-generated method stub
+				changeChecked("remove", checked, null, null, specId, null);
+			}
+		});
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		ll_select_all.setVisibility(View.INVISIBLE);
+		login_hint.setVisibility(View.GONE);
+		// Log.d("my", "listGouwuche.size():"+listGouwuche.size());
+		if (shoppingCardAdapter != null) {
+			shoppingCardAdapter.notifyDataSetChanged();
+		}
+		if (shoppingCartEntity.stores != null
+				&& shoppingCartEntity.stores.size() < 1) {
+			if (youLikeAdapter == null) {
+				list = new ArrayList<MaybeYouLike>();
+
+			}
+			if (youLikeAdapter == null) {
+				// youLikeAdapter=new MaybeYouLikerAdapter(getActivity(), list,
+				// false);
+				mayby_youlike_lv.setAdapter(youLikeAdapter);
+			}
+			if (list.size() < 1) {
+				// testMaybeyoulikedata();
+			}
+			// tv_edit.setVisibility(View.GONE);
+			// ll_noproduct.setVisibility(View.VISIBLE);
+			// ll_select_all.setVisibility(View.GONE);
+		} else {
+
+		}
+	
+		tv_edit.setVisibility(View.INVISIBLE);
+		ll_noproduct.setVisibility(View.GONE);
+		ll_select_all.setVisibility(View.VISIBLE);
+	}
+
+	private void initViews(View view) {
+		
+		
+		autoLoading.setClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stubf
+				
+				if (appContext.isNetworkConnected()) {
+					if(AppContext.getUserInformation().isLogin()){
+						
+						getCart("forceGetCart", AppContext.getUserInformation()
+								.getAccess_token());
+					}else{
+						Intent intent = new Intent(context, WebLoginActivity.class);
+						startActivity(intent);
+					}
+				} else {
+					toast(R.string.t_Connection);
+					autoLoading.showExceptionLayout();
+				}
+			}
+		});
+		mTitleTv = (TextView) view.findViewById(R.id.title_tv);
+		mTitleTv.setText(R.string.shopping);
+		if (AppContext.getUserInformation().isLogin()) {
+			login_hint.setVisibility(View.GONE);
+		} else if (!AppContext.getUserInformation().isLogin()) {
+
+//			login_hint.setVisibility(View.VISIBLE);
+		}
+		mayby_youlike_lv.setOnItemClickListener(this);
+
+	}
+
+	/** 猜你喜欢测试数据 */
+	private void testMaybeyoulikedata() {
+
+		for (int i = 0; i < 9; i++) {
+			// MaybeYouLike entity=new MaybeYouLike("id"+i,
+			// "url"+ i, "这里是描述信息"+i, "img"+ i, "这里是信息描述" +i, "33"+i);
+			MaybeYouLike entity = new MaybeYouLike("", "id" + i, "", "", "",
+					"img" + i, "", "");
+			list.add(entity);
+			// Log.e("my", "productshoplist"+i);
+		}
+
+		mayby_youlike_lv.setNumColumns(list.size());
+		youLikeAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	public String getFragmentName() {
+		return TAG;
+	}
+
+	@OnClick({  R.id.login_hint, R.id.qujiesuan, R.id.quguangguang })//R.id.tv_edit,
+	public void myClick(View v) {
+		switch (v.getId()) {
+		case R.id.tv_edit:// 编辑、完成
+			if (isEdit) {
+				isEdit = false;
+			} else {
+				isEdit = true;
+			}
+			if (isEdit) {
+				total_price.setVisibility(View.GONE);
+				tv_edit.setText("完成");
+				qujiesuan.setText("删除");
+			} else {
+				total_price.setVisibility(View.VISIBLE);
+				tv_edit.setText("编辑");
+				qujiesuan.setText("去结算（" + 2 + "）");
+			}
+			Toast.makeText(context, "登录提示", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.login_hint:// 登录提示
+			Toast.makeText(context, "登录提示", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.quguangguang:// 购物车没有数据跳转到其他页面
+			Toast.makeText(context, "去逛逛", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.qujiesuan:// 去结算、删除
+			if (isEdit) {
+				Toast.makeText(context, "删除所有", Toast.LENGTH_SHORT).show();
+			} else {
+				
+				if(appContext.isNetworkConnected()){
+					context.startActivity(new Intent(context, OrderClearActivity.class));
+				}else{
+					toast(R.string.t_Connection);
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "item" + position, Toast.LENGTH_SHORT)
+				.show();
+
+	}
+	/**更改勾选状态
+	 * 只传 checked 表示更改所有勾选所有,
+	 * 传checked和shopId表示更改勾选店铺,或者删除商品
+	 * 传checked和specIds表示更改选商品数
+	 * 传specId和targetCount表示更改商品规格数量
+	 * */
+	private void changeChecked(String method,boolean checked,String shopId,String specIds,
+			String specId,String targetCount){
+		RequestParams params=new RequestParams();
+		String checkedString=String.valueOf(checked);
+		if(checkedString.equals("true")||checkedString.equals("false")){
+			params.addQueryStringParameter("checked",checkedString);
+			
+		}
+		if(shopId!=null){
+			params.addQueryStringParameter("shopId",shopId);
+		}
+		if(specIds!=null){
+			params.addQueryStringParameter("specIds",specIds);
+		}
+		if(specId!=null){
+			params.addQueryStringParameter("specId",specId);
+		}
+		if(targetCount!=null){
+			params.addQueryStringParameter("targetCount",targetCount);
+		}
+		params.addQueryStringParameter("access_token", AppContext.getUserInformation().getAccess_token());
+	AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST,"m/Cart/"+ method, params, new HttpCallback() {
+		
+		@Override
+		public void onError(String msg) {
+			// TODO Auto-generated method stub
+			
+			autoLoading.showExceptionLayout();
+		}
+		
+		@Override
+		public void onBack(JSONObject json) {
+			// TODO Auto-generated method stub
+			try {
+				if(json.getBoolean("success")){
+					handler.sendEmptyMessage(2);
+					
+				}else{
+					toast(json.getString("msg"));
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			autoLoading.hideAll();
+		}
+	});
+	
+	}
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		// TODO Auto-generated method stub
+		
+		if ( shoppingCartEntity != null) {
+			shoppingCartEntity.checked = isChecked;
+		}
+		if (appContext.isNetworkConnected()) {
+			changeChecked("changeAllChecked",isChecked,null,null,null,null);
+			autoLoading.showLoadingLayout();
+		} else {
+			toast(R.string.t_Connection);
+			autoLoading.showExceptionLayout();
+		}
+		totalprice.setText("结算价:"+MyFormat.getPriceFormat(String
+				.valueOf(shoppingCartEntity.allPrice)));
+		if(shoppingCardAdapter != null){
+		
+			shoppingCardAdapter.notifyDataSetChanged();
+		}
+	}
+
+}

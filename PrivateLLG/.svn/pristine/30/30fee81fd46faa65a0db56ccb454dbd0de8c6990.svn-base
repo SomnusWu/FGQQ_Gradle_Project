@@ -1,0 +1,23 @@
+package com.llg.privateproject.entities;
+
+public class OrderComment {
+	private String PRODNAME;// 商品名字
+
+	public String getPRODNAME() {
+		return PRODNAME;
+	}
+
+	public void setPRODNAME(String pRODNAME) {
+		PRODNAME = pRODNAME;
+	}
+
+	public String getIMGURL() {
+		return IMGURL;
+	}
+
+	public void setIMGURL(String iMGURL) {
+		IMGURL = iMGURL;
+	}
+
+	private String IMGURL;// 商品图片
+}

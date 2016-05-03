@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+          android:layout_height="@dimen/dimen_120px"
+        android:padding="5dp" >
+
+        <ImageView
+            android:id="@+id/turn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@drawable/dingdanzhifu_fanhui" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="意见反馈"
+            android:textColor="@color/black1"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="13dp"
+            android:text="文明上网，理性发言"
+            android:textColor="@color/black2" />
+
+        <TextView
+            android:id="@+id/tv_restcount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/cha_03"
+            android:paddingLeft="5dp"
+            android:singleLine="true"
+            android:text="300"
+            android:textColor="@color/black2" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/stroke_lightgray"
+        android:gravity="top"
+        android:hint="请输入您的意见或建议"
+        android:maxLength="300"
+        android:minLines="5"
+        android:paddingLeft="10dp"
+        android:paddingTop="13dp"
+        android:textColor="@color/black2"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_commit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/stroke_oval"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="提交"
+        android:textColor="@color/orange2" />
+
+</LinearLayout>

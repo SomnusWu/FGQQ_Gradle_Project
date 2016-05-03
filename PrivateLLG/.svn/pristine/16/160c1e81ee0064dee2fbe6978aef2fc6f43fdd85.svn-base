@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="10dp" >
+
+    <RelativeLayout
+        android:id="@+id/top_relay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_launcher" />
+
+        <RelativeLayout
+            android:id="@+id/ry"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_toRightOf="@+id/iv" >
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:text="重庆小面"
+                android:layout_above="@+id/ll_center"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black1"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/ll_center"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal"
+                android:paddingLeft="4dp" >
+
+                <RatingBar
+                    android:id="@+id/ratingbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"
+                    android:minHeight="14dp"
+                    android:numStars="5"
+                    android:layout_marginBottom="2dp"
+                    android:progressDrawable="@drawable/layer_star"
+                    android:rating="4"
+                    android:stepSize="1" />
+
+                <TextView
+                    android:id="@+id/tv_grade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="4.0分"
+                    android:textColor="@color/orange1"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_people"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="158人"
+                    android:textColor="@color/black2"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/ly"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:paddingLeft="4dp"
+                android:layout_marginBottom="8dp" >
+
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="南坪"
+                    android:singleLine="true"
+                    android:textColor="@color/black2"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/mine_collection_tv_distribution_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="火锅"
+                    android:textColor="@color/black2"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="40KM"
+                    android:textColor="@color/black2"
+                    android:textSize="12sp" />
+
+                <View
+                    android:id="@+id/xu_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/tv_distance"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/light_grays"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_kubi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/xu_view"
+                    android:layout_marginTop="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black2"
+                    android:textSize="12sp"
+                    android:text="Cob" />
+
+                <TextView
+                    android:id="@+id/youhui"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_kubi"
+                    android:padding="4dp"
+                    android:text="优惠"
+                    android:textColor="@color/black2"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

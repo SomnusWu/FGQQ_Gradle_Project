@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+    <include layout="@layout/order_clear_head"/>
+    <LinearLayout 
+        android:id="@+id/ly_load"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+    <TextView android:id="@+id/address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:text="重庆市"
+        android:textColor="@color/black1"
+        />
+    <View android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/dian_line_product_e8"/>
+	<ListView android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/lv"
+	    android:scrollbars="none"
+	    android:listSelector="@color/white"
+	    android:divider="@drawable/dian_line_product_e8"
+	    android:dividerHeight="4dp"
+	    />
+	<ListView android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/lv_city"
+	    android:scrollbars="none"
+	    android:visibility="gone"
+	    android:listSelector="@color/white"
+	    android:divider="@drawable/dian_line_product_e8"
+	    android:dividerHeight="4dp"
+	    />
+	<ListView android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/lv_area"
+	    android:scrollbars="none"
+	    android:listSelector="@color/white"
+	    android:divider="@drawable/dian_line_product_e8"
+	    android:dividerHeight="4dp"
+	     android:visibility="gone"
+	    />
+	<ListView android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/lv_street"
+	    android:scrollbars="none"
+	    android:listSelector="@color/white"
+	     android:visibility="gone"
+	    android:divider="@drawable/dian_line_product_e8"
+	    android:dividerHeight="4dp"
+	    />
+	<ListView android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/lv_province"
+	    android:scrollbars="none"
+	    android:listSelector="@color/white"
+	     android:visibility="gone"
+	    android:divider="@drawable/dian_line_product_e8"
+	    android:dividerHeight="4dp"
+	    />
+	</LinearLayout>
+</LinearLayout>

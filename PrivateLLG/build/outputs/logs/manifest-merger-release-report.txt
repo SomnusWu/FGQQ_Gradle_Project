@@ -1,0 +1,1389 @@
+-- Merging decision tree log ---
+manifest
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:2:1-899:12
+	xmlns:android
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:2:11-69
+	package
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:3:5-41
+	android:versionName
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:5:5-33
+		INJECTED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml
+		INJECTED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml
+	android:versionCode
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:4:5-28
+		INJECTED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml
+		INJECTED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml
+uses-permission#android.permission.MODIFY_PHONE_STATE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:9:5-77
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:9:22-74
+uses-permission#android.permission.READ_CONTACTS
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:11:5-72
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:11:22-69
+uses-permission#android.permission.WRITE_CONTACTS
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:13:5-73
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:13:22-70
+uses-permission#android.permission.CALL_PHONE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:15:5-69
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:15:22-66
+uses-permission#android.permission.READ_SMS
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:17:5-67
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:17:22-64
+uses-permission#android.permission.MOUNT_UNMOUNT_FILESYSTEMS
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:18:5-84
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:18:22-81
+uses-permission#android.permission.INTERNET
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:20:5-67
+MERGED from [FGQQ_Gradle_Project:SmartAndroid:unspecified] E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\SmartAndroid\unspecified\AndroidManifest.xml:11:5-67
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:20:22-64
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:21:5-76
+MERGED from [FGQQ_Gradle_Project:SmartAndroid:unspecified] E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\SmartAndroid\unspecified\AndroidManifest.xml:13:5-76
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:21:22-73
+uses-permission#android.permission.CHANGE_WIFI_STATE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:22:5-76
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:22:22-73
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:23:5-75
+MERGED from [FGQQ_Gradle_Project:SmartAndroid:unspecified] E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\SmartAndroid\unspecified\AndroidManifest.xml:14:5-75
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:23:22-72
+uses-permission#android.permission.MANAGE_ACCOUNTS
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:24:5-74
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:24:22-71
+uses-permission#android.permission.GET_ACCOUNTS
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:25:5-71
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:25:22-68
+uses-permission#android.permission.READ_CALL_LOG
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:26:5-72
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:26:22-69
+uses-permission#android.permission.WRITE_CALL_LOG
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:27:5-73
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:27:22-70
+uses-permission#android.permission.CAMERA
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:30:5-31:23
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:30:22-62
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:32:5-33:23
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:32:22-78
+uses-feature#android.hardware.camera
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:35:5-60
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:35:19-57
+uses-feature#android.hardware.camera.autofocus
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:36:5-70
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:36:19-67
+uses-permission#android.permission.VIBRATE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:38:5-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:38:22-63
+uses-permission#android.permission.FLASHLIGHT
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:39:5-69
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:39:22-66
+uses-permission#android.permission.PROCESS_OUTGOING_CALLS
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:41:5-81
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:41:22-78
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:53:5-81
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:53:22-78
+uses-permission#android.permission.RESTART_PACKAGES
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:54:5-75
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:54:22-72
+uses-permission#android.permission.BROADCAST_STICKY
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:55:5-75
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:55:22-72
+uses-permission#android.permission.WRITE_SETTINGS
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:56:5-73
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:56:22-70
+uses-permission#android.permission.RECEIVE_USER_PRESENT
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:57:5-79
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:57:22-76
+uses-permission#android.permission.WAKE_LOCK
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:58:5-68
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:58:22-65
+uses-permission#android.permission.KILL_BACKGROUND_PROCESSES
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:59:5-84
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:59:22-81
+uses-permission#android.permission.GET_TASKS
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:60:5-68
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:60:22-65
+uses-permission#android.permission.READ_LOGS
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:61:5-68
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:61:22-65
+uses-permission#android.permission.BLUETOOTH
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:63:5-68
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:63:22-65
+uses-permission#android.permission.BATTERY_STATS
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:64:5-72
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:64:22-69
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:66:5-67:23
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:66:22-78
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:69:5-70:23
+MERGED from [FGQQ_Gradle_Project:SmartAndroid:unspecified] E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\SmartAndroid\unspecified\AndroidManifest.xml:15:5-79
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:69:22-76
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:75:5-76:23
+MERGED from [FGQQ_Gradle_Project:SmartAndroid:unspecified] E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\SmartAndroid\unspecified\AndroidManifest.xml:12:5-79
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:75:22-76
+uses-sdk
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:94:5-96:41
+MERGED from [FGQQ_Gradle_Project:SmartAndroid:unspecified] E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\SmartAndroid\unspecified\AndroidManifest.xml:7:5-9:41
+MERGED from [FGQQ_Gradle_Project:base_library_pullToRefresh_chenyoca:unspecified] E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\base_library_pullToRefresh_chenyoca\unspecified\AndroidManifest.xml:7:5-43
+	android:targetSdkVersion
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:96:9-38
+	android:minSdkVersion
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:95:9-35
+application
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:98:5-897:19
+MERGED from [FGQQ_Gradle_Project:base_library_pullToRefresh_chenyoca:unspecified] E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\base_library_pullToRefresh_chenyoca\unspecified\AndroidManifest.xml:9:5-20
+	android:label
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:102:9-41
+	android:allowBackup
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:100:9-35
+	android:icon
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:101:9-43
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:103:9-40
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:99:9-57
+activity#com.llg.privateproject.actvity.WelcomeActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:111:9-131:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:116:13-49
+	android:label
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:114:13-45
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:113:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:117:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:112:13-74
+	android:launchMode
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:115:13-43
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:118:13-122:29
+action#android.intent.action.MAIN
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:119:17-69
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:119:25-66
+category#android.intent.category.LAUNCHER
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:121:17-77
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:121:27-74
+intent-filter#android.intent.action.VIEW+android.intent.category.BROWSABLE+android.intent.category.DEFAULT
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:123:13-130:29
+action#android.intent.action.VIEW
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:124:17-69
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:124:25-66
+category#android.intent.category.DEFAULT
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:126:17-76
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:126:27-73
+category#android.intent.category.BROWSABLE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:127:17-78
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:127:27-75
+data
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:129:17-48
+	android:scheme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:129:23-45
+activity#com.king.photo.activity.ImageGridActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:132:9-135:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:134:13-49
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:133:13-69
+activity#com.king.photo.activity.TestPicActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:136:9-139:52
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:139:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:138:13-63
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:137:13-67
+activity#com.king.photo.activity.PhotoActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:140:9-142:52
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:142:13-49
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:141:13-65
+activity#com.king.photo.activity.AlbumActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:143:9-146:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:145:13-49
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:144:13-65
+activity#com.king.photo.activity.ImageFile
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:147:9-148:20
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:147:19-67
+activity#com.king.photo.activity.ShowAllPhoto
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:149:9-150:20
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:149:19-70
+activity#com.king.photo.activity.GalleryActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:151:9-152:20
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:151:19-73
+activity#com.llg.privateproject.actvity.MyFabuActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:153:9-159:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:157:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:155:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:158:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:156:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:154:13-73
+activity#com.llg.privateproject.actvity.BuyTopActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:160:9-166:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:164:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:162:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:165:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:163:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:161:13-73
+activity#com.llg.privateproject.actvity.FinancialOrderAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:167:9-173:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:171:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:169:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:172:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:170:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:168:13-76
+activity#com.llg.privateproject.actvity.FinanceOderDetail
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:174:9-180:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:178:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:176:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:179:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:177:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:175:13-76
+activity#com.llg.privateproject.actvity.Balance
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:182:9-188:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:186:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:184:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:187:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:185:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:183:13-66
+activity#com.llg.privateproject.actvity.WoDeHuiYuanActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:190:9-196:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:194:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:192:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:195:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:193:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:191:13-78
+activity#com.llg.privateproject.actvity.Notify
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:198:9-204:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:202:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:200:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:203:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:201:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:199:13-65
+activity#com.llg.privateproject.actvity.ModifyActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:205:9-211:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:209:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:207:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:210:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:208:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:206:13-73
+activity#com.llg.privateproject.actvity.SearchActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:213:9-219:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:217:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:215:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:218:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:214:13-73
+	android:launchMode
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:216:13-44
+activity#com.llg.privateproject.actvity.ActivityHome
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:221:9-226:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:224:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:223:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:225:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:222:13-71
+activity#com.llg.privateproject.actvity.ShopMap
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:228:9-233:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:231:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:230:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:232:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:229:13-66
+activity#com.llg.privateproject.actvity.NewHomeActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:235:9-249:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:240:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:237:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:241:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:238:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:236:13-74
+	android:launchMode
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:239:13-44
+activity#com.llg.privateproject.actvity.GetRedPackage
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:251:9-258:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:256:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:253:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:257:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:254:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:252:13-72
+	android:launchMode
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:255:13-42
+activity#com.llg.privateproject.actvity.GetRedPackage1
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:260:9-267:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:265:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:262:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:266:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:263:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:261:13-73
+	android:launchMode
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:264:13-48
+activity#com.llg.privateproject.actvity.MyHome
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:269:9-275:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:273:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:271:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:274:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:272:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:270:13-65
+activity#com.llg.privateproject.actvity.MainActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:277:9-283:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:281:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:279:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:282:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:280:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:278:13-71
+activity#com.llg.privateproject.actvity.PhoneActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:284:9-291:20
+	android:windowSoftInputMode
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:290:13-52
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:288:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:286:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:289:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:287:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:285:13-72
+activity#com.llg.privateproject.actvity.DemandReleaseActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:293:9-299:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:297:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:295:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:298:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:296:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:294:13-80
+activity#com.llg.privateproject.actvity.HomeDelivery
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:300:9-306:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:304:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:302:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:305:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:303:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:301:13-71
+activity#com.llg.privateproject.actvity.WebAty1
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:308:9-314:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:312:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:310:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:313:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:311:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:309:13-66
+activity#com.zxing.activity.CaptureActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:317:9-320:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:319:13-49
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:320:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:318:13-62
+activity#com.llg.privateproject.actvity.LoginActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:322:9-326:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:325:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:324:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:326:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:323:13-72
+activity#com.llg.privateproject.actvity.RegisterActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:328:9-332:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:331:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:330:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:332:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:329:13-75
+activity#com.llg.privateproject.actvity.ShopActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:334:9-342:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:338:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:336:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:339:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:337:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:335:13-71
+activity#com.llg.privateproject.actvity.ProductDetailActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:344:9-354:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:347:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:346:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:348:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:345:13-80
+intent-filter#android.intent.category.DEFAULT+com.my.test.yh
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:349:13-353:29
+action#com.my.test.yh
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:350:17-57
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:350:25-54
+activity#com.llg.privateproject.actvity.ProductDetailMoreActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:356:9-360:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:359:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:358:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:360:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:357:13-84
+activity#com.llg.privateproject.actvity.WebAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:362:9-366:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:365:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:364:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:366:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:363:13-65
+activity#com.llg.privateproject.actvity.ProductDetail_size
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:368:9-372:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:371:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:370:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:372:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:369:13-77
+activity#com.llg.privateproject.actvity.PhoneRegistAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:373:9-377:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:376:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:375:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:377:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:374:13-73
+activity#com.llg.privateproject.actvity.ProductDetailCommentActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:379:9-383:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:382:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:381:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:383:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:380:13-87
+activity#com.llg.privateproject.actvity.CommodityActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:385:9-390:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:389:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:387:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:390:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:388:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:386:13-76
+activity#com.llg.privateproject.actvity.OrderClearActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:392:9-397:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:396:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:394:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:397:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:395:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:393:13-77
+activity#com.bjg.lcc.alipay.pay.PayActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:399:9-404:52
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:403:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:401:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:404:13-49
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:402:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:400:13-62
+activity#com.llg.privateproject.actvity.OrderDetailAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:405:9-410:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:409:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:407:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:410:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:408:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:406:13-73
+activity#com.llg.privateproject.actvity.OrderAddressListActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:412:9-417:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:416:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:414:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:417:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:415:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:413:13-83
+activity#com.llg.privateproject.actvity.AddAddressActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:419:9-424:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:423:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:421:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:424:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:422:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:420:13-77
+activity#com.llg.privateproject.actvity.OrderStatusActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:427:9-432:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:431:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:429:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:432:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:430:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:428:13-78
+activity#com.llg.privateproject.actvity.OrderStatuspingjia
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:435:9-440:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:439:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:437:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:440:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:438:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:436:13-77
+activity#com.llg.privateproject.actvity.PhoneDetailAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:442:9-446:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:445:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:444:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:446:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:443:13-73
+activity#com.llg.privateproject.actvity.OrderstatusTuikuan
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:449:9-454:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:453:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:451:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:454:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:452:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:450:13-77
+activity#com.llg.privateproject.actvity.GuanzhuActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:457:9-462:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:461:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:459:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:462:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:460:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:458:13-74
+activity#com.llg.privateproject.actvity.MyMoney
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:465:9-470:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:469:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:467:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:470:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:468:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:466:13-66
+activity#com.llg.privateproject.actvity.SecurityCenter
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:472:9-477:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:476:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:474:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:477:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:475:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:473:13-73
+activity#com.llg.privateproject.actvity.Shimingrenzheng
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:479:9-484:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:483:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:481:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:484:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:482:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:480:13-74
+activity#com.llg.privateproject.actvity.MyDialog
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:487:9-492:51
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:491:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:489:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:492:13-48
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:490:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:488:13-67
+activity#com.llg.privateproject.actvity.BangDing
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:495:9-500:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:499:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:497:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:500:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:498:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:496:13-67
+activity#com.llg.privateproject.actvity.Consume
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:503:9-508:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:507:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:505:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:508:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:506:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:504:13-66
+activity#com.llg.privateproject.actvity.GeRenZiLiao
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:510:9-515:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:514:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:512:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:515:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:513:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:511:13-70
+activity#com.llg.privateproject.actvity.Huiyuandengji
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:517:9-530:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:521:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:519:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:522:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:520:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:518:13-72
+intent-filter#android.intent.action.VIEW+android.intent.category.DEFAULT
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:523:13-529:29
+activity#com.llg.privateproject.actvity.ShakeScreen
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:532:9-537:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:536:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:534:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:537:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:535:13-47
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:533:13-70
+activity#com.llg.privateproject.actvity.FeedBackActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:540:9-544:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:543:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:542:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:544:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:541:13-75
+activity#com.llg.privateproject.actvity.ContactUsActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:546:9-550:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:549:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:548:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:550:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:547:13-76
+activity#com.llg.privateproject.actvity.SysSetting
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:552:9-557:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:556:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:554:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:557:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:555:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:553:13-69
+activity#com.llg.privateproject.actvity.NewAppDown
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:559:9-564:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:563:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:561:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:564:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:562:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:560:13-69
+activity#com.llg.privateproject.actvity.IWantPartTimeJob
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:566:9-570:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:569:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:568:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:570:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:567:13-75
+activity#com.llg.privateproject.actvity.MineTask
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:572:9-576:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:575:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:574:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:576:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:573:13-67
+activity#com.llg.privateproject.actvity.TaskOrderDetailAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:578:9-582:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:581:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:580:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:582:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:579:13-77
+activity#com.llg.privateproject.actvity.SignInAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:584:9-588:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:587:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:586:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:588:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:585:13-68
+activity#com.llg.privateproject.actvity.OnlineExamAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:590:9-594:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:593:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:592:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:594:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:591:13-72
+activity#com.llg.privateproject.actvity.OnlineTrainAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:596:9-600:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:599:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:598:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:600:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:597:13-73
+activity#com.llg.privateproject.actvity.LogisticsHandbookAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:602:9-606:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:605:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:604:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:606:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:603:13-79
+activity#com.llg.privateproject.actvity.SumbitDataAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:608:9-612:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:611:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:610:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:612:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:609:13-72
+activity#com.llg.privateproject.actvity.BusinessListAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:614:9-618:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:617:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:616:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:618:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:615:13-74
+activity#com.llg.privateproject.actvity.ShopCartActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:620:9-624:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:623:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:622:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:624:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:621:13-75
+activity#com.llg.privateproject.actvity.PutAdvertisementAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:626:9-630:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:629:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:628:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:630:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:627:13-78
+activity#com.llg.privateproject.actvity.MineAdvertisementAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:632:9-637:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:636:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:634:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:637:13-66
+	android:hardwareAccelerated
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:635:13-48
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:633:13-79
+activity#com.llg.privateproject.actvity.MoreFunction
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:639:9-643:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:642:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:641:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:643:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:640:13-71
+activity#com.llg.privateproject.actvity.MineBalanceAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:645:9-649:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:648:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:647:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:649:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:646:13-73
+activity#com.llg.privateproject.actvity.RechargeAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:651:9-655:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:654:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:653:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:655:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:652:13-70
+activity#com.llg.privateproject.actvity.WithdrawAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:657:9-661:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:660:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:659:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:661:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:658:13-70
+activity#com.llg.privateproject.actvity.WithdrawHistoryAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:663:9-667:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:666:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:665:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:667:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:664:13-77
+activity#com.llg.privateproject.actvity.AccountChangeAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:669:9-673:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:672:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:671:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:673:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:670:13-75
+activity#com.llg.privateproject.actvity.AdvertisementCommentAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:675:9-679:69
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:678:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:677:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:679:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:676:13-82
+activity#com.llg.privateproject.camera.PopupSelectImage
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:680:9-685:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:683:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:682:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:684:13-57
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:681:13-74
+activity#com.llg.privateproject.camera.CropImageActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:686:9-690:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:689:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:688:13-74
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:687:13-75
+activity#com.finddreams.sortedcontact.CityListActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:691:9-696:20
+	android:windowSoftInputMode
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:695:13-52
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:694:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:693:13-74
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:692:13-73
+activity#com.llg.privateproject.actvity.AdvertisementDetailAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:697:9-700:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:699:13-49
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:698:13-81
+activity#com.llg.privateproject.actvity.WebLoginActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:701:9-704:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:703:13-49
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:702:13-75
+activity#com.llg.privateproject.actvity.NowBusinessSearchAty
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:705:9-708:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:707:13-49
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:706:13-79
+activity#com.llg.privateproject.actvity.WebApplyActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:710:9-714:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:712:13-49
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:713:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:711:13-75
+activity#com.llg.privateproject.actvity.FGQQShopEvaluateActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:715:9-719:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:717:13-49
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:718:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:716:13-83
+activity#com.llg.privateproject.actvity.BinDingAliPayActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:720:9-724:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:722:13-49
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:723:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:721:13-80
+activity#com.llg.privateproject.actvity.IncomeDetailActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:725:9-729:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:727:13-49
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:728:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:726:13-79
+activity#com.llg.privateproject.actvity.WebExchangeActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:731:9-735:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:733:13-49
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:734:13-66
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:732:13-78
+activity#com.alipay.sdk.app.H5PayActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:736:9-741:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:740:13-47
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:738:13-74
+	android:exported
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:739:13-37
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:737:13-60
+activity#com.alipay.sdk.auth.AuthActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:742:9-747:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:746:13-47
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:744:13-74
+	android:exported
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:745:13-37
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:743:13-60
+activity#com.tencent.tauth.AuthActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:749:9-762:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:753:13-49
+	android:noHistory
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:752:13-37
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:750:13-58
+	android:launchMode
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:751:13-44
+activity#com.tencent.connect.common.AssistActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:763:9-767:75
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:766:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:765:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:767:13-72
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:764:13-69
+activity#com.mob.tools.MobUIShell
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:769:9-783:20
+	android:windowSoftInputMode
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:774:13-67
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:772:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:771:13-74
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:773:13-72
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:770:13-52
+activity#com.bjg.lcc.privateproject.wxapi.WXEntryActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:785:9-790:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:789:13-49
+	android:label
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:788:13-45
+	android:exported
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:787:13-36
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:786:13-76
+activity#com.bjg.lcc.privateproject.wxapi.WXPayEntryActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:792:9-798:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:796:13-49
+	android:label
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:795:13-45
+	android:theme
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:797:13-49
+	android:exported
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:794:13-36
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:793:13-79
+activity#com.sina.weibo.sdk.component.WeiboSdkBrowser
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:800:9-806:20
+	android:windowSoftInputMode
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:805:13-55
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:804:13-49
+	android:configChanges
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:802:13-63
+	android:exported
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:803:13-37
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:801:13-72
+receiver#com.llg.help.PSCLBR
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:809:9-814:20
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:809:19-53
+intent-filter#android.intent.action.NEW_OUTGOING_CALL+android.intent.action.PHONE_STATE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:810:13-813:29
+	android:priority
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:810:28-51
+action#android.intent.action.NEW_OUTGOING_CALL
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:811:17-82
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:811:25-79
+action#android.intent.action.PHONE_STATE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:812:17-76
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:812:25-73
+service#com.sina.weibo.sdk.net.DownloadService
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:816:9-819:19
+	android:exported
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:818:13-37
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:817:13-66
+receiver#com.llg.help.XG
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:821:9-829:20
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:821:19-49
+intent-filter#com.tencent.android.tpush.action.FEEDBACK+com.tencent.android.tpush.action.PUSH_MESSAGE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:822:13-828:29
+action#com.tencent.android.tpush.action.PUSH_MESSAGE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:825:17-88
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:825:25-85
+action#com.tencent.android.tpush.action.FEEDBACK
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:827:17-84
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:827:25-81
+receiver#com.tencent.android.tpush.XGPushReceiver
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:831:9-848:20
+	android:process
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:833:13-45
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:832:13-68
+intent-filter#android.bluetooth.adapter.action.STATE_CHANGED+android.intent.action.ACTION_POWER_CONNECTED+android.intent.action.ACTION_POWER_DISCONNECTED+android.intent.action.USER_PRESENT+android.net.conn.CONNECTIVITY_CHANGE+com.tencent.android.tpush.action.INTERNAL_PUSH_MESSAGE+com.tencent.android.tpush.action.SDK
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:834:13-847:29
+	android:priority
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:834:28-57
+action#com.tencent.android.tpush.action.SDK
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:837:17-79
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:837:25-76
+action#com.tencent.android.tpush.action.INTERNAL_PUSH_MESSAGE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:838:17-97
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:838:25-94
+action#android.intent.action.USER_PRESENT
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:840:17-77
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:840:25-74
+action#android.net.conn.CONNECTIVITY_CHANGE
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:841:17-79
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:841:25-76
+action#android.bluetooth.adapter.action.STATE_CHANGED
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:844:17-89
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:844:25-86
+action#android.intent.action.ACTION_POWER_CONNECTED
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:845:17-87
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:845:25-84
+action#android.intent.action.ACTION_POWER_DISCONNECTED
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:846:17-90
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:846:25-87
+activity#com.tencent.android.tpush.XGPushActivity
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:852:9-861:20
+	android:screenOrientation
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:855:13-49
+	android:exported
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:854:13-36
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:853:13-68
+service#com.tencent.android.tpush.service.XGPushService
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:864:9-868:48
+	android:process
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:868:13-45
+	android:exported
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:866:13-36
+	android:persistent
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:867:13-38
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:865:13-75
+service#com.tencent.android.tpush.rpc.XGRemoteService
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:871:9-877:19
+	android:exported
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:873:13-36
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:872:13-73
+intent-filter#com.bjg.lcc.privateproject.PUSH_ACTION
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:874:13-876:29
+action#com.bjg.lcc.privateproject.PUSH_ACTION
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:875:17-81
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:875:25-78
+meta-data#XG_V2_ACCESS_ID
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:880:9-882:42
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:881:13-43
+	android:value
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:882:13-39
+meta-data#XG_V2_ACCESS_KEY
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:884:9-886:44
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:885:13-44
+	android:value
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:886:13-41
+service#com.baidu.location.f
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:888:9-892:19
+	android:process
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:891:13-38
+	android:enabled
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:890:13-35
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:889:13-48
+meta-data#com.baidu.lbsapi.API_KEY
+ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:894:9-896:56
+	android:name
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:895:13-52
+	android:value
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:896:13-53

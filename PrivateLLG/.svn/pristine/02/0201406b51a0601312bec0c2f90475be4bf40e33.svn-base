@@ -1,0 +1,121 @@
+package com.llg.privateproject.view;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringWriter;
+
+import com.bjg.lcc.privateproject.R;
+import com.llg.privateproject.AppContext;
+import com.smartandroid.sa.view.AutoLoading;
+import com.tencent.android.tpush.horse.Tools;
+
+import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.PopupWindow;
+
+public class PartTimePopuwindow extends PopupWindow implements OnClickListener {
+	public Context context;
+	// 屏幕宽度
+	public int mScreenWidth;
+	// 屏幕宽度
+	public int mScreenHeight;
+	// 个人中心linearlayout
+	public LinearLayout lyPersonalCenter;
+	// 灰色背景
+	public LinearLayout lyBgGray;
+	// 开关
+	public ToggleButton toggleButton;
+
+	public PartTimePopuwindow(Context context) {
+		this(context, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		// TODO Auto-generated constructor stub
+	}
+
+	public PartTimePopuwindow(Context context, int width, int height) {
+		// TODO Auto-generated constructor stub
+		this.context = context;
+		// 设置可以获得焦点
+		setFocusable(true);
+		// 设置弹窗内可点击
+		setTouchable(true);
+		// 设置弹窗外可点击
+		setOutsideTouchable(true);
+
+		// 获得屏幕的宽度和高度
+		mScreenWidth = AppContext.getScreenWidth();
+		mScreenHeight = AppContext.getScreenHeight();
+
+		// 设置弹窗的宽度和高度
+		setWidth(width);
+		setHeight(height);
+
+		setBackgroundDrawable(new BitmapDrawable());
+		StringWriter stringWriter=new StringWriter();
+		InputStream inputStream = null;
+	      BufferedWriter bufferedWriter=new BufferedWriter(stringWriter);
+
+		// 设置弹窗的布局界面
+		setContentView(LayoutInflater.from(context).inflate(
+				R.layout.parttime_popu, null));
+		initUI();
+	}
+
+	private void initUI() {
+		lyPersonalCenter = (LinearLayout) getContentView().findViewById(
+				R.id.ly_personal_center);
+		lyBgGray = (LinearLayout) getContentView()
+				.findViewById(R.id.ly_bg_gray);
+		toggleButton = (ToggleButton) getContentView().findViewById(
+				R.id.mTogBtn);
+		toggleButton.setWidth(100);
+		toggleButton.setHeight(45);
+		toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+				// TODO Auto-generated method stub
+				if (arg1) {
+					Toast.makeText(context, "选中", Toast.LENGTH_SHORT);
+				} else {
+					Toast.makeText(context, "未选中", Toast.LENGTH_SHORT);
+				}
+			}
+		});
+		lyBgGray.setOnClickListener(this);
+		lyPersonalCenter.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		dismiss();
+		switch (v.getId()) {
+		case R.id.ly_personal_center:
+
+			break;
+		case R.id.ly_bg_gray:
+
+			break;
+
+		default:
+			break;
+		}
+
+	}
+}

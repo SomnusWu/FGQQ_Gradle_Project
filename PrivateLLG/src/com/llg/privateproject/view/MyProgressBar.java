@@ -1,0 +1,35 @@
+package com.llg.privateproject.view;
+
+import com.bjg.lcc.privateproject.R;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.widget.ImageView;
+
+/**
+ * 进度条 yh 2015.08.27
+ * */
+public class MyProgressBar extends Dialog {
+	private ImageView myprogressbar;
+
+	/** 进度条 */
+	public MyProgressBar(Context context) {
+		super(context, R.style.agreemdialog);
+		// TODO Auto-generated constructor stub
+
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.myprogressbar);
+		myprogressbar = (ImageView) findViewById(R.id.myprogressbar);
+	}
+
+	public ImageView getImageView() {
+		return myprogressbar;
+	}
+
+}

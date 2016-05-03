@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:orientation="vertical" >
+    <include layout="@layout/order_clear_head"/>
+       <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+    
+
+        <CheckBox
+            android:id="@+id/ispush"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+        
+         android:layout_centerVertical="true"
+      android:button="@null"
+            android:layout_alignParentRight="true"
+    
+           android:background="@drawable/cb_on_off_gray_yellow"
+          
+            android:checked="true"
+            android:layout_marginRight="10dp"
+            android:textColor="#9d9b9c"
+            android:textSize="12sp" />
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            
+            android:padding="10dp"
+            android:text="开启推送"
+            android:textColor="@color/black2" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/dianline" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+    
+
+        <TextView
+            android:id="@+id/newversion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:drawablePadding="5dp"
+            android:drawableRight="@drawable/more"
+            android:gravity="center_vertical|end"
+            android:padding="10dp"
+           android:background="@drawable/btm_status"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="#9d9b9c"
+            android:textSize="12sp" />
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="检查新版本"
+            android:textColor="@color/black2" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/dianline" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+    
+
+        <TextView
+            android:id="@+id/aboutus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:drawablePadding="5dp"
+            android:drawableRight="@drawable/more"
+            android:gravity="center_vertical|end"
+            android:padding="10dp"
+           android:background="@drawable/btm_status"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="#9d9b9c"
+            android:textSize="12sp" />
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="关于我们"
+            android:textColor="@color/black2" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/dianline" />
+    <View android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+    <TextView 
+        android:id="@+id/exit_currentuser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="安全退出"
+        android:layout_gravity="center"
+        android:textSize="16sp"
+        android:gravity="center"
+      android:layout_marginLeft="30dp"
+      android:layout_marginRight="30dp"
+      android:layout_marginBottom="30dp"
+       android:background="@drawable/solid_orange1_rectangle_r"
+       android:textColor="@color/white"
+        android:padding="10dp"
+        />
+
+</LinearLayout>

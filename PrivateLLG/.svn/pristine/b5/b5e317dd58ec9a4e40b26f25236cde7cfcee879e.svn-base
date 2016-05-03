@@ -1,0 +1,89 @@
+package com.llg.privateproject.entities;
+
+import java.io.Serializable;
+
+import android.content.Context;
+import android.util.Log;
+/**
+ * 用户信息
+ * @author yh
+ * 2015.5.27
+ *
+ */
+public class UserInformation implements Serializable{
+
+	/**
+	 * 用户信息
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 登录状态
+	 * isLogin=false  未登录
+	 * isLogin=true  登录
+	 */
+	private static boolean isLogin=false;
+	private static String access_token="";
+	private static String refreshToken="";
+	
+	public static String getRefreshToken() {
+		return refreshToken;
+	}
+
+	private static UserInformation userInformation;
+	
+	
+
+	public static String getAccess_token() {
+		return access_token;
+	}
+
+	public static void setAccess_token(String access_token) {
+		Log.d("my",access_token);
+		UserInformation.access_token = access_token;
+	}
+
+	/**
+	 * @return the isLogin
+	 */
+	public static boolean isLogin() {
+		return isLogin;
+	}
+
+	/**
+	 * @param isLogin the isLogin to set
+	 */
+	public static void setLogin(boolean isLogin) {
+		UserInformation.isLogin = isLogin;
+	}
+	/**
+	 * @param isLogin the isLogin to set
+	 */
+	public static void setRefreshToken(String refreshToken) {
+		UserInformation.refreshToken = refreshToken;
+	}
+
+	/**
+	 * @param userInformation the userInformation to set
+	 */
+	public static void setUserInformation(UserInformation userInformation) {
+		UserInformation.userInformation = userInformation;
+	}
+
+	/**
+	 * 获取用户信息实例
+	 */
+	public static UserInformation getUserInformation(){
+		if(userInformation==null){
+			userInformation=new UserInformation();
+		}
+		return userInformation;
+	}
+	
+	private UserInformation() {
+		super();
+		// TODO Auto-generated constructor stub
+		
+		
+	}
+	
+}

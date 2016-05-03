@@ -1,0 +1,52 @@
+package com.llg.privateproject.entities;
+
+import java.io.Serializable;
+
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.view.View;
+import android.widget.ImageView;
+
+/**
+ * 个人信息列表项
+ * @author yh
+ * 2015.5.26
+ */
+public class InformationItem extends View implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	public int image;
+	public String name;
+	public String dsc;//描述
+	Context context;
+	public InformationItem(Context context,int image, String name, String dsc) {
+		super(context);
+		this.image = image;
+		this.name = name;
+		this.dsc = dsc;
+		this.context=context;
+	}
+	/**
+	 * @param dsc the dsc to set
+	 */
+	public void setDsc(String dsc) {
+		this.dsc = dsc;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "InformationItem [image=" + image + ", name=" + name
+				+ ", dsc=" + dsc + "]";
+	}
+	public InformationItem(Context context) {
+		super(context);
+	}
+
+	
+	
+}

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\base_library_pullToRefresh_chenyoca\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\indicator_bg_top.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\base_library_pullToRefresh_chenyoca\\build\\intermediates\\bundles\\debug\\res\\drawable\\indicator_bg_top.xml"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\base_library_pullToRefresh_chenyoca\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\indicator_bg_bottom.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\base_library_pullToRefresh_chenyoca\\build\\intermediates\\bundles\\debug\\res\\drawable\\indicator_bg_bottom.xml"
+    }
+]

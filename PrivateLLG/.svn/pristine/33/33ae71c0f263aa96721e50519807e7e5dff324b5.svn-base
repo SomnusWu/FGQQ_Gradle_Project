@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+    <include layout="@layout/order_clear_head"/>
+<TextView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="配送时间"
+   android:layout_margin="10dp"
+   android:paddingLeft="10dp"
+   android:textSize="15sp"
+   android:textColor="@color/black1"
+    />
+<View android:layout_width="match_parent"
+    android:layout_height="4dp"
+    android:background="@drawable/dian_line_product_e8"
+    />
+<RadioGroup android:id="@+id/rg_posttime"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:orientation="vertical"
+    >
+    <RadioButton android:id="@+id/alltime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@null"
+        android:checked="true"
+    
+        android:paddingLeft="5dp"
+  android:drawablePadding="5dp"
+        android:text="时间不限"
+        android:textColor="@color/black2"
+        android:layout_margin="10dp"
+        android:drawableLeft="@drawable/cb_gouwuche"
+        />
+    <View android:layout_width="match_parent"
+    android:layout_height="4dp"
+    android:layout_marginLeft="-10dp"
+    android:background="@drawable/dian_line_product_e8"
+    />
+    <RadioButton android:id="@+id/worktime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@null"
+           android:paddingLeft="5dp"
+  android:drawablePadding="5dp"
+        android:text="只工作日送货"
+        android:textColor="@color/black2"
+        android:layout_margin="10dp"
+        android:drawableLeft="@drawable/cb_gouwuche"
+        />
+    <View android:layout_width="match_parent"
+    android:layout_height="4dp"
+    android:background="@drawable/dian_line_product_e8"
+    />
+    <RadioButton android:id="@+id/holiday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@null"
+            android:paddingLeft="5dp"
+  android:drawablePadding="5dp"
+        android:text="只双休、假日送货"
+        android:textColor="@color/black2"
+        android:layout_margin="10dp"
+        android:drawableLeft="@drawable/cb_gouwuche"
+        />
+
+    
+</RadioGroup>
+<View android:layout_width="match_parent"
+    android:layout_height="4dp"
+    android:background="@drawable/dian_line_product_e8"
+    />
+<TextView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="付款方式"
+   android:layout_margin="10dp"
+   android:paddingLeft="10dp"
+   android:textSize="15sp"
+   android:textColor="@color/black1"
+    />
+<View android:layout_width="match_parent"
+    android:layout_height="4dp"
+    android:background="@drawable/dian_line_product_e8"
+    />
+<RadioGroup android:id="@+id/rg_pay"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp"
+    >
+    <RadioButton android:id="@+id/online_pay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@null"
+        android:checked="true"
+  android:drawablePadding="5dp"
+        android:text="网上支付"
+        android:textColor="@color/black2"
+        android:layout_margin="10dp"
+        android:paddingLeft="5dp"
+        android:drawableLeft="@drawable/cb_gouwuche"
+        />
+    <View android:layout_width="match_parent"
+    android:layout_height="4dp"
+    android:background="@drawable/dian_line_product_e8"
+    />
+   
+</RadioGroup>
+<TextView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="网上支付，优惠多多"
+   android:layout_margin="10dp"
+   android:paddingLeft="5dp"
+   android:textColor="@color/black3"
+    />
+<View android:layout_width="match_parent"
+    android:layout_height="4dp"
+    android:background="@drawable/dian_line_product_e8"
+    />
+<TextView 
+    android:id="@+id/confirm"
+    android:layout_width="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_height="wrap_content"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/stroke_orange2_val"
+    android:text="确定"
+    android:textColor="@color/orange2"
+    />
+</LinearLayout>

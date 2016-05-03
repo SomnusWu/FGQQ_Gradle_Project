@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <CheckBox
+            android:id="@+id/cb_shop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableLeft="@drawable/cb_gouwuche"
+          
+            android:paddingLeft="0dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+             />
+
+        <TextView
+            android:id="@+id/shop_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/cb_shop"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/cb_shop"
+            android:text="店铺名"
+            android:textColor="@color/black1"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/shop_eco"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/shop_name"
+            android:layout_below="@id/cb_shop"
+            android:text="选中商品总价："
+            android:textColor="@color/black1" />
+
+        <TextView
+            android:id="@+id/shop_economic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cb_shop"
+            android:layout_toRightOf="@id/shop_eco"
+            android:drawablePadding="5dp"
+     
+           
+            android:textColor="@color/orange1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_below="@id/shop_eco"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/dian_line_product_e8" />
+    </RelativeLayout>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    
+    android:id="@+id/ll_product"
+    ></LinearLayout>
+   <!--  <ListView
+        android:id="@+id/lv_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:listSelector="@color/white"
+        android:divider="@color/white"
+        android:scrollbars="none" >
+    </ListView> -->
+
+</LinearLayout>

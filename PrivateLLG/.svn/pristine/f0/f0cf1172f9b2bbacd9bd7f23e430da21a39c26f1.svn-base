@@ -1,0 +1,499 @@
+package com.llg.privateproject.actvity;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.bitmap.callback.BitmapLoadFrom;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.MyFormat;
+import com.llg.help.ScreenManager;
+import com.llg.privateproject.AppContext;
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.fragment.BaseActivity.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.Constants;
+import com.llg.privateproject.view.OrderStatusDialog;
+import com.llg.privateproject.view.OrderStatusDialog.FinishListener;
+import com.llg.privateproject.view.OrderStatusDialog.PicListener;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Message;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.RelativeLayout.LayoutParams;
+
+/***
+ * 评论 yh 2015.08.07
+ * */
+public class OrderStatuspingjia extends BaseActivity implements PicListener,
+		FinishListener {
+	/** 标题 */
+	@ViewInject(R.id.head_tilte)
+	private TextView head_tilte;
+	/** 評分 */
+	@ViewInject(R.id.rb_product)
+	private RatingBar rbarProduct;
+	/** 評論 */
+	@ViewInject(R.id.et_pinglun)
+	private EditText edtComment;
+	/** 标题 */
+	@ViewInject(R.id.confirm)
+	private TextView tvConfirm;
+	/** 传图片按钮 */
+	@ViewInject(R.id.chuantupian)
+	private ImageView chuantupian;
+
+	/** 商品布局 */
+	@ViewInject(R.id.ll_product)
+	private LinearLayout ll_product;
+	/** 图片布局 */
+	@ViewInject(R.id.ll_pics)
+	private LinearLayout ll_pics;
+	/*** 本地上传、拍照上传弹出框 */
+	private OrderStatusDialog dialog3;
+	/** sd卡路径 */
+	String path = "";
+	/** 图片名 */
+	String imgname = "";
+	Uri imageUri;
+	File file1 = null;
+	/** 图片数量 */
+	private int count = 0;
+	private static List<Bitmap> listbt;
+	private int wid = 1;
+	private int hei = 1;
+	private String iconId = "";
+	private String oid;
+	private String odid;
+	private String pid;
+	private String sid;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.orderstatus_pingjia);
+		ViewUtils.inject(this);
+		ScreenManager.getScreenManager().pushActivity(this);
+		init();
+		oid = getIntent().getStringExtra("oid");// 订单ID
+		odid = getIntent().getStringExtra("odid");// 订单详细ID
+		pid = getIntent().getStringExtra("pid");// 商品ID
+		sid = getIntent().getStringExtra("sid");// 规格ID
+
+	}
+
+	// 提交评价
+	private void submitComment(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addHeader(MyFormat.HEADER_KEY, MyFormat.HEADER_VALUE);
+		params.addQueryStringParameter("oid", oid);
+		params.addQueryStringParameter("odid", odid);
+		params.addQueryStringParameter("pid", pid);
+		params.addQueryStringParameter("sid", sid);
+		params.addQueryStringParameter("score", (int) rbarProduct.getRating()
+				+ "");
+		params.addQueryStringParameter("content", getStr(edtComment));
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/comment/save", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						customProgressSmall.dismiss();
+						toast("评价失败，未知错误");
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						ParseJson parseJson = ParseJson.getParseJson();
+						Map<String, Object> map = parseJson
+								.parseIsSuccess(json);
+						Log.i("tag", json.toString() + "==========json===");
+						customProgressSmall.dismiss();
+						try {
+							if (json.getBoolean("success")) {
+								toast("评价成功");
+								finish();
+							} else if (map.get("errorCode").equals("NOT_LOGIN")) {
+								setRefreshListtener(new Refresh() {
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+										Log.i("tag", "------监听里-------");
+										submitComment(access_token);
+									}
+								});
+								RefeshToken();
+							} else if (!(Boolean) map.get("success")) {
+								toast("评价失败，未知错误");
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	}
+
+	/** 评价对话框 */
+	private void init() {
+		wid = AppContext.getScreenWidth() * 2 / 5;
+		hei = wid - 1;
+		head_tilte.setText("发表评价");
+
+		View view = View.inflate(this, R.layout.order_gridview_item_item, null);
+		ImageView product_img = (ImageView) view.findViewById(R.id.product_img);
+		TextView product_dsc = (TextView) view.findViewById(R.id.product_dsc);
+		TextView product_price = (TextView) view
+				.findViewById(R.id.product_price);
+		TextView product_count = (TextView) view
+				.findViewById(R.id.product_count);
+		View v = (View) view.findViewById(R.id.view);
+		MyFormat.setBitmap(this, product_img,
+				getIntent().getStringExtra("img"), 0, 0);
+
+		product_dsc.setText(getIntent().getStringExtra("name"));
+		// product_price.setText("￥" + MyFormat.getPriceFormat("122".trim()));
+		// product_count.setText("X" + i);
+
+		ll_product.addView(view);
+
+	}
+
+	@OnClick({ R.id.turn, R.id.chuantupian, R.id.confirm })
+	public void myClick(View v) {
+		switch (v.getId()) {
+		case R.id.turn:// 返回
+			OrderStatusDialog dialog = new OrderStatusDialog(this,
+					(FinishListener) this, 5);
+			dialog.show();
+			Window window = dialog.getWindow();
+			android.view.WindowManager.LayoutParams lp = window.getAttributes();
+			lp.width = AppContext.getScreenWidth() * 4 / 5;
+			lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
+			window.setAttributes(lp);
+			// finish();
+			break;
+		case R.id.chuantupian:// 传图片
+			chuanTupian();
+			break;
+		case R.id.confirm:// 提交评论
+			if (getStr(edtComment) == null || getStr(edtComment).length() == 0) {
+				toast("输入的评论字符不能为空");
+				return;
+			}
+			if (getStr(edtComment).length() > 60) {
+				toast("字符长度不能超过60个");
+				return;
+			}
+			customProgressSmall.show();
+			submitComment(UserInformation.getAccess_token());
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	/** 上传图片弹出框 */
+	private void chuanTupian() {
+		if (dialog3 == null)
+		{
+			dialog3 = new OrderStatusDialog(this, 4, this, null);
+
+		}
+
+		dialog3.show();
+		Window window3 = dialog3.getWindow();
+		WindowManager.LayoutParams lp3 = window3.getAttributes();
+		lp3.width = AppContext.getScreenWidth() * 4 / 5;
+		lp3.height = lp3.WRAP_CONTENT;
+
+		dialog3.getWindow().setAttributes(lp3);
+	}
+
+	@Override
+	public void setPictrue(int type) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent();
+		if (type == 1) {// 本地上传
+			intent.setType("image/*");
+			// 启用相册
+			intent.setAction(Intent.ACTION_GET_CONTENT);
+			startActivityForResult(intent, 1);
+		} else if (type == 2) {// 拍照上传
+			if (hasSDcard()) {
+				File file = new File(Environment.getExternalStorageDirectory(),
+						"/head.jpg");
+				imageUri = Uri.fromFile(file);
+				// Log.i("my","r.id.paizhao"+ imageUri.toString());
+			}
+			// 拍照
+			intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+			intent.putExtra("return-data", false);
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+			intent.putExtra("outputFormat",
+					Bitmap.CompressFormat.JPEG.toString());
+			intent.putExtra("noFaceDetection", true);
+
+			startActivityForResult(intent, 2);
+		}
+
+	}
+
+	/** 判断是否有sd卡 */
+	boolean hasSDcard() {
+
+		String state = Environment.getExternalStorageState();
+		if (state.equals(Environment.MEDIA_MOUNTED)) {
+			path = Environment.getExternalStorageDirectory().toString();
+			return true;
+		}
+		Toast.makeText(this, "false", Toast.LENGTH_LONG).show();
+		return false;
+	}
+
+	@SuppressLint("NewApi")
+	@SuppressWarnings("deprecation")
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		// Log.i("my", "requestCode"+requestCode);
+		// Log.i("my", "ll_pic"+ll_pic);
+
+		count++;
+		// Log.i("my", "count:"+count);
+		if (count > 2) {
+			chuantupian.setVisibility(View.INVISIBLE);
+			Toast.makeText(this, "只能传两张图片", Toast.LENGTH_SHORT).show();
+		}
+		if (resultCode == RESULT_OK && count < 3) {
+
+			ContentResolver cr = getContentResolver();
+			switch (requestCode) {
+			case 1:// 相册上传
+				Uri uri = data.getData();
+				startPhotoZoom(uri, 200, 100);
+
+				break;
+			case 2:// 拍照上传
+
+				File file0 = new File(
+						Environment.getExternalStorageDirectory(), "/head.jpg");
+				imageUri = Uri.fromFile(file0);
+				startPhotoZoom(imageUri, 200, 100);
+
+				break;
+			case 3:// 加载裁剪后的图片图片
+				Bundle bundle = data.getExtras();
+				Bitmap bitmap = null;
+				File file = null;
+
+				if (bundle != null) {
+
+					bitmap = data.getExtras().getParcelable("data");
+
+					Drawable dawble;
+					dawble = new BitmapDrawable(bitmap);
+
+					ImageView iv = new ImageView(this);
+
+					LayoutParams lp = new LayoutParams(
+							AppContext.getScreenWidth() * 2 / 5,
+							AppContext.getScreenWidth() * 2 / 5);
+					// iv.setLayoutParams(lp);
+					lp.rightMargin = 10;
+					lp.leftMargin = 10;
+					iv.setLayoutParams(lp);
+					iv.setBackground(dawble);
+
+					// iv.setImageBitmap(bitmap);
+					if (ll_pics != null)
+						ll_pics.addView(iv);
+				}
+
+				try {
+
+					String path1 = Environment.getExternalStorageDirectory()
+							+ "/llg/bitmap/";
+					file = new File(path1);
+					if (!file.exists()) {
+						file.mkdirs();
+
+					}
+					file1 = new File(path1 + "img"
+							+ MyFormat.getTimeFormat0(new Date()) + ".jpg");
+					// if(file1.exists()){
+					// // file1.delete();
+					// // file1.deleteOnExit();
+					//
+					// }else{
+					// file1.mkdir();
+					// }
+
+					try {
+						file1.createNewFile();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					// fOut = new FileOutputStream(file1);
+
+					BufferedOutputStream foStream = new BufferedOutputStream(
+							new FileOutputStream(file1));
+					if (bitmap != null) {
+						bitmap.compress(Bitmap.CompressFormat.JPEG, 90,
+								foStream);
+					}
+					try {
+						foStream.flush();
+						foStream.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+
+					}
+
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+
+				}
+
+				RequestParams params = new RequestParams();
+
+				File file2 = new File(file1.getAbsolutePath());
+				params.addQueryStringParameter("access_token", AppContext
+						.getUserInformation().getAccess_token());
+				params.addBodyParameter("img", file1);
+				AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+						"m/sys/saveOrUpdateIcon", params, new HttpCallback() {
+
+							@Override
+							public void onError(String msg) {
+								// TODO Auto-generated method stub
+								Log.d("my", "onError" + msg);
+							}
+
+							@Override
+							public void onBack(JSONObject json) {
+								// TODO Auto-generated method stub
+								Log.d("my", "onback" + json);
+								try {
+									if (json.getBoolean("success")) {
+										iconId = json
+												.getJSONObject("attributes")
+												.getJSONObject("icon")
+												.getString("id");
+									} else {
+										toast(R.string.failed_upload_img);
+									}
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						});
+				break;
+			}
+			// Log.e("my", "uri:"+uri.toString());
+		} else {
+			Toast.makeText(this, "取消", Toast.LENGTH_SHORT).show();
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	@Override
+	public void callBack(int finishcode) {
+		// TODO Auto-generated method stub
+		Log.e("my", "finishcode" + finishcode);
+		if (finishcode == 1)
+			finish();
+	}
+
+	/**
+	 * 裁剪图片方法实现 当height<width 可任意调节比例裁剪 当height>=width 安固定比例裁剪 当
+	 */
+	public void startPhotoZoom(Uri uri, int width, int height) {
+
+		Intent intent = new Intent("com.android.camera.action.CROP");
+		intent.setDataAndType(uri, "image/*");
+		// 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
+		intent.putExtra("crop", "true");
+		// aspectX aspectY 是宽高的比例
+		intent.putExtra("aspectX", 1);
+		intent.putExtra("aspectY", height / width);
+		// outputX outputY 是裁剪图片宽高
+		intent.putExtra("outputX", width);
+		intent.putExtra("outputY", height);
+		intent.putExtra("return-data", true);
+		startActivityForResult(intent, 3);
+	}
+
+}

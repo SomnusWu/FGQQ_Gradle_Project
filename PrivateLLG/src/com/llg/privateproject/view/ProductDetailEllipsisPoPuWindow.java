@@ -1,0 +1,362 @@
+package com.llg.privateproject.view;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.actvity.LoginActivity;
+import com.llg.privateproject.actvity.WebLoginActivity;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.bjg.lcc.privateproject.R;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.FrameLayout.LayoutParams;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
+
+/**
+ * 更多对话框 yh 2015.6.18
+ * */
+public class ProductDetailEllipsisPoPuWindow extends PopupWindow implements
+		OnClickListener, OnItemClickListener {
+	private View v;
+	Context context;
+	private TextView more_collect;
+	private TextView more_guanzhu;
+	private TextView more_share;
+	private View show;
+	LayoutInflater inflatrer;
+	private SelecetListener selectListener;
+	ArrayAdapter<String> adapter;
+	List<String> list;
+	List<String> mlist;
+	private View add;
+	private int type;
+	private String prodspecId = "";
+	private MineSelectListenr mineSelectListenr;
+	AppContext appContext;
+	/** 添加退货方式选项 */
+	ListView lv;
+
+	/** 设置退货方式 */
+	public interface SelecetListener {
+		/** 设置退货方式 */
+		void setMessage(String message, int type);
+	}
+
+	/** 分享、关注、收藏 **/
+	public ProductDetailEllipsisPoPuWindow(Context context, final View show) {
+
+		this.context = context;
+		this.show = show;
+		appContext = (AppContext) context.getApplicationContext();
+		show.setVisibility(View.INVISIBLE);
+		setOnDismissListener(new OnDismissListener() {
+
+			@Override
+			public void onDismiss() {
+				// TODO Auto-generated method stub
+				show.setVisibility(View.INVISIBLE);
+			}
+		});
+
+		inflatrer = LayoutInflater.from(context);
+		v = inflatrer.inflate(R.layout.product_detail_ellipsis_more_popuwindow,
+				null);
+		setContentView(v);
+		setWidth(LayoutParams.WRAP_CONTENT);
+		setHeight(LayoutParams.WRAP_CONTENT);
+		setFocusable(true);
+		setOutsideTouchable(true);
+		setTouchable(true);
+		setBackgroundDrawable(new ColorDrawable(context.getResources()
+				.getColor(R.color.bantouming)));
+		more_collect = (TextView) v.findViewById(R.id.more_collect);
+		more_guanzhu = (TextView) v.findViewById(R.id.more_guanzhu);
+		more_share = (TextView) v.findViewById(R.id.more_share);
+		// setAnimationStyle(android.R.style.Animation_Dialog);
+
+		more_collect.setOnClickListener(this);
+		more_guanzhu.setOnClickListener(this);
+		more_share.setOnClickListener(this);
+
+	}
+
+	/** 分享、关注、收藏 **/
+	public ProductDetailEllipsisPoPuWindow(Context context, final View show,
+			String objectId) {
+		this.prodspecId = objectId;
+		this.context = context;
+		this.show = show;
+		appContext = (AppContext) context.getApplicationContext();
+		show.setVisibility(View.INVISIBLE);
+		setOnDismissListener(new OnDismissListener() {
+
+			@Override
+			public void onDismiss() {
+				// TODO Auto-generated method stub
+				show.setVisibility(View.INVISIBLE);
+			}
+		});
+
+		inflatrer = LayoutInflater.from(context);
+		v = inflatrer.inflate(R.layout.product_detail_ellipsis_more_popuwindow,
+				null);
+		setContentView(v);
+		setWidth(LayoutParams.WRAP_CONTENT);
+		setHeight(LayoutParams.WRAP_CONTENT);
+		setFocusable(true);
+		setOutsideTouchable(true);
+		setTouchable(true);
+		setBackgroundDrawable(new ColorDrawable(context.getResources()
+				.getColor(R.color.bantouming)));
+		more_collect = (TextView) v.findViewById(R.id.more_collect);
+		more_guanzhu = (TextView) v.findViewById(R.id.more_guanzhu);
+		more_share = (TextView) v.findViewById(R.id.more_share);
+		// setAnimationStyle(android.R.style.Animation_Dialog);
+
+		more_collect.setOnClickListener(this);
+		more_guanzhu.setOnClickListener(this);
+		more_share.setOnClickListener(this);
+
+	}
+
+	/**
+	 * 标记是不是我发布的广告
+	 */
+	private boolean advertisement;
+
+	/**
+	 * 退货退款选择
+	 * 
+	 * type:1退货选择，2原因选择，3上传图片方式
+	 * */
+	public ProductDetailEllipsisPoPuWindow(Context context,
+			SelecetListener selectListener, int type, View view) {
+		this.context = context;
+		this.type = type;
+		this.selectListener = selectListener;
+		inflatrer = LayoutInflater.from(context);
+		v = inflatrer.inflate(R.layout.orderstatus_tuihuo_listview, null);
+		// v=
+		// inflatrer.inflate(R.layout.product_detail_ellipsis_more_popuwindow,
+		// null);
+		setContentView(v);
+
+		setFocusable(true);
+		setOutsideTouchable(true);
+		setTouchable(true);
+		setBackgroundDrawable(new ColorDrawable(context.getResources()
+				.getColor(R.color.transparent)));
+		lv = (ListView) v.findViewById(R.id.lv_orderstatus_tuihuo);
+		list = new ArrayList<String>();
+		adapter = new ArrayAdapter<String>(context, R.layout.tv_item, list);
+		lv.setAdapter(adapter);
+		lv.setOnItemClickListener(this);
+		if (type != 4) {
+			setWidth(AppContext.getScreenWidth() / 3);
+			setHeight(LayoutParams.WRAP_CONTENT);
+		} else {
+			setWidth(AppContext.getScreenWidth() * 2 / 5);
+			setHeight(LayoutParams.WRAP_CONTENT);
+		}
+		list.clear();
+		switch (type) {
+		case 1:// 退货选择
+
+			list.add("退货退款");
+			list.add("仅退货");
+			list.add("仅退款");
+			break;
+		case 2:// 退货原因选择
+
+			list.add("与卖家协商一致");
+			list.add("商品破损");
+			list.add("没收到货");
+			break;
+		case 3:// 上传图片选择
+			list.add("本地上传");
+			list.add("拍照上传");
+			break;
+		case 4:// 广告位选择
+			list.add("app开始页滑动广告");
+			list.add("app欢迎页广告");
+			list.add("电话弹窗广告");
+			list.add("网站首页巨幅广告");
+			mlist = new ArrayList<String>();
+			mlist.add("APP_START_PAGE");
+			mlist.add("APP_HOME_OPEN_APP");
+			mlist.add("phone");
+			mlist.add("web");
+			break;
+		case 7:// 广告位选择
+			list.add("图片广告");
+			list.add("图片+网页链接地址广告");
+			break;
+		case 8:// 推送设置
+			list.add("活动开始时主动推送");
+			list.add("不进行推送");
+			break;
+
+		case 5:// 广告分享(不是我发的广告)
+			list.add("分享到朋友圈");
+			list.add("分享给微信好友");
+			list.add("转发为我的广告");
+			break;
+		case 6://
+			list.add("分享到朋友圈");
+			list.add("分享给微信好友");
+			list.add("关注");
+			break;
+		case 9://广告分享(是我发的广告)
+			list.add("分享到朋友圈");
+			list.add("分享给微信好友");
+			break;
+		}
+
+		adapter.notifyDataSetChanged();
+		showAsDropDown(view, 0, -5);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.more_collect:// 购物车
+			Toast.makeText(context, "购物车", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.more_guanzhu:// 关注
+			if (!appContext.isNetworkConnected()) {
+				Toast.makeText(context, R.string.t_Connection,
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
+			attion();
+
+			// Toast.makeText(context, "关注", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.more_share:// 分享
+			if (!appContext.isNetworkConnected()) {
+				Toast.makeText(context, R.string.t_Connection,
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
+			Toast.makeText(context, "分享", Toast.LENGTH_SHORT).show();
+			break;
+
+		default:
+			break;
+		}
+		dismiss();
+	}
+
+	/*** 关注 */
+	private void attion() {
+		if (!AppContext.isLogin) {
+			Toast.makeText(context, "关注前请先登录", Toast.LENGTH_SHORT).show();
+			context.startActivity(new Intent(context, WebLoginActivity.class));
+			return;
+		}
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", UserInformation.getAccess_token());
+		params.addQueryStringParameter("type", String.valueOf(1));
+		params.addQueryStringParameter("objectId", prodspecId);// objectId
+		AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST,
+				"m/attention/addAttention", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						try {
+							if (json.getBoolean("success")) {
+								Toast.makeText(context, "已经关注",
+										Toast.LENGTH_SHORT).show();
+							} else {
+								Toast.makeText(context, json.getString("msg"),
+										Toast.LENGTH_SHORT).show();
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+				});
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		TextView tv = (TextView) parent.getChildAt(position);
+		if (type == 4) {
+			if (position == 2) {
+				Toast.makeText(context, "请到电脑端操作", Toast.LENGTH_LONG).show();
+				return;
+			} else if (position == 3) {
+				Toast.makeText(context, "请到电脑端操作", Toast.LENGTH_LONG).show();
+				return;
+			}
+			if (selectListener != null) {
+				selectListener.setMessage(tv.getText().toString(), type);
+			}
+			if (mineSelectListenr != null) {
+				mineSelectListenr.setAdLocationName(mlist.get(position));
+			}
+		}
+		// if (type == 7) {
+		// if (selectListener != null) {
+		// selectListener.setMessage(tv.getText().toString(), type);
+		// }
+		// }
+		if (type != 4) {
+			if (selectListener != null) {
+				selectListener.setMessage(tv.getText().toString(), type);
+			}
+		}
+		dismiss();
+	}
+
+	public interface MineSelectListenr {
+		void setAdLocationName(String str);
+	}
+
+	public void setOnMineSelectListener(MineSelectListenr mineSelectListenr) {
+		this.mineSelectListenr = mineSelectListenr;
+	}
+
+	public boolean isAdvertisement() {
+		return advertisement;
+	}
+
+	public void setAdvertisement(boolean advertisement) {
+		this.advertisement = advertisement;
+	}
+}

@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:visibility="gone"
+    android:id="@+id/wangluoqingqiushibai" >
+
+    <ImageView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/bjg_tupjiazai_lianjiewanglshibai"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"/>
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black2"
+        android:layout_gravity="center_horizontal"
+        android:text="网络请求失败"/>
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black2"
+        android:layout_gravity="center_horizontal"
+        android:text="您的网络好像不太给力~"/>
+</LinearLayout>

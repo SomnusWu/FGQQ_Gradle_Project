@@ -1,0 +1,423 @@
+package com.llg.privateproject.utils;
+
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.net.Uri;
+import android.os.Environment;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+
+import com.bjg.lcc.privateproject.R;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.entities.UserInformation;
+
+/**
+ * 通用工具类
+ * 
+ * @author gongyibing
+ * @version 1.0
+ * @created 2015-05-07
+ */
+public class CommonUtils {
+	private static final String TAG = "CommonUtils";
+
+	private static final String APPSTARTIMG = "fgqq_start.jpg";
+	public static final String ZXingImage = "zxing.jpg";
+	
+	 
+	
+	 
+
+	/**
+	 * 开启activity
+	 */
+	public static void launchActivity(Context context, Class<?> activity) {
+		Intent intent = new Intent(context, activity);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		context.startActivity(intent);
+	}
+
+	public static void launchActivityForResult(Activity context,
+			Class<?> activity, int requestCode) {
+		Intent intent = new Intent(context, activity);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		context.startActivityForResult(intent, requestCode);
+	}
+
+	/**
+	 * 隐藏软键盘
+	 */
+	public static void hideSoftKeybord(Activity activity) {
+		if (null == activity) {
+			return;
+		}
+		try {
+			final View v = activity.getWindow().peekDecorView();
+			if (v != null && v.getWindowToken() != null) {
+				InputMethodManager imm = (InputMethodManager) activity
+						.getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+			}
+		} catch (Exception e) {
+
+		}
+	}
+
+	/**
+	 * 判断是否为合法的json
+	 * 
+	 * @param jsonContent
+	 *            需判断的字串
+	 */
+	public static boolean isJsonFormat(String jsonContent) {
+		try {
+			new JsonParser().parse(jsonContent);
+			return true;
+		} catch (JsonParseException e) {
+			LogManag.i(TAG, "bad json: " + jsonContent);
+			return false;
+		}
+	}
+
+	/**
+	 * 判断字符串是否为空
+	 * 
+	 * @return true null false !null
+	 */
+	public static boolean isNull(String text) {
+		if (text == null || "".equals(text.trim()) || "null".equals(text))
+			return true;
+		return false;
+	}
+
+	/**
+	 * 抖动动画
+	 */
+	public static void startShakeAnim(Context context, View view) {
+		Animation shake = AnimationUtils.loadAnimation(context, R.anim.shake);
+		view.startAnimation(shake);
+	}
+
+	/**
+	 * 显示进度
+	 * 
+	 * @param context
+	 * @param title
+	 * @param message
+	 * @param indeterminate
+	 * @param cancelable
+	 * @return
+	 */
+	public static ProgressDialog showProgress(Context context,
+			CharSequence title, CharSequence message, boolean indeterminate,
+			boolean cancelable) {
+		ProgressDialog dialog = new ProgressDialog(context);
+		dialog.setTitle(title);
+		dialog.setMessage(message);
+		dialog.setIndeterminate(indeterminate);
+		dialog.setCancelable(cancelable);
+		dialog.setCanceledOnTouchOutside(false);
+		// dialog.setDefaultButton(false);
+		dialog.show();
+		return dialog;
+	}
+
+	public static void readBitMap(Context context, ImageView imageView,
+			int resId) {
+		BitmapFactory.Options opt = new BitmapFactory.Options();
+		opt.inPreferredConfig = Bitmap.Config.RGB_565;
+		opt.inPurgeable = true;
+		opt.inInputShareable = true;
+		// 获取资源图片
+		InputStream is = context.getResources().openRawResource(resId);
+		imageView.setImageBitmap(BitmapFactory.decodeStream(is, null, opt));
+	}
+
+	public static Rect calculateSrcRect(int srcWidth, int srcHeight,
+			int dstWidth, int dstHeight) {
+		final float srcAspect = (float) srcWidth / (float) srcHeight;
+		final float dstAspect = (float) dstWidth / (float) dstHeight;
+		if (srcAspect > dstAspect) {
+			final int srcRectWidth = (int) (srcHeight * dstAspect);
+			final int srcRectLeft = (srcWidth - srcRectWidth) / 2;
+			return new Rect(srcRectLeft, 0, srcRectLeft + srcRectWidth,
+					srcHeight);
+		} else {
+			final int srcRectHeight = (int) (srcWidth / dstAspect);
+			final int scrRectTop = (int) (srcHeight - srcRectHeight) / 2;
+			return new Rect(0, scrRectTop, srcWidth, scrRectTop + srcRectHeight);
+		}
+
+	}
+
+	public static Rect calculateDstRect(int srcWidth, int srcHeight,
+			int dstWidth, int dstHeight) {
+		final float srcAspect = (float) srcWidth / (float) srcHeight;
+		final float dstAspect = (float) dstWidth / (float) dstHeight;
+		if (srcAspect > dstAspect) {
+			return new Rect(0, 0, dstWidth, (int) (dstWidth / srcAspect));
+		} else {
+			return new Rect(0, 0, (int) (dstHeight * srcAspect), dstHeight);
+		}
+
+	}
+
+	/**
+	 * 对图片进行数据压缩
+	 * 
+	 * @param src
+	 * @param format
+	 * @param size
+	 *            文件最后要求大小，单位：KB
+	 * @return
+	 */
+	public static Bitmap compress(Bitmap src, CompressFormat format, int size) {
+		ByteArrayOutputStream bai = new ByteArrayOutputStream();
+		int quality = 100;
+		int length = size * 1024 + 1;
+		while (quality > 0 && length > size * 1024) {
+			bai.reset();
+			src.compress(format, quality, bai);
+			length = bai.toByteArray().length;
+			quality -= 2;
+		}
+		return BitmapFactory.decodeByteArray(bai.toByteArray(), 0,
+				bai.toByteArray().length);
+	}
+
+	/**
+	 * 获取压缩后的图片Byte数据
+	 * 
+	 * @param src
+	 * @param format
+	 * @param size
+	 *            文件最后要求大小，单位：KB
+	 * @return
+	 */
+	public static byte[] getCompressByteArray(Bitmap src,
+			CompressFormat format, int size) {
+		ByteArrayOutputStream bai = new ByteArrayOutputStream();
+		int quality = 100;
+		int length = size * 1024 + 1;
+		while (quality > 0 && length > size * 1024) {
+			bai.reset();
+			src.compress(format, quality, bai);
+			length = bai.toByteArray().length;
+			if (quality <= 2)
+				break;
+			quality -= 2;
+		}
+		return bai.toByteArray();
+	}
+
+	/**
+	 * 根据宽度缩放图
+	 * 
+	 * @param src
+	 * @param width
+	 * @return
+	 */
+	public static Bitmap scaleBitmap(Bitmap src, int width) {
+		int scaleX = width;
+		int scaleY = (int) (width / ((float) src.getWidth() / src.getHeight()));
+		Matrix matrix = new Matrix();
+		matrix.postScale((float) scaleX / src.getWidth(),
+				(float) scaleY / src.getHeight());
+		Bitmap newbm = Bitmap.createBitmap(src, 0, 0, src.getWidth(),
+				src.getHeight(), matrix, true);
+		return newbm;
+	}
+
+	/**
+	 * 设置图片缓存路径
+	 */
+	public static final String createSDCardDir() {
+		try {
+			File sdcardDir = Environment.getExternalStorageDirectory();
+			String path = sdcardDir.getPath() + "/LLG/";
+			File path1 = new File(path);
+			if (!path1.exists()) {
+				path1.mkdirs();
+			}
+			return path;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	public static void cleanCustomCache(String filePath) {
+		deleteFilesByDirectory(new File(filePath));
+	}
+
+	private static void deleteFilesByDirectory(File directory) {
+		if (directory != null && directory.exists() && directory.isDirectory()) {
+			for (File item : directory.listFiles()) {
+				item.delete();
+			}
+		}
+	}
+
+	/**
+	 * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+	 */
+	public static int dip2px(Context context, float dpValue) {
+		final float scale = context.getResources().getDisplayMetrics().density;
+		return (int) (dpValue * scale + 0.5f);
+	}
+
+	/**
+	 * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
+	 */
+	public static int px2dip(Context context, float pxValue) {
+		final float scale = context.getResources().getDisplayMetrics().density;
+		return (int) (pxValue / scale + 0.5f);
+	}
+
+	// 文／IT_xiao小巫（简书作者）
+	// 原文链接：http://www.jianshu.com/p/2a1d052b8139
+	// 著作权归作者所有，转载请联系作者获得授权，并标注“简书作者”。
+
+	public static boolean isWeixinAvilible(Context context) {
+		final PackageManager packageManager = context.getPackageManager();// 获取packagemanager
+		List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);// 获取所有已安装程序的包信息
+		if (pinfo != null) {
+			for (int i = 0; i < pinfo.size(); i++) {
+				String pn = pinfo.get(i).packageName;
+				if (pn.equals("com.tencent.mm")) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 下载图片文件
+	 */
+	public static void downLoadAppStartImage(String imgUrl) {
+		// 判断SD卡是否存在，并且是否具有读写权限
+		if (Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED)) {
+			// 创建输入流
+			try {
+				InputStream is = getImageStream(imgUrl);
+				Bitmap mBitmap = BitmapFactory.decodeStream(is);
+				saveFile(mBitmap, APPSTARTIMG);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void downLoadZxingImage(String imgUrl) {
+		// 判断SD卡是否存在，并且是否具有读写权限
+		if (Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED)) {
+			// 创建输入流
+			try {
+				InputStream is = getImageStream(imgUrl);
+				Bitmap mBitmap = BitmapFactory.decodeStream(is);
+				saveFile(mBitmap, ZXingImage);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static Bitmap getAppStartImage() {
+		Bitmap bitMap = null;
+		if (Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED)) {
+			String imgPath = createSDCardDir() + APPSTARTIMG;
+			bitMap = BitmapFactory.decodeFile(imgPath);
+		}
+		return bitMap;
+	}
+
+	/*
+	 * 从网络获取图片
+	 */
+	public static InputStream getImageStream(String path) throws Exception {
+		URL url = new URL(path);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setConnectTimeout(10 * 1000);
+		conn.setRequestMethod("GET");
+		if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+			return conn.getInputStream();
+		}
+		return null;
+	}
+
+	/*
+	 * 保存文件
+	 */
+	public static void saveFile(Bitmap bm, String fileName) throws IOException {
+		// File dirFile = new File(createSDCardDir());
+		// if (!dirFile.exists()) {
+		// dirFile.mkdir();
+		// }
+		String path = createSDCardDir() + fileName;
+		File myCaptureFile = new File(path);
+		BufferedOutputStream bos = new BufferedOutputStream(
+				new FileOutputStream(myCaptureFile));
+		bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+		bos.flush();
+		bos.close();
+	}
+
+	/**
+	 * 删除文件
+	 */
+	public static void deleteFile() {
+		File myFile = new File(createSDCardDir() + APPSTARTIMG);
+		if (myFile.exists()) {
+			myFile.delete();
+		}
+	}
+	
+	 //扫描指定文件
+	public  static void scanFileAsync(Context ctx, String filePath) {
+        Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        scanIntent.setData(Uri.fromFile(new File(filePath)));
+        ctx.sendBroadcast(scanIntent);
+    }
+     
+    //扫描指定目录
+    public static final String ACTION_MEDIA_SCANNER_SCAN_DIR = "android.intent.action.MEDIA_SCANNER_SCAN_DIR";
+    public static void scanDirAsync(Context ctx, String dir) {
+    	dir = createSDCardDir() + ZXingImage;
+           Intent scanIntent = new Intent(ACTION_MEDIA_SCANNER_SCAN_DIR);
+           scanIntent.setData(Uri.fromFile(new File(dir)));
+           ctx.sendBroadcast(scanIntent);
+    }
+	
+	
+}

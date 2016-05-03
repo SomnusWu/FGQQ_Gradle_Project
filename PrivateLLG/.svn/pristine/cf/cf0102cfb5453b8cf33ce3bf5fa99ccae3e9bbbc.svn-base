@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/layout_wrap"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText,SmallSp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:background="@color/white" >
+
+        <ImageView
+            android:id="@+id/erji_fanhui"
+            style="@style/layout_wrap"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:src="@drawable/erji_fanhui" />
+
+        <TextView
+            android:id="@+id/home_search_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/home_search"
+            android:drawableRight="@drawable/sousuo"
+            android:hint="@string/search_hint"
+            android:inputType="text"
+            android:padding="5dp"
+            android:textColor="@color/black3"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/home_sweep_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:src="@drawable/erji_pinpu_fenlei" />
+    </LinearLayout>
+
+    <View style="@style/line_style3" />
+
+</LinearLayout>

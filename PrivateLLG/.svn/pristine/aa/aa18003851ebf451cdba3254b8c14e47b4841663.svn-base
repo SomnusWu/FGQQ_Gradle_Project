@@ -1,0 +1,624 @@
+package com.llg.privateproject.actvity;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.db.sqlite.Selector;
+import com.lidroid.xutils.exception.DbException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.ScreenManager;
+import com.llg.help.SetListHeigt;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.adapters.BusinessAdapter;
+import com.llg.privateproject.entities.Advertisement;
+import com.llg.privateproject.entities.Citys;
+import com.llg.privateproject.entities.MenuItem;
+import com.llg.privateproject.entities.NowBuyBusiness;
+import com.llg.privateproject.entities.Region;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.fragment.BaseActivity.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.Constants;
+import com.llg.privateproject.view.CustomProgressSmall;
+import com.llg.privateproject.view.ExpandTabView;
+import com.llg.privateproject.view.ExpandTabView.OnButtonClickListener;
+import com.llg.privateproject.view.TabViewOne;
+import com.llg.privateproject.view.TabViewTwo;
+
+public class BusinessListAty extends BaseActivity {
+	@ViewInject(R.id.ratingbar)
+	private RatingBar ratingBar;
+
+	@ViewInject(R.id.listview_business)
+	private PullToRefreshListView lvBusiness;
+
+	// @ViewInject(R.id.tv_nearby)
+	// private TextView tvNearby;
+	@ViewInject(R.id.ly_load)
+	private LinearLayout lyLoad;
+
+	@ViewInject(R.id.tv_search)
+	private TextView tvSearch;
+
+	@ViewInject(R.id.edt_search)
+	private EditText edtSearch;
+
+	@ViewInject(R.id.empty)
+	private LinearLayout lyEmpty;
+
+	private BusinessAdapter adapter;
+	// private String path;// 城市数据库在本地的路径
+	private String id = "402880fb4fdf2e7b014fdf31bd420000";// 商圈ID
+	// private String id;// 商圈ID
+	private List<NowBuyBusiness> tlist;// 总数据
+	// private int page = 1;// 页数
+	// private String name;// 搜索的商家名字
+
+	private ExpandTabView expandTabView;
+	private ArrayList<View> mViewArray = new ArrayList<View>();
+	private TabViewTwo tabView1;
+	private TabViewOne tabView2;
+	private TabViewOne tabView3;
+
+	private List<MenuItem> groups;// 左边的list
+	private List<ArrayList<MenuItem>> childrens;// 右边的list
+	private List<MenuItem> categoryItems;
+	private List<MenuItem> orderByItems;
+	private List<Region> regionList;
+	private int leftPosition = 0;
+	private int rightPosition;
+	private int mselectPosition;
+	private String shopCategory = "4028804751136ce10151142efe9e0001";
+	private List<Map<String, String>> kindList;
+	private List<MenuItem> kindNameList;
+	private List<MenuItem> kindIDList;
+	private String code = "5001";
+	private String baidu_code;
+	private boolean isModify = false;
+	private boolean regionIsFirstShow = true;
+	private boolean kindIsFirstShow = true;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aty_business_list);
+		ViewUtils.inject(this);
+		initUI();
+		expandTabView = (ExpandTabView) findViewById(R.id.xcc_expandTabView);
+		initData();
+		setOnClickListener();
+		new findCityAsyncTask().execute();
+	}
+
+	private class findCityAsyncTask extends
+			AsyncTask<Integer, Integer, Integer> {
+
+		@Override
+		protected Integer doInBackground(Integer... arg0) {
+			// TODO Auto-generated method stub
+			if (baidu_code != null && !baidu_code.equals("0")) {
+				String path = Environment.getExternalStorageDirectory()
+						.getPath() + File.separator + "Citys";
+
+				DbUtils dbUtils = DbUtils.create(BusinessListAty.this, path,
+						"city");
+				try {
+					Citys city = dbUtils.findFirst(Selector.from(Citys.class)
+							.where("baidu_code", "=", baidu_code + ""));
+					Log.i("tag", (city == null) + "-------------查询到的code");
+					Log.i("tag", baidu_code + "-------------定位baidu_code");
+					Log.i("tag", AppContext.myAddress
+							+ "-------------定位address");
+					if (city != null) {
+						UserInformation.code = city.getCode();
+						Log.i("tag", city.getName() + "-------------定位城市名字");
+					}
+				} catch (DbException e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			// TODO Auto-generated method stub
+			requestBusinessList();
+			super.onPostExecute(result);
+		}
+	}
+
+	Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				autoLoading.hideAll();
+				adapter.setList(tlist);
+				if (customProgressSmall.isShowing()) {
+					customProgressSmall.dismiss();
+				}
+				// lvBusiness.onRefreshComplete();
+				break;
+
+			default:
+				break;
+			}
+		};
+	};
+
+	// protected void onActivityResult(int requestCode, int resultCode, Intent
+	// data) {
+	// if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+	// name = data.getStringExtra("search");
+	// if (autoLoading == null) {
+	// initAutoLoading(lyLoad);
+	// } else {
+	// autoLoading.showLoadingLayout();
+	// }
+	// requestBusinessList();
+	// }
+	// };
+
+	@OnClick({ R.id.iv_back })
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.iv_back:
+			finish();
+			// case R.id.tv_search:
+			// name = getStr(edtSearch);
+			// if (name != null || name.length() > 0) {
+			// customProgressSmall.show();
+			// requestBusinessList();
+			// } else {
+			// Toast.makeText(this, "输入的关键字不能为空", Toast.LENGTH_LONG).show();
+			// }
+			// break;
+			// case R.id.tv_nearby:
+			// // if (nearbyPopuWindow == null) {
+			// // nearbyPopuWindow = new NearbyPopuWindow(this,
+			// // LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+			// // }
+			// // nearbyPopuWindow.showAsDropDown(tvNearby);
+			// break;
+		default:
+			break;
+		}
+	}
+
+	private void find() {
+
+	}
+
+	/**
+	 * @param id
+	 * 
+	 *            商圈id 取得商圈ID
+	 */
+	public void setID(String id) {
+		this.id = id;
+		isModify = true;
+		requestBusinessList();
+	}
+
+	/**
+	 * 请求商圈的商家列表
+	 */
+	private void requestBusinessList() {
+		RequestParams params = new RequestParams();
+		Log.i("tag", id + "---------id-------");
+		if (AppContext.myLongitude != 0 && AppContext.myLatitude != 0) {
+			if (isModify) {
+				params.addQueryStringParameter("mapCircleId", id);
+			}
+			Log.i("tag", id + "------mapCircleId");
+			params.addQueryStringParameter("lng", AppContext.myLongitude + "");
+			params.addQueryStringParameter("lat", AppContext.myLatitude + "");
+		} else {
+			// if (AppContext.myLongitude != 0 && AppContext.myLatitude != 0) {
+			// params.addQueryStringParameter("lng", AppContext.myLongitude
+			// + "");
+			// params.addQueryStringParameter("lat", AppContext.myLatitude
+			// + "");
+			// }
+			params.addQueryStringParameter("mapCircleId", id);
+			Log.i("tag", id + "------mapCircleId");
+		}
+		if (UserInformation.code != null) {
+			params.addQueryStringParameter("regionId", UserInformation.code);
+			Log.i("tag", UserInformation.code + "------regionId");
+		}
+		// params.addQueryStringParameter("pageNo", page + "");
+		// if (name != null) {
+		// params.addQueryStringParameter("name", name);
+		// }
+		if (shopCategory != null) {
+			params.addQueryStringParameter("shopCategory", shopCategory);
+		}
+		AppContext.getHtmlUitls().xUtils(this, HttpMethod.POST, "findSpotShop",
+				params, new HttpCallback() {
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						Log.i("tag", msg + "-------requestBusinessList()------");
+						autoLoading.showExceptionLayout();
+						// handler.sendEmptyMessage(2);
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						Map<String, Object> map = ParseJson.getParseJson()
+								.parseIsSuccess(json);
+						Log.i("tag", json.toString() + "----------成功了------");
+						Log.i("tag", (Boolean) map.get("isSuccess")
+								+ "---发送个人请求判断isSuccess------onBack------");
+						if ((Boolean) map.get("isSuccess")) {
+							List<NowBuyBusiness> list = ParseJson
+									.getParseJson().parseNowBuyBusiness(json);
+							// if (list != null && list.size() > 0) {
+							// connectData(list);
+							// } else {
+							// }
+							handler.sendEmptyMessage(1);
+						}
+					}
+				});
+	}
+
+	// /**
+	// * @param list
+	// * 根据page拼接数据
+	// */
+	// private void connectData(List<NowBuyBusiness> list) {
+	// if (page == 1) {
+	// tlist.clear();
+	// tlist.addAll(list);
+	// } else {
+	// tlist.addAll(list);
+	// }
+	// handler.sendEmptyMessage(1);
+	// }
+
+	/**
+	 * 初始化界面
+	 */
+	private void initUI() {
+		ScreenManager.getScreenManager().pushActivity(this);
+		initAutoLoading(lyLoad);
+		tlist = new ArrayList<NowBuyBusiness>();
+		adapter = new BusinessAdapter(this, tlist);
+		lvBusiness.setAdapter(adapter);
+		lvBusiness.setEmptyView(lyEmpty);
+		// lvBusiness.setOnRefreshListener(this);
+		lvBusiness.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(BusinessListAty.this,
+						ShopActivity.class);
+				intent.putExtra("shopId", id);
+				startActivity(intent);
+			}
+		});
+		autoLoading.setClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				autoLoading.showLoadingLayout();
+				requestBusinessList();
+			}
+		});
+		// edtSearch.setOnClickListener(new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View arg0) {
+		// // TODO Auto-generated method stub
+		// Intent intent = new Intent(BusinessListAty.this,
+		// NowBusinessSearchAty.class);
+		// startActivityForResult(intent, 1);
+		// }
+		// });
+	}
+
+	private void setOnClickListener() {
+		tabView1.setOnItemSelectListener(new TabViewTwo.OnItemSelectListener() {
+
+			@Override
+			public void itemSelected(int position) {
+				onRefreshTab(tabView1, tabView1.getShowText());
+				rightPosition = position;
+				UserInformation.code = regionList.get(leftPosition).getList()
+						.get(rightPosition).getId();
+				requestBusinessList();
+			}
+
+			@Override
+			public void itemLeftSelected(int position) {
+				// TODO Auto-generated method stub
+				leftPosition = position;
+			}
+		});
+		tabView2.setOnItemSelectListener(new TabViewOne.OnItemSelectListener() {
+
+			@Override
+			public void itemSelected(int position) {
+				onRefreshTab(tabView2, tabView2.getShowText());
+				shopCategory = kindList.get(position).get("id");
+				requestBusinessList();
+			}
+		});
+
+		tabView3.setOnItemSelectListener(new TabViewOne.OnItemSelectListener() {
+
+			@Override
+			public void itemSelected(int position) {
+				onRefreshTab(tabView3, tabView3.getShowText());
+			}
+		});
+	}
+
+	private void initData() {
+		kindList = new ArrayList<Map<String, String>>();
+		kindNameList = new ArrayList<MenuItem>();
+		baidu_code = AppContext.myCityCode;
+		kindList = new ArrayList<Map<String, String>>();
+		// 所有分类组
+		// groups.add(new MenuItem(1, "广东"));
+		groups = new ArrayList<MenuItem>();
+		childrens = new ArrayList<ArrayList<MenuItem>>();
+		// 第二个tab的数据
+		categoryItems = new ArrayList<MenuItem>();
+
+		// categoryItems.add(new MenuItem(1, "休闲"));
+		// categoryItems.add(new MenuItem(2, "娱乐"));
+		// categoryItems.add(new MenuItem(3, "饮食"));
+		// categoryItems.add(new MenuItem(4, "购物"));
+		// categoryItems.add(new MenuItem(5, "运动"));
+		// categoryItems.add(new MenuItem(6, "美发"));
+
+		// 第三个Tab的数据
+		orderByItems = new ArrayList<MenuItem>();
+		orderByItems.add(new MenuItem(1, "距离由近到远"));
+		orderByItems.add(new MenuItem(2, "销量由多到少"));
+
+		initTabView();
+
+		mViewArray.add(tabView1);
+		mViewArray.add(tabView2);
+		mViewArray.add(tabView3);
+
+		// 设置参数
+		expandTabView.setValue(mViewArray, R.drawable.expand_tab_selector);
+
+		// 设置默认标题
+		expandTabView.setTitle("全部商圈", 0, 1);
+		expandTabView.setTitle("全部类别", 1, 1);
+		expandTabView.setTitle("默认排序", 2, 1);
+		expandTabView.setOnButtonClickListener(new OnButtonClickListener() {
+
+			@Override
+			public void onClick(int selectPosition, PopupWindow popupWindow) {
+				// TODO Auto-generated method stub
+				if (selectPosition == 0) {
+					Log.i("tag", "----------执行了expandTabView---onClick---");
+					mselectPosition = selectPosition;
+					if (regionIsFirstShow) {
+						requestRegion(selectPosition);
+					}
+				} else if (selectPosition == 1) {
+					mselectPosition = selectPosition;
+					if (kindIsFirstShow) {
+						requestKind();
+					}
+				}
+			}
+		});
+	}
+
+	private void updateRegionData() {
+		groups = new ArrayList<MenuItem>();
+		ArrayList<MenuItem> item1 = null;
+		childrens = new ArrayList<ArrayList<MenuItem>>();
+		for (int i = 0; i < regionList.size(); i++) {
+			groups.add(new MenuItem(1, regionList.get(i).getName()));
+			item1 = new ArrayList<MenuItem>();
+			for (int j = 0; j < regionList.get(i).getList().size(); j++) {
+				regionList.get(i).getList().get(j).getName();
+				item1.add(new MenuItem(j + 1, regionList.get(i).getList()
+						.get(j).getName()));
+			}
+			childrens.add(item1);
+		}
+	}
+
+	private void requestRegion(int selectPosition) {
+		Log.i("tag", "----------执行了requestRegion()------");
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("code", code);
+		AppContext.getHtmlUitls().xUtils(this, HttpMethod.POST,
+				"findSysMapList", params, new HttpCallback() {
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						Log.i("tag", msg
+								+ "-------getCities--getCities-msg------");
+						// handler.sendEmptyMessage(2);
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						Map<String, Object> map = ParseJson.getParseJson()
+								.parseIsSuccess(json);
+						Log.i("tag", "----------成功了------");
+						Log.i("tag", (Boolean) map.get("isSuccess")
+								+ "---发送个人请求判断isSuccess------onBack------");
+						if ((Boolean) map.get("isSuccess")) {
+							regionList = ParseJson.getParseJson().parseRegion(
+									json);
+							Log.i("tag", regionList.size()
+									+ "----------regionList------");
+							updateRegionData();
+							tabView1.setList(childrens, groups,
+									BusinessListAty.this, mselectPosition);
+							regionIsFirstShow = false;
+						}
+					}
+				});
+	}
+
+	private void requestKind() {
+		AppContext.getHtmlUitls().xUtils(this, HttpMethod.GET,
+				"getShopCategory", null, new HttpCallback() {
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						Log.i("tag", msg
+								+ "-------getCities--getCities-msg------");
+						// handler.sendEmptyMessage(2);
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						Map<String, Object> map = ParseJson.getParseJson()
+								.parseIsSuccess(json);
+						Log.i("tag", "----------成功了------");
+						Log.i("tag", (Boolean) map.get("isSuccess")
+								+ "---发送个人请求判断isSuccess------onBack------");
+						if ((Boolean) map.get("isSuccess")) {
+							kindNameList.clear();
+							kindList = ParseJson.getParseJson().parseKindList(
+									json);
+							Log.i("tag", kindList.size()
+									+ "----------regionList------");
+							for (int i = 0; i < kindList.size(); i++) {
+								kindNameList.add(new MenuItem(i, kindList
+										.get(i).get("name")));
+								// kindIDList.add(new
+								// MenuItem(i,kindList.get(i).get("id")));
+							}
+							tabView2.setList(kindNameList);
+							kindIsFirstShow = false;
+						}
+					}
+				});
+	}
+
+	private void initTabView() {
+		// 3个TAB
+		tabView1 = new TabViewTwo(this, groups, childrens, -1, -1,
+				R.drawable.choose_item_selected,
+				R.drawable.choose_eara_item_selector,
+				R.drawable.choose_item_right,
+				R.drawable.choose_plate_item_selector);
+		// tabView2 = new TabViewTwo(this, groups, childrens, -1, -1,
+		// R.drawable.choose_item_selected,
+		// R.drawable.choose_eara_item_selector,
+		// R.drawable.choose_item_right,
+		// R.drawable.choose_plate_item_selector);
+
+		tabView2 = new TabViewOne(this, categoryItems, -1,
+				R.drawable.choose_item_right,
+				R.drawable.choose_eara_item_selector);
+		tabView3 = new TabViewOne(this, orderByItems, -1,
+				R.drawable.choose_item_right,
+				R.drawable.choose_eara_item_selector);
+	}
+
+	// // 下拉刷新
+	// @Override
+	// public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView)
+	// {
+	// // TODO Auto-generated method stub
+	// page = 1;
+	// requestBusinessList();
+	// }
+	//
+	// // 上拉加载
+	// @Override
+	// public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+	// // TODO Auto-generated method stub
+	// page = page + 1;
+	// requestBusinessList();
+	// }
+
+	/**
+	 * 设置TAB标题
+	 * 
+	 * @param view
+	 * @param showText
+	 */
+	private void onRefreshTab(View view, String showText) {
+
+		expandTabView.onPressBack();
+		int position = getPositon(view);
+		if (position >= 0 && !expandTabView.getTitle(position).equals(showText)) {
+			expandTabView.setTitle(showText, position, 2);
+		}
+	}
+
+	private int getPositon(View tView) {
+		for (int i = 0; i < mViewArray.size(); i++) {
+			if (mViewArray.get(i) == tView) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (!expandTabView.onPressBack()) {
+			finish();
+		}
+	}
+
+}

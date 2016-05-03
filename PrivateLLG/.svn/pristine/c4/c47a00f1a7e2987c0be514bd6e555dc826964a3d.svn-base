@@ -1,0 +1,174 @@
+package com.llg.privateproject.fragment;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.llg.help.GetProgressBar;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.adapters.PhoneCallAdapter;
+import com.llg.privateproject.entities.AttentionAdvertisement;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+public class FragmentPhoneCall extends BaseFragment implements
+		OnItemClickListener {
+	private GridView gridView;
+	private TextView edtNumber;
+	private ImageView ivClear;
+	private ImageView ivCall;
+	private List<String> list;
+private Context context;
+@Override
+public void onAttach(Activity activity) {
+	// TODO Auto-generated method stub
+	super.onAttach(activity);
+	context=activity;
+}
+@Override
+public void onPause() {
+	// TODO Auto-generated method stub
+	super.onPause();
+	GetProgressBar.dismissMyProgressBar();
+}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		View v = inflater.inflate(R.layout.fgt_call, null);
+		gridView = (GridView) v.findViewById(R.id.gridview);
+		edtNumber = (TextView) v.findViewById(R.id.edt_number);
+		ivClear = (ImageView) v.findViewById(R.id.iv_clear);
+		ivCall= (ImageView) v.findViewById(R.id.iv_call);
+		list = new ArrayList<String>();
+		list.add("1");
+		list.add("2");
+		list.add("3");
+		list.add("4");
+		list.add("5");
+		list.add("6");
+		list.add("7");
+		list.add("8");
+		list.add("9");
+		list.add("*");
+		list.add("0");
+		list.add("#");
+		PhoneCallAdapter adapter = new PhoneCallAdapter(getActivity(), list);
+		gridView.setAdapter(adapter);
+		gridView.setOnItemClickListener(this);
+		ivClear.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				int lengh = edtNumber.getText().length();
+				if (lengh == 0) {
+					return;
+				}
+				String text = edtNumber.getText().toString()
+						.substring(0, lengh - 1);
+				edtNumber.setText(text);
+			}
+		});
+		ivCall.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				toast("电话已拨出");
+				call();
+			}
+
+
+		
+		});
+		return v;
+	}
+	/**打电话*/
+	private void call() {
+		if(!appContext.isNetworkConnected()){
+			toast("网络未连接");
+			return;
+		}
+		if( edtNumber
+				.getText().toString().length()<7){
+			toast("请输入正确的电话号码");
+			return;
+		}
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", UserInformation.getAccess_token());
+		params.addQueryStringParameter("tel", getSharePrefence().getString("phone", null));
+		params.addQueryStringParameter("callerDisplayNumber", edtNumber
+				.getText().toString());
+		AppContext.getHtmlUitls().xUtilsm(getActivity(),
+				HttpMethod.POST, "m/tel/call", params,
+				new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						if(msg.equals("401")){
+							toast("请登录");
+						}
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						try {
+							if (json.getBoolean("success")) {
+								if (json.getJSONObject("obj")
+										.getString("retCode").equals("0")) {
+									GetProgressBar.getProgressBar(context, 1);
+									toast("电话已拨出");
+								} else {
+									toast("余额不足");
+								}
+
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+	
+	@Override
+	public String getFragmentName() {
+		// TODO Auto-generated method stub
+		return "FragmentPhoneCall";
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		// TODO Auto-generated method stub
+		String text = edtNumber.getText().toString();
+		edtNumber.setText(text + list.get(arg2));
+	}
+}

@@ -1,0 +1,226 @@
+package com.llg.privateproject.actvity;
+
+import java.io.File;
+
+import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.db.sqlite.Selector;
+import com.lidroid.xutils.exception.DbException;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.llg.help.Recv02;
+import com.llg.help.Recv02.MyCallback;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.entities.Citys;
+import com.llg.privateproject.fragment.CategoryFragment;
+import com.llg.privateproject.fragment.HomeFragment;
+import com.llg.privateproject.fragment.RecommendCommodities;
+import com.llg.privateproject.fragment.ShoppingCartFragment;
+import com.llg.privateproject.utils.Constants;
+import com.llg.privateproject.view.MyTabWidget;
+import com.llg.privateproject.view.MyTabWidget.OnTabSelectedListener;
+
+/**
+ * 导航页
+ * 
+ * 商品汇
+ * @author gongyibing
+ * @version 1.0
+ * @created 2015-05-07
+ */
+public class MainActivity extends MyFragmentActivity implements
+		OnTabSelectedListener, MyCallback {
+
+	@ViewInject(R.id.tab_widget)
+	private MyTabWidget mTabWidget;
+	/** 商城*/
+	private HomeFragment mHomeFragment;
+	/** 分类*/
+	private CategoryFragment mCategoryFragment;
+	/** 购物车*/
+	private ShoppingCartFragment shoppingFragment;
+	/** 推荐*/
+	private RecommendCommodities mSettingFragment;
+
+	// 设置默认首页
+	private int mIndex = Constants.HOME_FRAGMENT_INDEX;
+	public static FragmentManager mFragmentManager;
+	// 全局Context
+	private AppContext appContext;
+	private String path;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		// 在使用注解绑定控件的时候，一定记得在onCreate中调用ViewUtils.inject(this);
+		path = Environment.getExternalStorageDirectory().getPath()
+				+ File.separator + "Citys";
+		ViewUtils.inject(this);
+		appContext = (AppContext) getApplication();
+		if (appContext.isNetworkConnected()) {
+			// UpdateManager.getUpdateManager().checkAppUpdate(
+			// getApplicationContext(), false);
+		} else {
+
+		}
+		init();
+		initEvents();
+		// initSystemBar();
+	}
+
+	/** 初始化 */
+	private void init() {
+
+		DbUtils dbUtils = DbUtils.create(this, path, "city");
+		Log.i("tag", "-----------++++++++--查询到的code");
+		Citys city = null;
+		try {
+			city = dbUtils.findFirst(Selector.from(Citys.class).where(
+					"baidu_code", "=", 265 + ""));
+		} catch (DbException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		mFragmentManager = getSupportFragmentManager();
+		Recv02 rec = new Recv02(appContext, this);
+		Thread r = new Thread(rec);
+		r.start();
+
+	}
+
+	/** 事件 */
+	private void initEvents() {
+		mTabWidget.setOnTabSelectedListener(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		onTabSelected(mIndex);
+		// mTabWidget.setTabsDisplay(this, mIndex);
+		// mTabWidget.setIndicateDisplay(this, "2", true);
+	}
+
+	@Override
+	public void onTabSelected(int index) {
+		FragmentTransaction transaction = mFragmentManager.beginTransaction();
+		hideFragments(transaction);
+		switch (index) {
+		case Constants.HOME_FRAGMENT_INDEX:
+			if (null == mHomeFragment) {
+				mHomeFragment = new HomeFragment();
+				transaction.add(R.id.center_layout, mHomeFragment);
+			} else {
+				transaction.show(mHomeFragment);
+			}
+			break;
+		case Constants.CATEGORY_FRAGMENT_INDEX:
+			if (null == mCategoryFragment) {
+				mCategoryFragment = new CategoryFragment();
+				transaction.add(R.id.center_layout, mCategoryFragment);
+			} else {
+				transaction.show(mCategoryFragment);
+			}
+			break;
+		case Constants.COLLECT_FRAGMENT_INDEX:
+			if (null == shoppingFragment) {
+				shoppingFragment = new ShoppingCartFragment();
+				transaction.add(R.id.center_layout, shoppingFragment);
+			} else {
+				transaction.show(shoppingFragment);
+			}
+			break;
+		case Constants.SETTING_FRAGMENT_INDEX:
+			if (null == mSettingFragment) {
+				mSettingFragment = new RecommendCommodities();
+				transaction.add(R.id.center_layout, mSettingFragment);
+				// Bundle bundle=new Bundle();
+				// bundle.putString("msg", message);
+				// Log.e("my", "msgmssggsafdsadf+:"+message);
+				// mSettingFragment.setArguments(bundle);
+			} else {
+				transaction.show(mSettingFragment);
+			}
+
+			break;
+		default:
+			break;
+		}
+		mIndex = index;
+		transaction.commitAllowingStateLoss();
+	}
+
+	private void hideFragments(FragmentTransaction transaction) {
+		if (null != mHomeFragment) {
+			transaction.hide(mHomeFragment);
+		}
+		if (null != mCategoryFragment) {
+			transaction.hide(mCategoryFragment);
+		}
+		if (null != shoppingFragment) {
+			transaction.hide(shoppingFragment);
+		}
+		if (null != mSettingFragment) {
+			transaction.hide(mSettingFragment);
+		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// 自己记录fragment的位置,防止activity被系统回收时，fragment错乱的问题
+		// super.onSaveInstanceState(outState);
+		outState.putInt("index", mIndex);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// super.onRestoreInstanceState(savedInstanceState);
+		mIndex = savedInstanceState.getInt("index");
+	}
+
+	/*private void initSystemBar() {
+		Log.e("my", "build.version" + Build.VERSION.SDK_INT);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			// create our manager instance after the content view is set
+			setTheme(R.style.Theme_Timetodo);
+			SystemBarTintManager tintManager = new SystemBarTintManager(this);
+			// enable status bar tint
+
+			tintManager.setStatusBarTintEnabled(true);
+			// enable navigation bar tint
+
+			tintManager.setNavigationBarTintEnabled(true);
+			// set a custom tint color for all system bars
+
+			tintManager.setTintColor(Color.parseColor("#0000ff"));
+			// set a custom navigation bar resource
+			tintManager.setNavigationBarTintResource(R.drawable.turn);
+			// set a custom status bar drawable
+			// tintManager.setStatusBarTintDrawable(MyDrawable);
+			// tintManager.setStatusBarTintResource(R.color.yellow);
+			SystemBarConfig config = tintManager.getConfig();
+			// setPadding(0, config.getPixelInsetTop(true), 0,
+			// config.getPixelInsetBottom());
+		}
+	}*/
+
+	@Override
+	public void setMymessage(String message) {
+		// TODO Auto-generated method stub
+		AppContext.testMessage = message;
+	}
+	// public String getMessage(){
+	// return message;
+	// }
+
+}

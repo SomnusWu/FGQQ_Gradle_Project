@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_full"
+    android:background="@color/app_bg"
+    android:orientation="vertical" >
+
+    <!-- title bar -->
+
+    <include
+        layout="@layout/title_bar" 
+        />
+<LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#bbcecbba"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/title_tv"
+                style="@style/title_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/daifukuan"
+                android:text="待付款"
+                android:textSize="12sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/title_tv1"
+                style="@style/title_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/daishouhuo"
+                android:text="待收货"
+                android:textSize="12dp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/title_tv2"
+                style="@style/title_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/daifukuan"
+                android:text="我的资产"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <View
+            style="@style/small_divider"
+            android:layout_gravity="center" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/title_tv3"
+                style="@style/title_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/daipingjia"
+                android:textStyle="bold"
+                android:text="资料设置"
+                android:textSize="14sp" />
+        </FrameLayout>
+    </LinearLayout>
+    <com.llg.privateproject.view.AbScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:fillViewport="true" >
+
+        <ListView
+            android:id="@+id/infomation_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </com.llg.privateproject.view.AbScrollView>
+
+</LinearLayout>

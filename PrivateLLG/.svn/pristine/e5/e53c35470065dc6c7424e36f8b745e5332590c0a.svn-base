@@ -1,0 +1,116 @@
+package com.llg.privateproject.adapters;
+
+import java.util.List;
+import java.util.Map;
+
+import com.bjg.lcc.privateproject.R;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.adapters.GuangGaoJiFenAdapter.ViewHolder;
+import com.llg.privateproject.entities.AttentionAdvertisement;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+
+public class AttentionAdvertisementAdapter extends BaseAdapter {
+	private Context context;
+	private List<AttentionAdvertisement> list;
+	private LayoutInflater inflater;
+
+	public AttentionAdvertisementAdapter(Context context,
+			List<AttentionAdvertisement> list) {
+		this.context = context;
+		this.list = list;
+		inflater = LayoutInflater.from(context);
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return (list == null) ? 0 : list.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return list.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+
+	@Override
+	public View getView(final int position, View v, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		final ViewHolder holder;
+		if (v == null) {
+			holder = new ViewHolder();
+			v = inflater.inflate(R.layout.listitem_attention_advertisement,
+					null);
+			holder.iv = (ImageView) v.findViewById(R.id.iv);
+			holder.tvLocation = (TextView) v.findViewById(R.id.tv_location);
+			holder.tvSend = (TextView) v.findViewById(R.id.tv_send);
+			holder.tvIsCanDraw = (TextView) v.findViewById(R.id.tv_isCanDraw);
+			v.setTag(holder);
+		} else {
+			holder = (ViewHolder) v.getTag();
+		}
+		ViewTreeObserver vto = holder.iv.getViewTreeObserver();
+		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				if (position == list.size()) {
+					holder.iv.getViewTreeObserver()
+							.removeGlobalOnLayoutListener(this);
+				}
+				int width = holder.iv.getWidth();
+				holder.iv.setLayoutParams(new LayoutParams(width,
+						(int) (width * 0.5)));
+			}
+		});
+		MyFormat.setBitmap(context, holder.iv, list.get(position)
+				.getCOVER_IMAGE_URL(), 0, 0);
+		String name = list.get(position).getLOCATION_NAME();
+		holder.tvLocation.setText(name);
+		holder.tvSend.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		int co = list.get(position).getHAS_CO();
+		int money = list.get(position).getHAS_MONEY();
+		if (co == 1 || money == 1) {
+			holder.tvIsCanDraw.setText("用户可领取红包");
+		} else {
+			holder.tvIsCanDraw.setText("红包已领取完");
+		}
+		return v;
+	}
+
+	class ViewHolder {
+		private ImageView iv;
+		private TextView tvLocation;
+		private TextView tvSend;
+		private TextView tvIsCanDraw;
+	}
+
+	public void setList(List<AttentionAdvertisement> list) {
+		this.list = list;
+		notifyDataSetChanged();
+	}
+}

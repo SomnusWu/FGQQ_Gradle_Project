@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <include layout="@layout/order_clear_head" />
+
+    <ImageView
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/welcome"
+        android:orientation="vertical" >
+    </ImageView>
+
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+                android:id="@+id/red_package_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="风购全球"
+                android:textColor="@color/meihong"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+    <View android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/to_see"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/stroke_lightgray"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="查看更多"
+        android:textColor="@color/black2" />
+</LinearLayout>
+ <TextView
+            android:id="@+id/fgqqg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="5dp"
+            android:text="FGQQG.COM"
+            android:textColor="@color/black2"
+            android:textSize="14sp"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold" />
+    <LinearLayout
+        android:id="@+id/lll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="5dp" >
+
+        <TextView 
+            android:id="@+id/question"
+            
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+              android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:text=""
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/black1"
+            android:padding="5dp"
+            />
+<EditText
+    android:id="@+id/eanswer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bg_size_rectangle_o"
+            android:hint="输入答案收红包"
+            android:padding="5dp"
+            android:textColor="@color/black1"
+            android:textSize="12dp"
+            android:textColorHint="@color/black3" />
+        <TextView
+           android:id="@+id/answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@drawable/stroke_meihong_r"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="收红包"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/meihong" />
+    </LinearLayout>
+
+  <View android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:padding="10dp" >
+
+        <EditText
+            android:id="@+id/et_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="3.5"
+            android:background="@drawable/bg_size_rectangle_o"
+            android:hint="太爱你,的红包啦!"
+            android:textColor="@color/black1"
+            android:textSize="12sp"
+            android:padding="5dp"
+            android:textColorHint="@color/black3" />
+
+        <TextView
+            android:id="@+id/tv_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/stroke_meihong_r"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="评价"
+            android:textColor="@color/meihong" />
+    </LinearLayout>
+
+</LinearLayout>

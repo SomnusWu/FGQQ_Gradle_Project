@@ -1,0 +1,83 @@
+package com.llg.privateproject.adapters;
+
+import java.util.List;
+import java.util.Map;
+
+import com.bjg.lcc.privateproject.R;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.actvity.Consume;
+
+
+import com.llg.privateproject.entities.Consumeentity;
+
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+/**商家现场消费订单列表适配器
+ * yh
+ * 2015.12.20
+ * */
+public class ConsumeAdapter extends BaseAdapter{
+private List<Consumeentity> list;
+private Consume context;
+ public ConsumeAdapter(List<Consumeentity> list,Consume consume) {
+	// TODO Auto-generated constructor stub
+	 this.list=list;
+	 this.context=consume;
+}
+ @Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return list == null ? 0 : list.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return list.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+
+	@Override
+	public View getView(int position, View view, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		Viewholder holder = null;
+		Consumeentity item=list.get(position);
+		if (view == null) {
+			holder = new Viewholder();
+			view = View.inflate(context, R.layout.consume_item, null);
+			holder.consume_id = (TextView) view.findViewById(R.id.consume_id);
+			holder.username = (TextView) view.findViewById(R.id.username);
+			holder.price = (TextView) view.findViewById(R.id.price);
+			holder.co = (TextView) view.findViewById(R.id.co);
+			holder.createtime = (TextView) view.findViewById(R.id.createtime);
+			view.setTag(holder);
+		} else {
+			holder = (Viewholder) view.getTag();
+		}
+		// Log.i("my", "holder.num"+holder.num);
+		// Log.i("my", "quan.getnum"+quan.getNum());
+		holder.consume_id.setText("订单编号:"+item.CODE);
+		holder.username.setText("消费者昵称:"+MyFormat.replaceString(item.APPELLATION, 4));
+		
+		holder.price.setText("原价:"+MyFormat.getPriceFormat(item.ORIG_PRICE)+"/支付价:"+MyFormat.getPriceFormat(item.PRICE));
+		holder.createtime.setText("支付时间:"+MyFormat.getTimeFormat3(item.PAY_DATE));
+		holder.co.setText("使用CO个数:"+item.CO+"个/返回CO个数:"+item.BACK_CO+"个");
+		return view;
+	}
+
+	class Viewholder {
+		TextView consume_id;
+		TextView username;
+		TextView price;
+		TextView co;
+		TextView createtime;
+	}
+
+}

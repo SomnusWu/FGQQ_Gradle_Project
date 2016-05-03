@@ -1,0 +1,77 @@
+package com.llg.privateproject.entities;
+
+public class Address {
+	private String zoneName;// 地区地址
+
+	public String getZoneName() {
+		return zoneName;
+	}
+
+	public void setZoneName(String zoneName) {
+		this.zoneName = zoneName;
+	}
+
+	public String getCompAddress() {
+		return compAddress;
+	}
+
+	public void setCompAddress(String compAddress) {
+		this.compAddress = compAddress;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getIsDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(String isDefault) {
+		this.isDefault = isDefault;
+	}
+
+	private String compAddress;// 收货地址全名
+	private String address;// 街道地址
+	private String name;// 收货人
+	private String phone;// 电话
+	private String isDefault;// 是否是默认地址
+	private String id;
+	private String zone;
+
+	public String getZone() {
+		return zone;
+	}
+
+	public void setZone(String zone) {
+		this.zone = zone;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+}

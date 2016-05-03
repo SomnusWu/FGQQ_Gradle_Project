@@ -1,0 +1,83 @@
+package com.finddreams.sortedcontact;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.finddreams.sortedcontact.sortlist.PersonSortMode;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.db.sqlite.Selector;
+import com.lidroid.xutils.exception.DbException;
+import com.llg.privateproject.entities.Citys;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.os.Environment;
+import android.provider.ContactsContract;
+import android.util.Log;
+
+public class ConstactUtil {
+	/**
+	 * 获取所有数据
+	 * 
+	 * @return
+	 */
+	public static List<Citys> getAllCallRecords(Context context) {
+		List<Citys> list = null;
+		// String path = Environment.getExternalStorageDirectory().getPath()
+		// + File.separator + "Citys";
+		String path = Environment.getExternalStorageDirectory().getPath()
+				+ File.separator + "Citys";
+		Log.i("tag", "------数据库查询的path");
+		DbUtils dbUtils = DbUtils.create(context, path, "city");
+		try {
+			list = dbUtils.findAll(Citys.class);
+			Log.i("tag", ((list == null) ? 0 : list.size())
+					+ "------数据库查询的list大小");
+		} catch (DbException e) {
+			e.printStackTrace();
+		}
+		// Cursor c = context.getContentResolver().query(
+		// ContactsContract.Contacts.CONTENT_URI,
+		// null,
+		// null,
+		// null,
+		// ContactsContract.Contacts.DISPLAY_NAME
+		// + " COLLATE LOCALIZED ASC");
+		// if (c.moveToFirst()) {
+		// do {
+		// // 获得联系人的ID号
+		// String contactId = c.getString(c
+		// .getColumnIndex(ContactsContract.Contacts._ID));
+		// // 获得联系人姓名
+		// String name = c
+		// .getString(c
+		// .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+		// // 查看该联系人有多少个电话号码。如果没有这返回值为0
+		// int phoneCount = c
+		// .getInt(c
+		// .getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+		// String number=null;
+		// if (phoneCount > 0) {
+		// // 获得联系人的电话号码
+		// Cursor phones = context.getContentResolver().query(
+		// ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+		// null,
+		// ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+		// + " = " + contactId, null, null);
+		// if (phones.moveToFirst()) {
+		// number = phones
+		// .getString(phones
+		// .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+		// }
+		// phones.close();
+		// }
+		// temp.put(name, number);
+		// } while (c.moveToNext());
+		// }
+		// c.close();
+		return list;
+	}
+}

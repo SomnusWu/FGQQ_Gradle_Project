@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_120px"
+        android:padding="5dp"
+        >
+        <ImageView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+          android:src="@drawable/dingdanzhifu_fanhui"
+          android:layout_centerVertical="true"
+          android:id="@+id/turn"
+            />
+        <TextView android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:text="我的资产"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+          android:textSize="20sp"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/black1"
+            />
+       
+    </RelativeLayout>
+	<View android:layout_width="match_parent"
+	    android:layout_height="0.8dp"
+	    android:background="@color/black3"/>
+    <RelativeLayout
+        android:id="@+id/rl_yue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <TextView android:layout_width="wrap_content"
+            android:paddingLeft="10dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/yue"
+            android:drawablePadding="10dp"
+            android:text="余额"
+            
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/black2"
+            />
+        <TextView 
+          
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:text="0.00"
+            android:gravity="center"
+            android:drawableRight="@drawable/dingdanzhifu_xiafan"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+         android:drawablePadding="5dp"
+            android:textColor="@color/orange2"
+            android:id="@+id/yue"
+            />
+       
+    </RelativeLayout>
+	<View android:layout_width="match_parent"
+	    android:layout_height="3dp"
+	    android:background="@drawable/dianline"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <TextView android:layout_width="wrap_content"
+            android:paddingLeft="10dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ji"
+            android:drawablePadding="10dp"
+            android:text="积分"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/black2"
+            />
+        <TextView android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/orange2"
+            android:id="@+id/jifen"
+            />
+       
+    </RelativeLayout>
+	<View android:layout_width="match_parent"
+	    android:layout_height="3dp"
+	    android:background="@drawable/dianline"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <TextView android:layout_width="wrap_content"
+            android:paddingLeft="10dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/bi"
+            android:drawablePadding="10dp"
+            android:text="CO币"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/black2"
+            />
+        <TextView android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/orange2"
+            android:id="@+id/cqbi"
+            />
+       
+    </RelativeLayout>
+	<View android:layout_width="match_parent"
+	    android:layout_height="3dp"
+	    android:background="@drawable/dianline"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <TextView android:layout_width="wrap_content"
+            android:paddingLeft="10dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/quan"
+            android:drawablePadding="10dp"
+            android:text="礼券"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/black2"
+            android:id="@+id/_quan"
+            />
+
+        <CheckBox
+            android:id="@+id/cb"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/_quan"
+            android:background="@drawable/ch_quan"
+            android:button="@null"
+            android:checked="true"
+            android:padding="5dp" />
+
+        <TextView android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/orange2"
+            android:id="@+id/quan"
+            />
+       
+    </RelativeLayout>
+	<View android:layout_width="match_parent"
+	    android:layout_height="3dp"
+	    android:background="@drawable/dianline"/>
+	<!-- 优惠券列表 -->
+	<LinearLayout android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/ll"
+	    android:visibility="invisible"
+	    android:orientation="vertical">
+	<LinearLayout android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:paddingTop="5dp"
+	    android:paddingBottom="5dp"
+	    
+	    android:orientation="horizontal">
+	    <TextView android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:text="编号"
+	        android:textSize="12sp"
+	        
+	        android:textColor="@color/black2"/>
+	    <TextView android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:text="面值"
+	        android:textSize="12sp"
+	        android:textColor="@color/black2"/>
+	    <TextView android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:text="状态"
+	        android:textSize="12sp"
+	        android:textColor="@color/black2"/>
+	    <TextView android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:text="有效期"
+	        android:textSize="12sp"
+	        android:textColor="@color/black2"/>
+	</LinearLayout>
+
+	<View
+	    android:layout_width="match_parent"
+	    android:layout_height="0.8dp"
+	    android:background="@color/orange2" />
+   <ListView 
+       android:id="@+id/lv_quan"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:divider="@drawable/dianline"
+       android:dividerHeight="3dp"></ListView>
+	   </LinearLayout>
+
+
+</LinearLayout>

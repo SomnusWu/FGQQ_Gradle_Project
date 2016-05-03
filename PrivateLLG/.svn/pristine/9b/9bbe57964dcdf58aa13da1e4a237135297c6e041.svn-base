@@ -1,0 +1,206 @@
+package com.llg.privateproject.actvity;
+
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.MyFormat;
+import com.llg.help.ScreenManager;
+import com.llg.help.Util;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.fragment.BaseActivity.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.smartandroid.sa.json.JsonObject;
+
+/**
+ * @author cc 申请提现
+ */
+public class WithdrawAty extends BaseActivity {
+	@ViewInject(R.id.edt_money)
+	private EditText edtMoney;
+	@ViewInject(R.id.edt_number)
+	private EditText edtNumber;
+	@ViewInject(R.id.ly_load)
+	private LinearLayout lyLoad;
+
+	@ViewInject(R.id.tv_lowmoney)
+	private TextView tvLowMoney;
+	@ViewInject(R.id.tv_time)
+	private TextView tvTime;
+	@ViewInject(R.id.tv_free)
+	private TextView tvFree;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aty_withdraw);
+		ViewUtils.inject(this);
+		initUI();
+	}
+
+	private void initUI() {
+		ScreenManager.getScreenManager().pushActivity(this);
+		initAutoLoading(lyLoad);
+		requestDrawMoney(UserInformation.getAccess_token());
+	}
+
+	@OnClick({ R.id.iv_back, R.id.tv_confirm })
+	public void onClick(View v) {
+		Log.i("tag", "++++++++++++++++++=----------------tag");
+		switch (v.getId()) {
+		case R.id.iv_back:
+			finish();
+			break;
+			
+		case R.id.tv_confirm:
+			if (!MyFormat.isEmail(getStr(edtNumber))
+					&& !MyFormat.isMobileNO(getStr(edtNumber))) {
+				toast("请输入正确的支付宝账号");
+				return;
+			}
+			if (!Util.isDouble(getStr(edtMoney))) {
+				toast("请输入正确的提现现金");
+				return;
+			}
+			customProgressSmall.setMessage("正在提现中");
+			customProgressSmall.show();
+			requestConfirm(UserInformation.getAccess_token());
+			break;
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * 提现信息
+	 */
+	private void requestDrawMoney(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/customer/getCashAdvanceInfo", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						// autoLoading.showExceptionLayout();
+						autoLoading.showExceptionLayout();
+						Log.i("tag", msg + "--------进来了--msg------");
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						ParseJson parseJson = ParseJson.getParseJson();
+						Map<String, Object> map = parseJson
+								.parseIsSuccess(json);
+						Log.i("tag",
+								"--------进来了requestAdvisetisementDetail------");
+						Log.i("tag", (Boolean) map.get("isSuccess")
+								+ "--------------isSuccess-----" + json);
+						if ((Boolean) map.get("isSuccess")) {
+							// json.getJSONObject("");
+							Double double1;
+							try {
+								JSONObject jsonObject = json
+										.getJSONObject("obj");
+								double1 = jsonObject.optDouble("asset");
+								String argeement = jsonObject
+										.optString("agreement");
+								if (double1 != null) {
+									edtMoney.setText("本次最高提现" + double1 + "元");
+								} else {
+									edtMoney.setText("本次最高提现0元");
+								}
+								tvLowMoney.setText(argeement);
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							autoLoading.hideAll();
+						} else if (map.get("errorCode").equals("NOT_LOGIN")) {
+							setRefreshListtener(new Refresh() {
+								@Override
+								public void refreshRequst(String access_token) {
+									// TODO Auto-generated method stub
+									Log.i("tag", "------监听里-------");
+									requestDrawMoney(access_token);
+								}
+							});
+							RefeshToken();
+						}
+					}
+				});
+	}
+
+	/**
+	 * 提现信息
+	 */
+	private void requestConfirm(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		params.addQueryStringParameter("accountType", "1");
+		params.addQueryStringParameter("applyAccount", getStr(edtNumber));
+		params.addQueryStringParameter("money", getStr(edtMoney));
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/customer/saveCashAdvance", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						// autoLoading.showExceptionLayout();
+						toast("提现失败,未知错误");
+						Log.i("tag", msg + "--------进来了--msg------");
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						ParseJson parseJson = ParseJson.getParseJson();
+						Map<String, Object> map = parseJson
+								.parseIsSuccess(json);
+						Log.i("tag",
+								"--------进来了requestAdvisetisementDetail------");
+						Log.i("tag", (Boolean) map.get("isSuccess")
+								+ "--------------isSuccess-----" + json);
+						if ((Boolean) map.get("isSuccess")) {
+							// json.getJSONObject("");
+							toast("提现成功");
+							finish();
+						} else if (map.get("errorCode").equals("NOT_LOGIN")) {
+							setRefreshListtener(new Refresh() {
+								@Override
+								public void refreshRequst(String access_token) {
+									// TODO Auto-generated method stub
+									Log.i("tag", "------监听里-------");
+									requestConfirm(access_token);
+								}
+							});
+							RefeshToken();
+						} else if (!(Boolean) map.get("isSuccess")) {
+							toast("提现失败,未知错误");
+						}
+					}
+				});
+	}
+}

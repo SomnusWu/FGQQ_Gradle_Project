@@ -1,0 +1,129 @@
+package com.llg.privateproject.actvity;
+
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.llg.privateproject.fragment.FragmentPhoneCall;
+import com.llg.privateproject.fragment.FragmentPhoneCharge;
+import com.llg.privateproject.fragment.FragmentPhoneMoney;
+import com.llg.privateproject.fragment.FragmentPhoneRecent;
+import com.llg.privateproject.fragment.FragmentPhonelist;
+import com.smartandroid.sa.sql.util.Log;
+
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.widget.FrameLayout;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+
+/**
+ * 打电话 yh 2016.01.03
+ * 
+ * */
+public class PhoneActivity extends FragmentActivity implements
+		OnCheckedChangeListener {
+	private FragmentManager fm;
+	@ViewInject(R.id.fl_phone)
+	private FrameLayout fl_phone;
+	@ViewInject(R.id.rg_phone)
+	private RadioGroup rg_phone;
+	private FragmentPhonelist fpl;
+	private FragmentPhoneMoney fpm;
+	private FragmentPhoneCall fpCall;
+	private FragmentPhoneRecent fpRecent;
+	private FragmentPhoneCharge fpc;
+	private FragmentTransaction ft;
+
+	@Override
+	protected void onCreate(Bundle arg0) {
+		// TODO Auto-generated method stub
+		super.onCreate(arg0);
+		setContentView(R.layout.phoneactivity);
+		ViewUtils.inject(this);
+		fm = getSupportFragmentManager();
+		rg_phone.setOnCheckedChangeListener(this);
+		fpCall = new FragmentPhoneCall();
+		ft = fm.beginTransaction();
+		ft.add(R.id.fl_phone, fpCall);
+		ft.show(fpCall);
+		ft.commit();
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		// TODO Auto-generated method stub
+		FragmentTransaction ft = fm.beginTransaction();
+		hideFragments(ft);
+		Log.d("my", "checkedId" + checkedId);
+		switch (checkedId) {
+		case R.id.rb_list:
+			if (fpl == null) {
+				fpl = new FragmentPhonelist();
+				ft.add(R.id.fl_phone, fpl);
+			} else {
+				ft.show(fpl);
+			}
+			break;
+
+		case R.id.rb_money:
+			if (fpm == null) {
+				fpm = new FragmentPhoneMoney();
+				ft.add(R.id.fl_phone, fpm,"money");
+			} else {
+				ft.show(fm.findFragmentByTag("money"));
+			}
+			break;
+		case R.id.rb_charge:
+			if (fpc == null) {
+				Log.i("tag", "-------------0--------------------");
+				fpc = new FragmentPhoneCharge();
+				Log.i("tag", "-------------1--------------------");
+				ft.add(R.id.fl_phone, fpc);
+			} else {
+				ft.show(fpc);
+			}
+			break;
+		case R.id.rb_call:
+			if (fpCall == null) {
+				fpCall = new FragmentPhoneCall();
+				ft.add(R.id.fl_phone, fpCall);
+			} else {
+				ft.show(fpCall);
+			}
+			break;
+		case R.id.rb_recent:
+			if (fpRecent == null) {
+				fpRecent = new FragmentPhoneRecent();
+				ft.add(R.id.fl_phone, fpRecent);
+			} else {
+				ft.show(fpRecent);
+			}
+			break;
+		}
+		ft.commit();
+	}
+
+	private void hideFragments(FragmentTransaction ft) {
+		Log.d("my", "影藏通讯录");
+		if (fpl != null) {// 通讯录
+			Log.d("my", "影藏通讯录");
+			// fm.findFragmentByTag("list");
+			ft.hide(fpl);
+		}
+		if (fpm != null) {
+			ft.hide(fpm);
+		}
+		if (fpc != null) {
+			ft.hide(fpc);
+		}
+		if (fpRecent != null) {
+			ft.hide(fpRecent);
+		}
+		if (fpCall != null) {
+			ft.hide(fpCall);
+		}
+	}
+
+}

@@ -1,0 +1,27 @@
+
+package com.llg.privateproject.entities;
+
+import android.R.id;
+
+public class SearchHistory {
+	
+    public SearchHistory() {
+		// TODO Auto-generated constructor stub
+    	this.searchHistory=searchHistory;
+	}
+	public String getSearchHistory() {
+		return searchHistory;
+	}
+	public void setSearchHistory(String searchHistory) {
+		this.searchHistory = searchHistory;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	private String searchHistory;
+    private int id;
+    
+}

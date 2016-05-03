@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="4" by="lint 24.4.1">
+
+    <issue
+        id="DuplicateIds"
+        severity="Fatal"
+        message="Duplicate id `@+id/show_can_user_co`, already defined earlier in this layout"
+        category="Correctness"
+        priority="7"
+        summary="Duplicate ids within a single layout"
+        explanation="Within a layout, id&apos;s should be unique since otherwise `findViewById()` can return an unexpected view."
+        errorLine1="            android:id=&quot;@+id/show_can_user_co&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\res\layout\shop_cash.xml"
+            line="182"
+            column="13"/>
+        <location
+            file="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\res\layout\shop_cash.xml"
+            line="138"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DuplicateIds"
+        severity="Fatal"
+        message="Duplicate id `@+id/cb_s`, already defined earlier in this layout"
+        category="Correctness"
+        priority="7"
+        summary="Duplicate ids within a single layout"
+        explanation="Within a layout, id&apos;s should be unique since otherwise `findViewById()` can return an unexpected view."
+        errorLine1="            android:id=&quot;@+id/cb_s&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\res\layout\shop_cash.xml"
+            line="194"
+            column="13"/>
+        <location
+            file="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\res\layout\shop_cash.xml"
+            line="150"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DuplicateIds"
+        severity="Fatal"
+        message="Duplicate id `@+id/layout_original_price`, already defined earlier in this layout"
+        category="Correctness"
+        priority="7"
+        summary="Duplicate ids within a single layout"
+        explanation="Within a layout, id&apos;s should be unique since otherwise `findViewById()` can return an unexpected view."
+        errorLine1="            android:id=&quot;@+id/layout_original_price&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\res\layout\shop_cash.xml"
+            line="344"
+            column="13"/>
+        <location
+            file="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\res\layout\shop_cash.xml"
+            line="248"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ValidFragment"
+        severity="Fatal"
+        message="This fragment should provide a default constructor (a public constructor with no arguments) (`com.llg.privateproject.fragment.AnimFragment`)"
+        category="Correctness"
+        priority="6"
+        summary="Fragment not instantiatable"
+        explanation="From the Fragment documentation:
+*Every* fragment must have an empty constructor, so it can be instantiated when restoring its activity&apos;s state. It is strongly recommended that subclasses do not have other constructors with parameters, since these constructors will not be called when the fragment is re-instantiated; instead, arguments can be supplied by the caller with `setArguments(Bundle)` and later retrieved by the Fragment with `getArguments()`."
+        url="http://developer.android.com/reference/android/app/Fragment.html#Fragment()"
+        urls="http://developer.android.com/reference/android/app/Fragment.html#Fragment()"
+        errorLine1="public class AnimFragment extends Fragment implements OnClickListener {"
+        errorLine2="             ~~~~~~~~~~~~">
+        <location
+            file="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\src\com\llg\privateproject\fragment\AnimFragment.java"
+            line="20"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ValidFragment"
+        severity="Fatal"
+        message="Avoid non-default constructors in fragments: use a default constructor plus `Fragment#setArguments(Bundle)` instead"
+        category="Correctness"
+        priority="6"
+        summary="Fragment not instantiatable"
+        explanation="From the Fragment documentation:
+*Every* fragment must have an empty constructor, so it can be instantiated when restoring its activity&apos;s state. It is strongly recommended that subclasses do not have other constructors with parameters, since these constructors will not be called when the fragment is re-instantiated; instead, arguments can be supplied by the caller with `setArguments(Bundle)` and later retrieved by the Fragment with `getArguments()`."
+        url="http://developer.android.com/reference/android/app/Fragment.html#Fragment()"
+        urls="http://developer.android.com/reference/android/app/Fragment.html#Fragment()"
+        errorLine1=" public AnimFragment(Fragment listener) {"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\src\com\llg\privateproject\fragment\AnimFragment.java"
+            line="32"
+            column="9"/>
+    </issue>
+
+</issues>

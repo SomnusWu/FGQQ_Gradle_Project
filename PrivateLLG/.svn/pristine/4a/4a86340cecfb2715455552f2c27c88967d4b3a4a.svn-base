@@ -1,0 +1,419 @@
+package com.llg.privateproject.actvity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.lidroid.xutils.view.annotation.event.OnItemClick;
+import com.bjg.lcc.privateproject.R;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.adapter.CommodityAdapter;
+import com.llg.privateproject.adapters.SearchResultAdapter;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.view.MyGridView;
+import com.smartandroid.sa.aysnc.Log;
+import com.smartandroid.sa.view.AutoLoading;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+/**
+ * 热门搜索页面 yh 2015.07.06
+ * 
+ * */
+public class SearchActivity extends BaseActivity implements TextWatcher {
+	AppContext appContext;
+	/** 返回 */
+	@ViewInject(R.id.erji_fanhui)
+	private ImageView erji_fanhui;
+	/** 搜索框 */
+	@ViewInject(R.id.home_search_id)
+	private EditText home_search_id;
+	/** 清空搜索框 */
+	@ViewInject(R.id.iv_clear)
+	private TextView iv_clear;
+	/** 搜索按钮 */
+	@ViewInject(R.id.home_sweep_id)
+	private TextView home_sweep_id;
+	/** 没有找到布局 */
+	@ViewInject(R.id.ll_weizhaodao)
+	private LinearLayout ll_weizhaodao;
+	/** 热门搜索布局 */
+	@ViewInject(R.id.hot_ll)
+	private LinearLayout hot_ll;
+	/** 历史搜索布局 */
+	@ViewInject(R.id.history_ll)
+	private LinearLayout history_ll;
+	/** 清空历史浏览记录 */
+	@ViewInject(R.id.ll_cear)
+	private LinearLayout ll_cear;
+	/**  */
+	@ViewInject(R.id.lyLoad)
+	private LinearLayout lyLoad;
+	/** 热门搜索gridview */
+	@ViewInject(R.id.hot_gv)
+	private MyGridView hot_gv;
+	/** 搜索历史gridview */
+	@ViewInject(R.id.history_gv)
+	private MyGridView history_gv;
+	/** 搜索结果gridview */
+	@ViewInject(R.id.search_result_gv)
+	private MyGridView search_result_gv;
+	/** 热门搜索列表 */
+	private List<String> listhot;
+	/** 搜索历史列表 */
+	private List<String> listhistory;
+	/** 搜索结果列表 */
+	private List<Map<String, Object>> listSearch_result;
+	/** 热搜列表适配器 */
+	ArrayAdapter<String> hotAdapter;
+	/** 历史搜索列表适配器 */
+	ArrayAdapter<String> historyAdapter;
+	/** 搜索结果列表适配器 */
+	CommodityAdapter searchResultAdapter;
+	/** 历史搜索条数 */
+	private int historyCount = 0;
+private String categoryId="";
+	private Intent intent = null;
+AutoLoading autoLoading;
+Handler handler=new Handler(){
+	public void handleMessage(android.os.Message msg) {
+		switch (msg.what) {
+		case 1:
+			hot_ll.setVisibility(View.GONE);
+			history_ll.setVisibility(View.GONE);
+			search_result_gv.setVisibility(View.VISIBLE);
+			
+			break;
+
+		case 2:
+			break;
+		}
+		historyAdapter.notifyDataSetChanged();
+		hotAdapter.notifyDataSetChanged();
+		searchResultAdapter.notifyDataSetChanged();
+		
+	};
+}
+;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		init();
+	}
+
+	private void init() {
+		setContentView(R.layout.search);
+		ViewUtils.inject(this);
+		if(autoLoading==null){
+			autoLoading=new AutoLoading(this, lyLoad);
+		}
+		appContext=(AppContext) getApplication();
+		intent = new Intent(this, ProductDetailActivity.class);
+		listhot = new ArrayList<String>();
+		listhistory = new ArrayList<String>();
+		categoryId=getIntent().getStringExtra("categoryId");
+		if(getIntent().getStringExtra("name")!=null){
+			Log.d("my", "name"+getIntent().getStringExtra("name"));
+			home_search_id.setText(getIntent().getStringExtra("name"));
+			Log.d("my", "name"+getIntent().getStringExtra("categoryId"));
+		}
+		listSearch_result = new ArrayList<Map<String, Object>>();
+
+		hotAdapter = new ArrayAdapter<String>(this, R.layout.search_hot_item,
+				listhot);
+		historyAdapter = new ArrayAdapter<String>(this,
+				R.layout.search_history_item, R.id.search_history_item,
+				listhistory);
+		searchResultAdapter = new CommodityAdapter(this, listSearch_result, true);
+
+		hot_gv.setAdapter(hotAdapter);
+		history_gv.setAdapter(historyAdapter);
+		search_result_gv.setAdapter(searchResultAdapter);
+		// hot_gv.setNumColumns(3);
+		home_search_id
+				.setHintTextColor(getResources().getColor(R.color.black3));
+		home_search_id.setTextColor(getResources().getColor(R.color.black2));
+
+		home_search_id.addTextChangedListener(this);
+
+		testHot();
+		 testHistory();
+		// testSearchresult();
+
+		setViewvisible();
+	}
+
+	/** 热门搜索测试数据 */
+	private void testHot() {
+		String str=getSharedPreferences("suggestSearch", Context.MODE_PRIVATE).getString("suggestSearch","");
+		try {
+			JSONArray ar=new JSONArray(str);
+			if(ar.length()>0){
+				listhot.clear();
+			for (int i = 0; i < ar.length(); i++) {
+				listhot.add(ar.getString(i));
+			}
+			hotAdapter.notifyDataSetChanged();
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		
+	}
+
+	/** 热门搜索测试数据 */
+	private void testHistory() {
+		String str=getSharedPreferences("suggestSearch", Context.MODE_PRIVATE).getString("history","");
+		try {
+			JSONArray ar=new JSONArray(str);
+			if(ar.length()>0){
+			for (int i = 0; i < ar.length(); i++) {
+				listhistory.add(ar.getString(i));
+			}
+			historyAdapter.notifyDataSetChanged();
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	
+	/**收索
+	 * @param keyword 关键字
+	 * */
+private void search(String keyword){
+	RequestParams params=new RequestParams();
+	params.addBodyParameter("keyword", keyword);
+//	params.addBodyParameter("categoryId", categoryId);
+	
+	autoLoading.showLoadingLayout();
+	params.addHeader(MyFormat.HEADER_KEY,MyFormat.HEADER_VALUE);
+	AppContext.getHtmlUitls().xUtils(this, HttpMethod.POST, "search", params, new HttpCallback() {
+		
+		@Override
+		public void onError(String msg) {
+			// TODO Auto-generated method stub
+			autoLoading.hideAll();
+		}
+		
+		@Override
+		public void onBack(JSONObject json) {
+			// TODO Auto-generated method stub
+			Log.d("my", json.toString());
+			autoLoading.hideAll();
+			try {
+				if(json.getBoolean("success")){
+					JSONObject searchResult=json.getJSONObject("attributes").getJSONObject("searchResult");
+					JSONArray suggestSearch=searchResult.getJSONArray("suggestSearch");
+				
+					getSharedPreferences("suggestSearch", Context.MODE_PRIVATE).edit().putString("suggestSearch", suggestSearch.toString()).commit();
+					if(suggestSearch.length()>0){
+						listhot.clear();
+						for (int j = 0; j < suggestSearch.length(); j++) {
+							listhot.add(suggestSearch.getString(j));
+						
+						}
+						hotAdapter.notifyDataSetChanged();
+						
+					}
+					JSONArray productList=searchResult.getJSONArray("productList");
+					if(productList.length()>0){
+						Map<String, Object> map;
+						listSearch_result.clear();
+						for (int j = 0; j < productList.length(); j++) {
+							JSONObject ob=productList.getJSONObject(j);
+							map=new HashMap<String, Object>();
+							map.put("name", ob.getString("name"));
+							map.put("price", ob.getString("price"));
+							map.put("img", ob.getString("image"));
+							map.put("specId", ob.getString("specId"));
+							listSearch_result.add(map);
+							
+						}
+						handler.sendEmptyMessage(1);
+						searchResultAdapter.notifyDataSetChanged();
+						
+					}else{
+						handler.sendEmptyMessage(2);
+//						autoLoading.showExceptionLayout();
+						
+						toast("暂无相关产品");
+					}
+					}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		});
+	
+
+//	
+}
+@Override
+protected void onPause() {
+	// TODO Auto-generated method stub
+	super.onPause();
+	JSONArray json = new JSONArray();
+	for (int i = 0; i <listhistory.size(); i++) {
+	json.put(listhistory.get(i));
+	}
+	getSharedPreferences("suggestSearch", Context.MODE_PRIVATE).edit().putString("history",json.toString()).commit();
+}
+	/** 设置列表是否可见 */
+	private void setViewvisible() {
+		ll_weizhaodao.setVisibility(View.GONE);// 设置没有找到布局不可见
+		hot_ll.setVisibility(View.VISIBLE);// 设置热门搜索列表可见
+		if (historyAdapter.getCount() > 0) {
+			history_ll.setVisibility(View.VISIBLE);
+		} else {
+			history_ll.setVisibility(View.GONE);
+
+		}
+		search_result_gv.setVisibility(View.GONE);// 设置搜索结果列表不可见
+	}
+
+	@OnClick({ R.id.erji_fanhui, R.id.iv_clear, R.id.home_sweep_id,
+			R.id.ll_cear })
+	public void myClick(View v) {
+		switch (v.getId()) {
+		case R.id.erji_fanhui:// 返回
+			finish();
+			break;
+		case R.id.iv_clear:// 清空搜索框
+			if (home_search_id.getText().toString().trim() != "") {
+				home_search_id.setText("");
+				hot_ll.setVisibility(View.VISIBLE);
+				search_result_gv.setVisibility(View.GONE);
+				if (historyAdapter.getCount() > 0) {
+					history_ll.setVisibility(View.VISIBLE);
+				} else {
+					history_ll.setVisibility(View.GONE);
+
+				}
+			}
+
+			break;
+		case R.id.home_sweep_id:// 搜索按钮
+			if (home_search_id.getText().toString().trim().length() < 1) {
+				Toast.makeText(this, "请输入关键词", Toast.LENGTH_SHORT).show();
+			} else {
+				
+				listhistory.add(home_search_id.getText().toString().trim());
+				
+				historyAdapter.notifyDataSetChanged();
+				history_ll.setVisibility(View.VISIBLE);
+				if(appContext.isNetworkConnected()){
+				search(home_search_id.getText().toString().trim());}else{
+					toast(R.string.t_Connection);
+				}
+//				intent.putExtra(name, value)
+//				startActivity(intent);
+			}
+			break;
+		case R.id.ll_cear:// 清除历史搜索
+			listhistory.clear();
+			historyAdapter.notifyDataSetChanged();
+			history_ll.setVisibility(View.GONE);
+			Toast.makeText(this, "清除历史搜索", Toast.LENGTH_SHORT).show();
+
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+		// TODO Auto-generated method stub
+		// Log.d("my","beforeTextChanged"+"s:"+s+"start:"+start+"count:"+count+"after:"+after);
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		// TODO Auto-generated method stub
+		// Log.d("my","onTextChanged"+"s:"+s+"start:"+start+"before:"+before+"count:"+count);
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		// TODO Auto-generated method stub
+		if (s.toString() != null && s.toString().trim().length() > 0) {
+			hot_ll.setVisibility(View.GONE);
+			history_ll.setVisibility(View.GONE);
+			search_result_gv.setVisibility(View.VISIBLE);
+//			testSearchresult();
+		} else if (s.toString() != null) {
+			hot_ll.setVisibility(View.VISIBLE);
+			search_result_gv.setVisibility(View.GONE);
+			if (historyAdapter.getCount() > 0) {
+				history_ll.setVisibility(View.VISIBLE);
+			} else {
+				history_ll.setVisibility(View.GONE);
+
+			}
+		}
+		// Log.d("my","afterTextChanged"+"s:"+s.toString());
+	}
+
+	@OnItemClick({ R.id.hot_gv, R.id.search_result_gv, R.id.history_gv })
+	public void onItemClicks(AdapterView<?> parent, View arg1, int position,
+			long arg3) {
+
+		switch (parent.getId()) {
+		case R.id.hot_gv:// 热搜列表
+			search(listhot.get(position));
+			break;
+		case R.id.history_gv:// 历史搜索列表
+			search(listhistory.get(position));
+			toast(listhistory.get(position));
+			break;
+
+		case R.id.search_result_gv://搜索结果列表
+			if(appContext.isNetworkConnected()){
+				
+				
+				
+				intent.putExtra("prodspecId", listSearch_result.get(position).get("specId").toString());
+				intent.putExtra("img", listSearch_result.get(position).get("img").toString());
+				startActivity(intent);
+			}else{toast(R.string.t_Connection);}
+			break;
+		}
+	
+	}
+}

@@ -1,0 +1,286 @@
+package com.llg.privateproject.actvity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.lidroid.xutils.ViewUtils;
+
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.lidroid.xutils.view.annotation.event.OnItemClick;
+import com.bjg.lcc.privateproject.R;
+import com.llg.privateproject.adapters.SearchResultAdapter;
+import com.llg.privateproject.view.MyGridView;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+/**
+ * 热门搜索页面 yh 2015.07.06
+ * 
+ * */
+public class SearchActivity extends Activity implements TextWatcher {
+	/** 返回 */
+	@ViewInject(R.id.erji_fanhui)
+	private ImageView erji_fanhui;
+	/** 搜索框 */
+	@ViewInject(R.id.home_search_id)
+	private EditText home_search_id;
+	/** 清空搜索框 */
+	@ViewInject(R.id.iv_clear)
+	private TextView iv_clear;
+	/** 搜索按钮 */
+	@ViewInject(R.id.home_sweep_id)
+	private TextView home_sweep_id;
+	/** 没有找到布局 */
+	@ViewInject(R.id.ll_weizhaodao)
+	private LinearLayout ll_weizhaodao;
+	/** 热门搜索布局 */
+	@ViewInject(R.id.hot_ll)
+	private LinearLayout hot_ll;
+	/** 历史搜索布局 */
+	@ViewInject(R.id.history_ll)
+	private LinearLayout history_ll;
+	/** 清空历史浏览记录 */
+	@ViewInject(R.id.ll_cear)
+	private LinearLayout ll_cear;
+	/** 热门搜索gridview */
+	@ViewInject(R.id.hot_gv)
+	private MyGridView hot_gv;
+	/** 搜索历史gridview */
+	@ViewInject(R.id.history_gv)
+	private MyGridView history_gv;
+	/** 搜索结果gridview */
+	@ViewInject(R.id.search_result_gv)
+	private MyGridView search_result_gv;
+	/** 热门搜索列表 */
+	private List<String> listhot;
+	/** 搜索历史列表 */
+	private List<String> listhistory;
+	/** 搜索结果列表 */
+	private List<Map<String, Object>> listSearch_result;
+	/** 热搜列表适配器 */
+	ArrayAdapter<String> hotAdapter;
+	/** 历史搜索列表适配器 */
+	ArrayAdapter<String> historyAdapter;
+	/** 搜索结果列表适配器 */
+	SearchResultAdapter searchResultAdapter;
+	/** 历史搜索条数 */
+	private int historyCount = 0;
+
+	private Intent intent = null;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		init();
+	}
+
+	private void init() {
+		setContentView(R.layout.search);
+		ViewUtils.inject(this);
+		intent = new Intent(this, CommodityActivity.class);
+		listhot = new ArrayList<String>();
+		listhistory = new ArrayList<String>();
+		listSearch_result = new ArrayList<Map<String, Object>>();
+
+		hotAdapter = new ArrayAdapter<String>(this, R.layout.search_hot_item,
+				listhot);
+		historyAdapter = new ArrayAdapter<String>(this,
+				R.layout.search_history_item, R.id.search_history_item,
+				listhistory);
+		searchResultAdapter = new SearchResultAdapter(this, listSearch_result,
+				listhistory, historyAdapter);
+
+		hot_gv.setAdapter(hotAdapter);
+		history_gv.setAdapter(historyAdapter);
+		search_result_gv.setAdapter(searchResultAdapter);
+		// hot_gv.setNumColumns(3);
+		home_search_id
+				.setHintTextColor(getResources().getColor(R.color.black3));
+		home_search_id.setTextColor(getResources().getColor(R.color.black2));
+
+		home_search_id.addTextChangedListener(this);
+
+		testHot();
+		// testHistory();
+		// testSearchresult();
+
+		setViewvisible();
+	}
+
+	/** 热门搜索测试数据 */
+	private void testHot() {
+		for (int i = 0; i < 12; i++) {
+			listhot.add("热门搜索");
+		}
+		hotAdapter.notifyDataSetChanged();
+	}
+
+	/** 热门搜索测试数据 */
+	private void testHistory() {
+		for (int i = 0; i < 12; i++) {
+			listhistory.add("历史搜索" + i);
+		}
+		historyAdapter.notifyDataSetChanged();
+	}
+
+	/** 搜索结果测试数据 */
+	private void testSearchresult() {
+		listSearch_result.clear();
+		for (int i = 0; i < 12; i++) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("name", "细分类");
+			map.put("name1", "细分类1");
+			map.put("name2", "细分类2");
+			map.put("name3", "细分类3");
+			Map<String, Object> map0 = new HashMap<String, Object>();
+			map0.put("result" + i, map);
+			listSearch_result.add(map0);
+		}
+		searchResultAdapter.notifyDataSetChanged();
+	}
+
+	/** 设置列表是否可见 */
+	private void setViewvisible() {
+		ll_weizhaodao.setVisibility(View.GONE);// 设置没有找到布局不可见
+		hot_ll.setVisibility(View.VISIBLE);// 设置热门搜索列表可见
+		if (historyAdapter.getCount() > 0) {
+			history_ll.setVisibility(View.VISIBLE);
+		} else {
+			history_ll.setVisibility(View.GONE);
+
+		}
+		search_result_gv.setVisibility(View.GONE);// 设置搜索结果列表不可见
+	}
+
+	@OnClick({ R.id.erji_fanhui, R.id.iv_clear, R.id.home_sweep_id,
+			R.id.ll_cear })
+	public void myClick(View v) {
+		switch (v.getId()) {
+		case R.id.erji_fanhui:// 返回
+			finish();
+			break;
+		case R.id.iv_clear:// 清空搜索框
+			if (home_search_id.getText().toString().trim() != "") {
+				home_search_id.setText("");
+				hot_ll.setVisibility(View.VISIBLE);
+				search_result_gv.setVisibility(View.GONE);
+				if (historyAdapter.getCount() > 0) {
+					history_ll.setVisibility(View.VISIBLE);
+				} else {
+					history_ll.setVisibility(View.GONE);
+
+				}
+			}
+
+			Toast.makeText(this, "清空搜索框", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.home_sweep_id:// 搜索按钮
+			if (home_search_id.getText().toString().trim().length() < 1) {
+
+				Toast.makeText(this, "请输入关键词", Toast.LENGTH_SHORT).show();
+			} else {
+				listhistory.add("历史搜索" + (++historyCount));
+				historyAdapter.notifyDataSetChanged();
+				history_ll.setVisibility(View.VISIBLE);
+				startActivity(intent);
+			}
+			break;
+		case R.id.ll_cear:// 清除历史搜索
+			listhistory.clear();
+			historyAdapter.notifyDataSetChanged();
+			history_ll.setVisibility(View.GONE);
+			Toast.makeText(this, "清除历史搜索", Toast.LENGTH_SHORT).show();
+
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+		// TODO Auto-generated method stub
+		// Log.d("my","beforeTextChanged"+"s:"+s+"start:"+start+"count:"+count+"after:"+after);
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		// TODO Auto-generated method stub
+		// Log.d("my","onTextChanged"+"s:"+s+"start:"+start+"before:"+before+"count:"+count);
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		// TODO Auto-generated method stub
+		if (s.toString() != null && s.toString().trim().length() > 0) {
+			hot_ll.setVisibility(View.GONE);
+			history_ll.setVisibility(View.GONE);
+			search_result_gv.setVisibility(View.VISIBLE);
+			testSearchresult();
+		} else if (s.toString() != null) {
+			hot_ll.setVisibility(View.VISIBLE);
+			search_result_gv.setVisibility(View.GONE);
+			if (historyAdapter.getCount() > 0) {
+				history_ll.setVisibility(View.VISIBLE);
+			} else {
+				history_ll.setVisibility(View.GONE);
+
+			}
+		}
+		// Log.d("my","afterTextChanged"+"s:"+s.toString());
+	}
+
+	@OnItemClick({ R.id.hot_gv, R.id.search_result_gv, R.id.history_gv })
+	public void onItemClicks(AdapterView<?> parent, View arg1, int position,
+			long arg3) {
+
+		switch (parent.getId()) {
+
+		case R.id.hot_gv:// 热搜列表
+			listhistory.add("历史搜索" + (++historyCount));
+			searchResultAdapter.notifyDataSetChanged();
+			// historyAdapter.notifyDataSetChanged();
+			startActivity(intent);
+			Toast.makeText(this, "热门搜索item" + position, Toast.LENGTH_SHORT)
+					.show();
+			break;
+		case R.id.history_gv:// 历史搜索列表
+			startActivity(intent);
+			Toast.makeText(this, "历史搜索item" + position, Toast.LENGTH_SHORT)
+					.show();
+
+			break;
+
+		default:
+			break;
+		}
+		// try {
+		// String parentId=
+		// SecondaryListArryay.get(position).get("id").toString().trim();
+		// Intent intent = new Intent(mActivity,CommodityActivity.class);
+		// intent.putExtra("parentId", parentId);
+		// startActivity(intent);
+		// } catch (Exception e){
+		// LogUtils.e("分类跳转异常", e);
+		// }
+	}
+}

@@ -1,0 +1,321 @@
+package com.llg.privateproject.actvity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bjg.lcc.privateproject.R;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.llg.common.constant.enums.UserTypeEnums;
+import com.llg.help.GetProgressBar;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.adapters.QuanAdapter;
+import com.llg.privateproject.adapters.UserGradeInstructionAdapter;
+import com.llg.privateproject.entities.Quan;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.LogManag;
+
+/**
+ * 我邀请的会员
+ * 
+ * @author Administrator
+ * 
+ */
+public class WoDeHuiYuanActivity extends BaseActivity implements
+		OnRefreshListener2<ListView> {
+	private View v1;
+	private View v2;
+	private LinearLayout l1;
+	private TextView tv_hint;
+	/** 装载我发展的会员 */
+	private PullToRefreshListView lv_member;
+	/***/
+	TextView tv_upgrade;
+	/** 我的发展的会员列表 */
+	List<Quan> list_membus;
+	/** 发展的会员适配器 */
+	QuanAdapter memberadapter;
+	/** 会员及升级 */
+	UserGradeInstructionAdapter adapter;
+	private String sign;
+	/** 返回 */
+	private ImageView turn;
+	private int p = 1;
+
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			GetProgressBar.dismissMyProgressBar();
+			switch (msg.what) {
+			case 1:// 普通会员
+				if (adapter != null) {
+					adapter.notifyDataSetChanged();
+					lv_member.onRefreshComplete();
+				}
+				break;
+			case 2:// 我的会员列表
+				if (memberadapter != null) {
+					memberadapter.notifyDataSetChanged();
+					lv_member.onRefreshComplete();
+				}
+				if (list_membus.size() > 0) {
+					v1.setVisibility(View.VISIBLE);
+					v2.setVisibility(View.VISIBLE);
+					l1.setVisibility(View.VISIBLE);
+					tv_hint.setVisibility(View.GONE);
+				}
+				break;
+			case 3:// 订单详情
+					// setdata(sign, list);
+				break;
+			}
+		};
+	};
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.yaoqinghuiyuanshuoming);
+
+		v1 = (View) findViewById(R.id.v1);
+		v2 = (View) findViewById(R.id.v2);
+		l1 = (LinearLayout) findViewById(R.id.l1);
+		lv_member = (PullToRefreshListView) findViewById(R.id.lv);
+		lv_member.setOnRefreshListener(this);
+		turn = (ImageView) findViewById(R.id.turn);
+		TextView wodehuiyuan = (TextView) findViewById(R.id.wodehuiyuan);
+		tv_upgrade = (TextView) findViewById(R.id.tv_upgrade);
+		tv_hint = (TextView) findViewById(R.id.tv_hint);
+		TextView tv_huiyuan = (TextView) findViewById(R.id.tv_huiyuan);
+		TextView tv_chenggonghuiyuan = (TextView) findViewById(R.id.tv_chenggonghuiyuan);
+		SpannableStringBuilder ssbBuilder = new SpannableStringBuilder(
+				tv_huiyuan.getText().toString());
+		SpannableStringBuilder ssbBuilder1 = new SpannableStringBuilder(
+				tv_chenggonghuiyuan.getText().toString());
+		ForegroundColorSpan fensColorSpan = new ForegroundColorSpan(
+				getResources().getColor(R.color.fen));
+		ssbBuilder.setSpan(fensColorSpan, 0, 6,
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		ssbBuilder1.setSpan(fensColorSpan, 0, 9,
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		tv_huiyuan.setText(ssbBuilder);
+		tv_chenggonghuiyuan.setText(ssbBuilder1);
+		wodehuiyuan.setText("我邀请的会员");
+
+		list_membus = new ArrayList<Quan>();
+		// for (int i = 0; i < 15; i++) {
+		// Quan quan = new Quan("123456789" + i, "昵称" + i,
+		// MyFormat.getTimeFormat1(new Date()), "会员等级" + i);
+		// list_membus.add(quan);
+		// }
+
+		if (list_membus.size() < 1) {
+			v1.setVisibility(View.GONE);
+			v2.setVisibility(View.GONE);
+			l1.setVisibility(View.GONE);
+			tv_hint.setVisibility(View.VISIBLE);
+		}
+
+		invitePerson(1);
+		memberadapter = new QuanAdapter(this, list_membus);
+		lv_member.setAdapter(memberadapter);
+		turn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		GetProgressBar.dismissMyProgressBar();
+	}
+
+	/** 获取我发展的会员 */
+	private void invitePerson(final int page) {
+		GetProgressBar.getProgressBar(this);
+		RequestParams params = new RequestParams();
+		params.addHeader(MyFormat.HEADER_KEY, MyFormat.HEADER_VALUE);
+		params.addQueryStringParameter("access_token", AppContext
+				.getUserInformation().getAccess_token());
+		params.addQueryStringParameter("pageNo", page + "");
+		LogManag.d("page -- >", "" + page);
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/develop/invitePerson", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						try {
+							if (json.getBoolean("success")) {
+
+								GetProgressBar.dismissMyProgressBar();
+
+								JSONObject _page = json.getJSONObject(
+										"attributes").getJSONObject("page");
+								JSONArray result = _page.getJSONArray("result");
+								if (result.length() > 0) {
+									if (page == 1) {
+										list_membus.clear();
+										memberadapter.notifyDataSetChanged();
+									}
+									for (int i = 0; i < result.length(); i++) {
+										JSONObject obj = result
+												.getJSONObject(i);
+										String dateString = "";
+										if (obj.get("last_pay_date") == null
+												|| obj.get("last_pay_date")
+														.equals(null)) {
+											dateString = "暂无";
+
+										} else {
+											dateString = MyFormat.getTimeFormat2(obj
+													.getString("last_pay_date"));
+										}
+										String user_type = "";
+
+										if (obj.getString("user_type").equals(
+												UserTypeEnums.GENERAL_USER
+														.getValue())) {
+											user_type = UserTypeEnums.GENERAL_USER
+													.getInfo();
+										} else if (obj.getString("user_type")
+												.equals(UserTypeEnums.VIP_USER
+														.getValue())) {
+											user_type = UserTypeEnums.VIP_USER
+													.getInfo();
+										} else if (obj
+												.getString("user_type")
+												.equals(UserTypeEnums.ENTREPRENEUR
+														.getValue())) {
+											user_type = UserTypeEnums.ENTREPRENEUR
+													.getInfo();
+										} else if (obj
+												.getString("user_type")
+												.equals(UserTypeEnums.NETWORK_LEADER
+														.getValue())) {
+											user_type = UserTypeEnums.NETWORK_LEADER
+													.getInfo();
+										} else if (obj
+												.getString("user_type")
+												.equals(UserTypeEnums.REGION_PROXY
+														.getValue())) {
+											user_type = UserTypeEnums.REGION_PROXY
+													.getInfo();
+										} else if (obj.getString("user_type")
+												.equals(UserTypeEnums.MANAGER
+														.getValue())) {
+											user_type = UserTypeEnums.MANAGER
+													.getInfo();
+										} else if (obj
+												.getString("user_type")
+												.equals(UserTypeEnums.SUPER_ADMIN
+														.getValue())) {
+											user_type = UserTypeEnums.SUPER_ADMIN
+													.getInfo();
+										} else if (obj.getString("user_type")
+												.equals(UserTypeEnums.PROVINCE
+														.getValue())) {
+											user_type = UserTypeEnums.PROVINCE
+													.getInfo();
+										} else if (obj.getString("user_type")
+												.equals(UserTypeEnums.COUNTY
+														.getValue())) {
+											user_type = UserTypeEnums.COUNTY
+													.getInfo();
+										}
+
+										// dateString=obj.getString("last_pay_date");
+
+										MyFormat.replaceString(
+												obj.getString("appellation"), 4);
+										Quan quan = new Quan(
+												MyFormat.replaceString(
+														obj.getString("cus_id"),
+														4),
+												MyFormat.replaceString(
+														obj.getString("appellation"),
+														4), dateString,
+												user_type);
+
+										list_membus.add(quan);
+									}
+								}
+								// else
+								// {//控制如果没有刷新的数据则不能执行向下拉;没有加载数据则不能执行向下拉(还需要作判断)
+								// //lv_member.setMode(Mode.PULL_FROM_END);//
+								// 向下拉刷新
+								// lv_member.setMode(Mode.PULL_FROM_START);//向上拉刷新
+								// }
+								handler.sendEmptyMessage(2);
+							} else {
+								if (json.getString("errorCode") != null
+										&& json.getString("errorCode").equals(
+												"NOT_LOGIN")) {
+									Toast.makeText(WoDeHuiYuanActivity.this,
+											json.getString("msg"),
+											Toast.LENGTH_SHORT).show();
+									startActivity(new Intent(
+											WoDeHuiYuanActivity.this,
+											WebLoginActivity.class));
+								}
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+
+	}
+
+	// 下拉
+	@Override
+	public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+		// TODO Auto-generated method stub
+		p = 1;
+		invitePerson(1);
+	}
+
+	// 上拉
+	@Override
+	public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+		// TODO Auto-generated method stub
+		++p;
+		invitePerson(p);
+	}
+}

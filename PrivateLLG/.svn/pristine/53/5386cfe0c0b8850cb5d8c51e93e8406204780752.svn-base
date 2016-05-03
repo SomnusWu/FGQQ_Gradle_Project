@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" 
+    android:scrollbars="none"
+     android:background="@drawable/bg_solid_white_r"
+     android:id="@+id/sv"
+    android:layout_height="wrap_content">
+
+<LinearLayout 
+    android:layout_marginRight="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+   
+    android:layout_marginBottom="30dp"
+     >
+<TextView 
+    
+    android:id="@+id/wodehuiyuan"
+    android:paddingTop="20dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="@color/black1"
+    android:textSize="16sp"
+    android:text="邀请成功会员展示"
+    android:layout_marginBottom="20dp"
+    />
+<TextView android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="邀请会员升级规则:"
+    android:textColor="@color/orange2"
+    android:textSize="16sp"
+    android:layout_marginBottom="5dp"
+    />
+<TextView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="邀请有效会员成功人数在10人以上,即可申请成为VIP会员.邀请有效会员成功人数不少于200人,即可升级为创业者."
+    android:textColor="@color/black2"
+    android:layout_marginBottom="5dp"
+    />
+
+    <TextView
+        android:id="@+id/tv_huiyuan"
+         android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="邀请成功会员:邀请后在本平台注册成功的会员."
+    android:textColor="@color/black2"
+    android:layout_marginBottom="5dp"
+    />
+
+
+    <TextView
+        android:id="@+id/tv_chenggonghuiyuan"
+         android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="邀请有效成功会员:邀请后在本平台注册成功的会员,且在本平台至少消费一次."
+    android:textColor="@color/black2"
+    android:layout_marginBottom="5dp"
+    />
+    <TextView android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="我邀请的会员:"
+    android:textColor="@color/orange2"
+    android:layout_marginBottom="5dp"
+    />
+    <TextView 
+        android:id="@+id/tv_hint"
+        android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="亲你还没有邀请过会员哦,快去邀请吧!"
+    android:textColor="@color/black2"
+    android:visibility="gone"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginBottom="5dp"
+    />
+<View 
+    android:id="@+id/v1"
+    android:layout_width="match_parent"
+    android:layout_height="4dp"
+    android:background="@drawable/dianline_orange2"
+    />
+<LinearLayout 
+    android:id="@+id/l1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:orientation="horizontal">
+    <TextView 
+	        android:id="@+id/bianhao"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:text="会员ID"
+	        android:textSize="12sp"
+	        
+	        android:textColor="@color/black2"/>
+	    <TextView android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:id="@+id/mianzhi"
+	        android:gravity="center"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:text="昵称"
+	        android:textSize="12sp"
+	        android:textColor="@color/orange2"/>
+	    <TextView android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:id="@+id/zhuangtai"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:text="首次消费时间"
+	        android:textSize="12sp"
+	        android:textColor="@color/black2"/>
+	    <TextView android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:id="@+id/youxiaoqi"
+	        android:text="等级"
+	        android:textSize="12sp"
+	        android:textColor="@color/black2"/>
+</LinearLayout>
+<View 
+     android:id="@+id/v2"
+    android:layout_width="match_parent"
+    android:layout_height="4dp"
+    android:background="@drawable/dianline_orange2"
+    />
+<com.llg.privateproject.view.MyListView android:id="@+id/lv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:listSelector="@color/white"
+    android:divider="@drawable/dian_line_product_e8"
+    android:dividerHeight="4dp"
+    android:paddingBottom="10dp"
+    />
+
+ 
+</LinearLayout>
+</ScrollView>

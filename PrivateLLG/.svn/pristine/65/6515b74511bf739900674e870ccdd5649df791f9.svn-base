@@ -1,0 +1,217 @@
+package com.llg.privateproject.html;
+
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.json.JSONObject;
+
+import android.R.integer;
+import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
+
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.util.LogUtils;
+import com.lidroid.xutils.util.PreferencesCookieStore;
+import com.llg.privateproject.AppContext;
+import com.bjg.lcc.privateproject.R;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.Constants;
+import com.llg.privateproject.utils.StringUtils;
+import com.llg.privateproject.view.MyProgressBar;
+
+/**
+ * 请求数据工具类
+ * @author gongyibing
+ * @version 1.0
+ * @created 2015-05-07
+ */
+public class HtmlUitls  extends Constants{
+	/**数据请求*/
+	private String dataHttp;
+	private String dataHttpm;
+	/**图片请求*/
+	private String imageHttp;
+	/**进度条*/
+	private MyProgressBar myProgressBar;
+	/***
+	 * 构造函数
+	 * @param context
+	 */
+	public HtmlUitls(Context context) 
+	{
+		if (TEST) {
+			dataHttp = context.getResources().getString(R.string.test_data_server_url);
+			dataHttpm = context.getResources().getString(R.string.test_data_server_urlm);
+			imageHttp = context.getResources().getString(R.string.test_image_server_url);
+		} else {
+			dataHttp = context.getResources().getString(R.string.data_server_url);
+			imageHttp = context.getResources().getString(R.string.image_server_url);
+		}
+	}
+	
+	public String getDataHttp() {
+		return dataHttp;
+	}
+	public String getDataHttpm() {
+		return dataHttpm;
+	}
+	public void setDataHttp(String dataHttp) {
+		this.dataHttp = dataHttp;
+	}
+	public String getImageHttp() {
+		return imageHttp;
+	}
+	public void setImageHttp(String imageHttp) {
+		this.imageHttp = imageHttp;
+	}
+	
+	/***
+	 * 网络请求 
+	 * @param httpMethod  请求方式 POST/GET
+	 * @param Method  方法名
+	 * @param params 参数
+	 * @param httpcallback 回调函数
+	 */
+	public void xUtils(final Context context,HttpMethod httpMethod,final String method,RequestParams params, final HttpCallback httpcallback) {
+		   /**设置请求超时时间为10秒*/
+		HttpHandler<String>  httpHandler=null;
+		
+		   HttpUtils client = new HttpUtils(1000 * 5);
+		    /**设置超时时间*/
+		    client.configSoTimeout(1000 * 5);
+//		    client.configCurrentHttpCacheExpiry(currRequestExpiry)
+			client.configResponseTextCharset("UTF-8");
+
+			// 保存服务器端(Session)的Cookie
+			PreferencesCookieStore cookieStore = new PreferencesCookieStore(context);
+			cookieStore.clear(); // 清除原来的cookie
+			client.configCookieStore(cookieStore);
+			Log.d("my", "url:"+ AppContext.getHtmlUitls().getDataHttp()+method);
+
+			
+		  httpHandler=client.send(httpMethod, AppContext.getHtmlUitls().getDataHttp()+method,params ,new RequestCallBack<String>() {
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+
+				Log.e("my", "onFailure"+ AppContext.getHtmlUitls().getDataHttp()+method+arg1);
+				httpcallback.onError(arg0.getExceptionCode()+"---msg-code");
+			}
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+
+				String jsonContent = arg0.result;
+				JSONObject response = null;
+//				Log.i("my", "arg0.result"+arg0.result);
+				try {
+					if(StringUtils.isJsonFormat(jsonContent)){
+						response = new JSONObject(jsonContent);
+						if(response.isNull("success")){
+//							Log.e("my", "response.isNull(sucess)"+response.isNull("sucess"));
+							httpcallback.onBack(response);
+						} else if (response.optBoolean("success")) {
+//							Log.e("my", "response.optBoolean(success)"+response.optBoolean("success"));
+							httpcallback.onBack(response);
+						} else {
+							//g.e("my", "sucess==nullsucess==nullsucess==null"+sucess);
+							httpcallback.onBack(response);
+//							httpcallback.onError(response.getString("msg"));
+						}
+					}else{
+						Log.e("my", "接收不合法的json");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					httpcallback.onError(context.getResources().getString(R.string.exception));
+				}
+			}
+		});
+	}
+	/***
+	 * 受保护网络请求 
+	 * @param httpMethod  请求方式 POST/GET
+	 * @param Method  方法名
+	 * @param params 参数
+	 * @param httpcallback 回调函数
+	 */
+	public void xUtilsm(final Context context,HttpMethod httpMethod,final String method,final RequestParams params, final HttpCallback httpcallback) {
+		/**设置请求超时时间为10秒*/
+		HttpUtils client = new HttpUtils(1000 * 5);
+		/**设置超时时间*/
+		client.configSoTimeout(1000 * 5);
+		client.configResponseTextCharset("UTF-8");
+//			if(myProgressBar==null){
+//				myProgressBar=new MyProgressBar(context);
+//				
+//			}
+//			myProgressBar.show();
+		// 保存服务器端(Session)的Cookie
+		PreferencesCookieStore cookieStore = new PreferencesCookieStore(context);
+		//cookieStore.clear(); // 清除原来的cookie
+		client.configCookieStore(cookieStore);
+		Log.d("my", "url"+ AppContext.getHtmlUitls().getDataHttpm()+method);
+		
+//			if( params.getQueryStringParams()!=null){
+//			for (int i=0;i< params.getQueryStringParams().size();i++) {
+//				 Log.d("my", "param:"+params.getQueryStringParams().get(i));
+//			}
+//			}
+		
+		client.send(httpMethod, AppContext.getHtmlUitls().getDataHttpm()+method,params ,new RequestCallBack<String>() {
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+				
+				int errorCode  = arg0.getExceptionCode();
+				
+//				if (myProgressBar!=null) {
+//					myProgressBar.dismiss();
+//				}
+//				Log.d("my", "url"+ AppContext.getHtmlUitls().getDataHttpm()+method+params);
+				Log.e("my", "onFailure +errorCode="+errorCode + AppContext.getHtmlUitls().getDataHttpm()+method+arg1);
+				httpcallback.onError(errorCode+"");
+			}
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+//				Log.d("my", "url"+ AppContext.getHtmlUitls().getDataHttpm()+method+params);
+//				if (myProgressBar!=null) {
+//					myProgressBar.dismiss();
+//				}
+				String jsonContent = arg0.result;
+				
+				
+				
+				JSONObject response = null;
+				
+				Log.i("tag", "arg0.result--------------"+arg0.result);
+				
+				try {
+					if(StringUtils.isJsonFormat(jsonContent)){
+						response = new JSONObject(jsonContent);
+						if(response.isNull("success")){
+//							Log.e("my", "response.isNull(sucess)"+response.isNull("sucess"));
+							httpcallback.onBack(response);
+						} else if (response.optBoolean("success")) {
+//							Log.e("my", "response.optBoolean(success)"+response.optBoolean("success"));
+							httpcallback.onBack(response);
+						} else {
+							//g.e("my", "sucess==nullsucess==nullsucess==null"+sucess);
+							httpcallback.onBack(response);
+//							httpcallback.onError(response.getString("msg"));
+						}
+					}else{
+						Log.e("my", "接收不合法的json");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					httpcallback.onError(context.getResources().getString(R.string.exception));
+				}
+			}
+		});
+	}
+}

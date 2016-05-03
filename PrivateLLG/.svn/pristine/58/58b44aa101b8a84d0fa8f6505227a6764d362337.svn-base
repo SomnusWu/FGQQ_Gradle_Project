@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/threestagepage_youhuiquan"
+    android:padding="10dp"
+    android:orientation="vertical" >
+    <TextView android:id="@+id/miane"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10"
+        android:textSize="26sp"
+        android:textColor="@color/white"
+        />
+    <TextView android:id="@+id/yuan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="元"
+        android:paddingTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="10sp"
+        android:layout_toRightOf="@id/miane"
+        android:textColor="@color/white"
+        />
+    <TextView android:id="@+id/youhuiquan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="优惠券"
+        android:singleLine="true"
+        android:layout_marginLeft="10dp"
+        android:textSize="10sp"
+        android:layout_toRightOf="@id/miane"
+        android:layout_below="@id/yuan"
+        android:textColor="@color/white"
+        />
+    <TextView android:id="@+id/man"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="满100元可用"
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp"
+       android:paddingTop="5dp"
+        android:layout_below="@id/youhuiquan"
+        android:textColor="@color/white"
+        />
+	
+</RelativeLayout>

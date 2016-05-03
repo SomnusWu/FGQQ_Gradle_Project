@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include
+        android:id="@+id/done_cancel_bar"
+        layout="@layout/crop__layout_done_cancel" />
+
+    <com.llg.privateproject.camera.CropImageView
+        android:id="@+id/crop_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/done_cancel_bar"
+        android:background="@color/black" />
+    <Button 
+        android:id="@+id/btn_roate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:text="旋转图片90度"
+        android:padding="10dp"
+        />
+
+</RelativeLayout>

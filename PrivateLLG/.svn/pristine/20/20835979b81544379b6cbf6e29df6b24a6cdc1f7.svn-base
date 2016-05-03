@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rool"
+    style="@style/title_bar_style" >
+
+    <ImageView
+        android:id="@+id/iv_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:src="@drawable/shezhi"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/iv_messege"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="15dp"
+        android:src="@drawable/xiaoxi"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/ll_center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_messege"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal" >
+
+            <!-- 用户头像 -->
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/userheadbg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/bkg_head1"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/iv_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/iv_login"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
+                    android:text="登录/注册"
+                    android:textColor="#cdcdcd"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
+
+            <!-- 用户信息 -->
+
+            <RelativeLayout
+                android:id="@+id/rl_userinformation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp" >
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="用户名"
+                    android:textColor="#fff"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/usergrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/username"
+                    android:layout_marginTop="10dp"
+                    android:background="#fac261"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:singleLine="true"
+                    android:text="用户标识"
+                    android:textColor="#fff"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+              
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <!-- 订单 -->
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_center"
+        android:layout_marginTop="44dp"
+        android:background="#bbcecbba"
+        android:orientation="horizontal"
+      
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+         >
+	<FrameLayout android:layout_width="0dp"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:visibility="gone"
+	    >
+        <TextView
+            android:id="@+id/title_tv"
+            style="@style/title_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/daifukuan"
+            android:text="待付款"
+            android:textSize="12sp" />
+        
+</FrameLayout>
+   
+<FrameLayout android:layout_width="0dp"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:visibility="gone"
+	    >
+        <TextView
+            android:id="@+id/title_tv1"
+            style="@style/title_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/daishouhuo"
+            android:text="待收货"
+            android:textSize="12dp" />
+        </FrameLayout>
+
+<FrameLayout android:layout_width="0dp"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    >
+        <TextView
+            android:id="@+id/title_tv2"
+            style="@style/title_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/daifukuan"
+            android:text="我的资产"
+            android:textSize="12sp" />
+</FrameLayout>
+        <View
+            style="@style/small_divider"
+            android:layout_gravity="center" />
+<FrameLayout android:layout_width="0dp"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    >
+        <TextView
+            android:id="@+id/title_tv3"
+            style="@style/title_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/daipingjia"
+            android:text="资料设置"
+            android:textSize="12sp" />
+        </FrameLayout>
+    </LinearLayout>
+
+</RelativeLayout>

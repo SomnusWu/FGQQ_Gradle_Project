@@ -1,0 +1,147 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+ 
+    >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dimen_120px"
+            android:background="#de2e1f"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/iv_pay_back"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+               
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/dingdanzhifu_fanhui" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_marginLeft="10dp"
+                android:text="支付订单" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:paddingTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="商品名称:"
+                android:textColor="#777777"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/product_subject"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="测试的商品"
+                android:textColor="#333333"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="商品单价:"
+                android:textColor="#777777"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/sdesc"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:maxLength="20"
+                android:maxLines="2"
+                android:text="该测试商品的详细描述"
+                android:textColor="#333333"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="商品总价:"
+                android:textColor="#777777"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/product_price"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="0.01元"
+                android:textColor="#ff6600"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/pay"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:onClick="pay"
+            android:text="支付"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/check"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:onClick="check"
+            android:visibility="gone"
+            android:text="检查账户"
+            tools:ignore="HardcodedText" />
+        <Button
+            android:id="@+id/back"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:onClick="back"
+            
+            android:text="取消"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
+</ScrollView>

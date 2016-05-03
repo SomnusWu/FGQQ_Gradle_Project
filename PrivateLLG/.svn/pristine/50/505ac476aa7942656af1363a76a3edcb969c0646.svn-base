@@ -1,0 +1,217 @@
+package com.llg.privateproject.actvity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.llg.help.MyFormat;
+import com.llg.help.ScreenManager;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.adapters.QuanAdapter;
+import com.llg.privateproject.entities.Quan;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.fragment.BaseActivity.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MyMoney extends BaseActivity implements OnCheckedChangeListener {
+	/** 优惠券列表 */
+	private List<Quan> list;
+	/** 显示余额 */
+	@ViewInject(R.id.yue)
+	private TextView yue;
+	/** 显示余额 */
+	@ViewInject(R.id.rl_yue)
+	private RelativeLayout rl_yue;
+	/** 显示积分 */
+	@ViewInject(R.id.jifen)
+	private TextView jifen;
+	/** 显示cO币 */
+	@ViewInject(R.id.cqbi)
+	private TextView co;
+	/** 显示优惠券张数 */
+	@ViewInject(R.id.quan)
+	private TextView quan;
+	/** 优惠券列表是否展开 */
+	@ViewInject(R.id.cb)
+	private CheckBox cb;
+	/** 优惠券列表是否展开 */
+	@ViewInject(R.id.ll)
+	private LinearLayout ll;
+	/** 优惠券ListView */
+	@ViewInject(R.id.lv_quan)
+	private ListView lv_quan;
+	/** 加载页面 */
+	@ViewInject(R.id.ly_load)
+	private LinearLayout lyLoad;
+	String str[];
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 0:// 失败
+
+				break;
+			case 1:// 成功
+				JSONObject obj = (JSONObject) msg.obj;
+				try {
+					yue.setText(obj.getString("totalBalances"));
+					jifen.setText(obj.getString("integralAmount"));
+					co.setText(obj.getString("coAmount"));
+					quan.setText(obj.getString("couponAmount"));
+					str[0] = obj.getString("totalBalances");
+					str[1] = obj.getString("freezeBalances");
+					str[2] = obj.getString("canExtractBalances");
+					autoLoading.hideAll();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				break;
+			default:
+				break;
+			}
+		};
+	};
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.mymoney);
+		ViewUtils.inject(this);
+		str = new String[3];
+		list = new ArrayList<Quan>();
+		setListData();
+		initAutoLoading(lyLoad);
+		getMyMoney(UserInformation.getAccess_token());
+		QuanAdapter adapter = new QuanAdapter(this, list);
+		quan.setText("" + list.size());
+		lv_quan.setAdapter(adapter);
+		adapter.notifyDataSetChanged();
+		cb.setOnCheckedChangeListener(this);
+	}
+
+	// 请求我的资产
+	private void getMyMoney(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addHeader(MyFormat.HEADER_KEY, MyFormat.HEADER_VALUE);
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/assets/assets", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						handler.sendEmptyMessage(0);
+						autoLoading.showExceptionLayout();
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						try {
+							ParseJson parseJson = ParseJson.getParseJson();
+							Map<String, Object> map = parseJson
+									.parseIsSuccess(json);
+							if ((Boolean) map.get("isSuccess")) {
+								Message msg = new Message();
+								msg.what = 1;
+								msg.obj = json.getJSONObject("attributes")
+										.getJSONObject("attentionList");
+								handler.sendMessage(msg);
+							} else {
+								if (map.get("errorCode").equals("NOT_LOGIN")) {
+									setRefreshListtener(new Refresh() {
+										@Override
+										public void refreshRequst(
+												String access_token) {
+											// TODO Auto-generated method stub
+											Log.i("tag", "------监听里-------");
+											getMyMoney(access_token);
+										}
+									});
+									RefeshToken();
+								}else {
+									Toast.makeText(MyMoney.this, json.optString("msg"),
+											Toast.LENGTH_LONG).show();
+								}
+							}
+
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+
+	/** 优惠券列表添加数据 */
+	void setListData() {
+
+		for (int i = 0; i < 15; i++) {
+			Quan quan = new Quan("1" + i, "2" + 1, "0" + 1, "2015" + i);
+			list.add(quan);
+		}
+
+	}
+
+	@OnClick({ R.id.turn, R.id.rl_yue })
+	public void myClick(View v) {
+		switch (v.getId()) {
+		case R.id.turn:
+			finish();
+			break;
+		case R.id.rl_yue:// 跳转到余额详情
+			if (UserInformation.isLogin()) {
+				Intent intent = new Intent(this, MineBalanceAty.class);
+				intent.putExtra("money", str);
+				startActivity(intent);
+			} else {
+				goWebLoginActivity();
+			}
+
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		// TODO Auto-generated method stub
+		if (isChecked) {
+			ll.setVisibility(View.INVISIBLE);
+		} else {
+			ll.setVisibility(View.VISIBLE);
+
+		}
+	}
+}

@@ -1,0 +1,47 @@
+package com.bjg.lcc.alipay.pay;
+
+
+import com.bjg.lcc.privateproject.R;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+public class payfragment extends Fragment {
+	public interface Mydismiss{
+		public boolean mDismiss(boolean isDismiss);
+	}
+	private Mydismiss mydismiss;
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v=inflater.inflate(R.layout.pay_external, container, false);
+		TextView sname=(TextView) v.findViewById(R.id.product_subject);
+//		TextView sdesc=(TextView) v.findViewById(R.id.sdesc);
+		TextView sprice=(TextView) v.findViewById(R.id.product_price);
+		ImageView back=(ImageView) v.findViewById(R.id.iv_pay_back);
+		Intent intent=getActivity().getIntent();
+		sname.setText(intent.getStringExtra("name"));
+//		sdesc.setText(intent.getStringExtra("singlePrice"));
+		mydismiss=(Mydismiss) getActivity();
+		sprice.setText(intent.getStringExtra("price"));
+		back.setOnClickListener(l);
+		return v;
+	}
+	OnClickListener l=new OnClickListener() {
+		
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			mydismiss.mDismiss(true);
+//			Log.d("my","mdismiss"+mydismiss.mDismiss(true));
+		}
+	};
+}

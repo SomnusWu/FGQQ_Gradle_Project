@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 通用颜色 -->
+    <!-- 白色 -->
+    <color name="white">#ffffff</color>
+
+    <!-- 雪花色 -->
+    <color name="snow">#FFFAFA</color>
+    <!-- 黑色 -->
+    <color name="black">#000000</color>
+    <!-- 红色 -->
+    <color name="red">#FF0000</color>
+    <!-- 半透明红色 -->
+    <color name="transparentred">#88FF0000</color>
+    <!-- 西瓜红 -->
+    <color name="red_xg">#ef5354</color>
+    <color name="choose_eara_item_press_color">#f4f4f4</color>
+    <!-- 橙色 -->
+    <color name="orange">#FFA500</color>
+    <!-- 金色 -->
+    <color name="gold">#FFD700</color>
+    <!-- 黄色 -->
+    <color name="yellow">#FFFF00</color>
+    <!-- 半透明黄色 -->
+    <color name="transparentyellow">#88FFFF00</color>
+    <!-- 浅黄 -->
+    <color name="light_yellow">#FFFFE0</color>
+    <!-- 灰色 -->
+    <color name="gray">#e52463</color>
+    <!-- 深灰色 -->
+    <color name="light_gray">#D3D3D3</color>
+    <!-- 浅灰色 -->
+    <color name="light_grays">#F2F2F2</color>
+    <!-- 蓝绿色 -->
+    <color name="cyan">#00FFFF</color>
+    <!-- 浅绿色 -->
+    <color name="light_cyan">#E1FFFF</color>
+    <!-- 纯蓝 -->
+    <color name="blue">#0000FF</color>
+    <!-- 浅蓝 -->
+    <color name="light_blue">#ADD8E6</color>
+    <!-- 淡蓝 -->
+    <color name="dan_blue">#3184b9</color>
+    <!-- 粉红 -->
+    <color name="pink">#FFC0CB</color>
+    <!-- 深粉红 -->
+    <color name="dark_pink">#e52463</color>
+    <!-- 浅粉色 -->
+    <color name="light_pink">#FFB6C1</color>
+    <!-- 透明色 -->
+    <color name="transparent">#00000000</color>
+    <!-- 透明色 -->
+    <color name="transparent8">#88ffffff</color>
+    <!-- 透明色 -->
+    <color name="toumingblack">#b0000000</color>
+
+    <!-- 底板导航点击字体颜色 -->
+    <color name="home_t">#ff9d45</color>
+    <!-- 底部导航字体默认颜色 -->
+    <color name="home_t_n">#696566</color>
+    <!-- 登录未选中颜色 -->
+    <color name="login_unchecked">#c2c2c2</color>
+    <!-- 登录未选中颜色1 -->
+    <color name="login_uncheckeda">#525051</color>
+    <!-- 登录选中颜色 -->
+    <color name="login_checked">#ff9d45</color>
+    <color name="app_bg">#ffffff</color>
+    <color name="tab_item_default">#fafafa</color>
+    <color name="tab_item_selected">#f0f1f2</color>
+    <color name="tab_text_selected">#f8597c</color>
+    <color name="tab_text_default">#bbbbbb</color>
+    <color name="background_color">#fbfbfb</color>
+    <color name="title_text_color">#ffffff</color>
+    <color name="pull_refresh_textview">#000000</color>
+
+    <!-- 透明色 -->
+    <color name="fuxk_settle_black_mark">#1A000000</color>
+    <!-- 分割线 -->
+    <color name="fuxk_base_divide_line_color">#dcdcdc</color>
+    <color name="black0">#383838</color>
+    <color name="black1">#696566</color>
+    <color name="black2">#9d9b9c</color>
+    <color name="black3">#c2c2c2</color>
+ <!-- dcdcdc -->
+    <color name="black4">#e8e8e8</color>
+    <color name="black5">#cc383838</color>
+    <color name="black6">#c6c6c6</color>
+    <color name="black7">#dadada</color>
+    <color name="black8">#e8e8e8</color>
+    <color name="orange0">#f67b2e</color>
+    <color name="orange1">#ff9d45</color>
+    <color name="orange2">#fac261</color>
+    <color name="orange3">#ffd284</color>
+    <color name="green1">#c4c128</color>
+    <color name="green2">#90cf7c</color>
+    <color name="green3">#2f761a</color>
+    <color name="blue1">#95bfdd</color>
+    <!-- 半透明 -->
+    <color name="bantouming">#88bec2c8</color>
+    <!-- 圆环 -->
+    <color name="yuanhuan">#88ffffff</color>
+    <!-- 粉色 -->
+    <color name="fen">#ffa09a</color>
+    <!-- 玫红 -->
+    <color name="meihong">#ffa8d7</color>
+
+    <!-- 进入店铺按钮背景 -->
+    <color name="toshop">#e8e7d2</color>
+    <!-- 进入店铺文字颜色 -->
+    <color name="toshop_text">#4e4e2c</color>
+    <!-- 二维码 -->
+    <color name="viewfinder_frame">#ff000000</color>
+    <color name="viewfinder_laser">#ffff0000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#b0000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+    <!-- 首页板块颜色 -->
+    <color name="tongchengdaigou">#f3682a</color>
+    <color name="xuqiufabu">#2bbbb7</color>
+    <color name="woyaojianzhi">#4e91ed</color>
+    <color name="xianchangxiaofei">#ff4442</color>
+    <color name="wodehoutai">#ff7f7e</color>
+    <color name="shangpinhui">#3da13c</color>
+    <color name="haoyoufazhan">#ff8431</color>
+    <color name="tuangou">#4e91ed</color>
+    <color name="yewulianxi">#ff6765</color>
+    <!-- 灰白色 -->
+    <color name="graywhite">#f0f0f0</color>
+    <!-- 玫瑰红色 -->
+    <color name="rosered">#e52563</color>
+    <!-- 玫瑰红色 -->
+    <color name="rosered1">#cf686a</color>
+<color name="drop_down_list_header_font_color">#000000</color>
+    <!-- drop down list header second font color -->
+    <color name="drop_down_list_header_second_font_color">#000000</color>
+    <!-- drop down list footer font color -->
+    <color name="drop_down_list_footer_font_color">#000000</color>
+    <color name="sidebar_item_background_activated_dark">#ff4c365d</color>
+    <color name="background_tab_pressed">#6633B5E5</color>
+    <color name="bg_row_normal">#ffffffff</color>
+    <color name="bg_row_pressed_start">#ff67cbfe</color>
+    <color name="bg_row_pressed_center">#ffa5e0ff</color>
+    <color name="bg_row_pressed_end">#ffdaf2ff</color>
+    <color name="bg_row_normal_start">@color/bg_row_normal</color>
+    <color name="bg_row_normal_center">@color/bg_row_normal</color>
+    <color name="bg_row_normal_end">@color/bg_row_normal</color>
+    <color name="bg_row_border">#ff999999</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="dark">#2D2D2D</color>
+    <color name="orange">#FF7C39</color>
+    <color name="gray">#E7E7E7</color>
+    <color name="red">#ff0000</color>
+    <color name="blue">#0079FF</color>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="divider">#E3E3E3</color>
+    <!-- crop -->
+    <color name="crop__button_bar">#f3f3f3</color>
+    <color name="crop__button_text">#666666</color>
+    <color name="crop__selector_pressed">#1a000000</color>
+    <color name="crop__selector_focused">#77000000</color>
+    <color name="darkgreen">#024442</color>
+</resources>

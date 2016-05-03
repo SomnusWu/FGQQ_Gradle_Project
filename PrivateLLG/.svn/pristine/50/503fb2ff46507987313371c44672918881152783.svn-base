@@ -1,0 +1,974 @@
+package com.llg.privateproject.adapters;
+
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.bjg.lcc.alipay.pay.PayActivity;
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.actvity.AdvertisementDetailAty;
+import com.llg.privateproject.actvity.GetRedPackage;
+import com.llg.privateproject.adapters.BusinessAdapter.ViewHolder;
+import com.llg.privateproject.entities.Advertisement;
+import com.llg.privateproject.entities.AdvertisementSeeHistory;
+import com.llg.privateproject.entities.AttentionAdvertisement;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.fragment.BaseActivity.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.CommonUtils;
+import com.llg.privateproject.view.CustomProgressSmall;
+import com.llg.privateproject.view.DialogAuthentication;
+import com.llg.privateproject.view.DialogAuthentication.onConfirmListener;
+import com.llg.privateproject.view.Gerenziliao_Dialog;
+import com.llg.privateproject.view.Gerenziliao_Dialog.OnDeleteListener;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+public class AdvertisementAdapter<T> extends BaseAdapter {
+	private List<T> list;
+	private Context context;
+	private LayoutInflater inflater;
+	private CustomProgressSmall customProgressSmall;
+	private Gerenziliao_Dialog dialog;
+	private int width;
+
+	public AdvertisementAdapter(Context context, List<T> mlist) {
+		// TODO Auto-generated constructor stub
+		this.context = context;
+		inflater = LayoutInflater.from(context);
+		list = mlist;
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		// (list == null) ? 0 : list.size()
+		return (list == null) ? 0 : list.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+
+	@Override
+	public View getView(final int position, View v, ViewGroup arg2) {
+		// TODO Auto-generated method stub
+		final ViewHolder holder;
+		if (list.get(0).getClass().equals(Advertisement.class)) {
+			holder = new ViewHolder();
+			Log.i("tag", position + "************position***********");
+			v = inflater.inflate(R.layout.listitem_advertisement, null);
+			Log.i("tag", v.hashCode() + "************conertview***********");
+			holder.iv = (ImageView) v.findViewById(R.id.iv);
+			holder.ivZhuan = (ImageView) v.findViewById(R.id.iv_zhuan);
+			holder.tvTime = (TextView) v.findViewById(R.id.tv_time);
+			holder.tvIsCanDraw = (TextView) v.findViewById(R.id.tv_isCanDraw);
+			holder.tvIsRuning = (TextView) v.findViewById(R.id.tv_isRuning);
+			holder.tvLocation = (TextView) v.findViewById(R.id.tv_location);
+			holder.tvDelete = (TextView) v.findViewById(R.id.tv_delete);
+			holder.tvCheck = (TextView) v.findViewById(R.id.tv_check);
+			holder.tvIsStart = (TextView) v.findViewById(R.id.tv_isStart);
+			holder.tvDetail = (TextView) v.findViewById(R.id.tv_detail);
+			holder.tvTitle = (TextView) v.findViewById(R.id.tv_title);
+			holder.relayout = (RelativeLayout) v.findViewById(R.id.ralayout);
+			// v.setTag(holder);
+			String strTime = ((Advertisement) list.get(position))
+					.getCREATE_DATE();
+			String time;
+			final String isMine = ((Advertisement) list.get(position))
+					.getFORWARD_OR_MY();
+			Log.i("tag", isMine + "--------isMine------");
+			if (strTime != null && isMine != null && isMine.equals("my")) {
+				time = MyFormat.getTimeFormat2(strTime);
+				holder.tvIsStart.setVisibility(View.VISIBLE);
+				holder.tvTime.setText("创建时间" + time);
+				holder.ivZhuan.setVisibility(View.GONE);
+			} else if (strTime != null && isMine != null
+					&& isMine.equals("forward")) {
+				time = MyFormat.getTimeFormat2(strTime);
+				// Log.i("tag", isMine + "--------执行了设置isMine------");
+				// Log.i("tag", position + "--------执行了设置position------");
+				holder.tvTime.setText("转载时间" + time);
+				holder.ivZhuan.setVisibility(View.VISIBLE);
+			}
+
+			final String mstatus = ((Advertisement) list.get(position))
+					.getAD_STATUS();
+			// Log.i("tag", mstatus + "************mstatus***********");
+			if (mstatus != null) {
+				if (isMine.equals("my")) {
+					deleteAD(position, holder, 1);
+					holder.tvIsStart.setVisibility(View.VISIBLE);
+					holder.tvIsRuning.setVisibility(View.VISIBLE);
+					if (mstatus.equals("1")) {
+						holder.tvIsStart.setText("暂停广告");
+						holder.tvIsRuning.setText("广告进行中");
+					} else if (mstatus.equals("2")) {
+
+						holder.tvIsStart.setText("启动广告");
+						holder.tvIsRuning.setText("广告闲置中");
+					} else if (mstatus.equals("3")) {
+						holder.tvIsStart.setText("去支付");
+						holder.tvIsRuning.setText("广告闲置中");
+					}
+				} else if (isMine.equals("forward")) {
+					deleteAD(position, holder, 2);
+					// Log.i("tag", isMine +
+					// "********forward****isMine***********");
+					// Log.i("tag", position
+					// + "**********forward**position***********");
+					holder.tvIsStart.setVisibility(View.GONE);
+					holder.tvIsRuning.setVisibility(View.GONE);
+				}
+			}
+			String check = ((Advertisement) list.get(position))
+					.getCHECK_STATUS();
+			if (!mstatus.equals("3") && isMine.equals("my")) {
+				if (check.equals("1")) {
+					holder.tvCheck.setVisibility(View.VISIBLE);
+					holder.tvCheck.setText("正在审核中");
+				} else if (check.equals("3")) {
+					holder.tvCheck.setVisibility(View.VISIBLE);
+					holder.tvCheck.setText("未通过");
+				} else {
+					holder.tvCheck.setVisibility(View.GONE);
+				}
+			} else {
+				holder.tvCheck.setVisibility(View.GONE);
+			}
+			final DecimalFormat decimalFormat = new DecimalFormat(".00");
+			final Double money = ((Advertisement) list.get(position))
+					.getMONEY();
+			final Integer CO = ((Advertisement) list.get(position))
+					.getCO_AMOUNT();
+			holder.tvIsStart.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					if (mstatus.equals("1")) {
+						showDialog("正在加载中");
+						requesPauseOrStart(position,
+								UserInformation.getAccess_token(), "2");
+					} else if (mstatus.equals("2")) {
+						showDialog("正在加载中");
+						requesPauseOrStart(position,
+								UserInformation.getAccess_token(), "1");
+					} else if (mstatus.equals("3")) {
+						final DialogAuthentication dialogAuthentication = new DialogAuthentication(
+								context);
+						dialogAuthentication
+								.setOnConfirmListener(new onConfirmListener() {
+
+									@Override
+									public void request() {
+										// TODO Auto-generated method stub
+										dialogAuthentication.dismiss();
+										customProgressSmall = CustomProgressSmall
+												.initDialog(context, "正在支付中",
+														true,
+														new OnCancelListener() {
+
+															@Override
+															public void onCancel(
+																	DialogInterface arg0) {
+																// TODO
+																// Auto-generated
+																// method stub
+																customProgressSmall
+																		.dismiss();
+															}
+														});
+										customProgressSmall.show();
+										if (money != null) {
+											Double doubleMoney = Double
+													.parseDouble(decimalFormat
+															.format(money));
+										}
+										requesPay(position, UserInformation
+												.getAccess_token(), money);
+									}
+								});
+						dialogAuthentication.initUI();
+						dialogAuthentication.setTitle("支付");
+						dialogAuthentication.setMessage("本次需要支付现金"
+								+ ((Advertisement) list.get(position))
+										.getMONEY()
+								+ "元,"
+								+ "需要支付CO币"
+								+ ((Advertisement) list.get(position))
+										.getCO_AMOUNT() + "个,"
+								+ "账户酷币余额不足折算成现金支付,10个酷币等于1元现金");
+						dialogAuthentication.show();
+					}
+				}
+			});
+			holder.tvDetail.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					Intent intent = null;
+					String id = ((Advertisement) list.get(position)).getID();
+					if (isMine.equals("my")) {
+						intent = new Intent(context,
+								AdvertisementDetailAty.class);
+					} else if (isMine.equals("forward")) {
+						intent = new Intent(context, GetRedPackage.class);
+						intent.putExtra("img", ((Advertisement) list
+								.get(position)).getCOVER_IMAGE_URL());
+						intent.putExtra("adForwardId", ((Advertisement) list
+								.get(position)).getAD_FORWARD_ID());
+					}
+					if (id != null) {
+						intent.putExtra("adInfoId",
+								((Advertisement) list.get(position)).getID());
+					}
+					Log.i("tag", ((Advertisement) list.get(position)).getID()
+							+ "==id==============id");
+					context.startActivity(intent);
+				}
+			});
+			// holder.tvIsDraw.setText(list.get(position).getCreateDate());
+			String adLocation = ((Advertisement) list.get(position))
+					.getAD_LOCATION();
+			if (adLocation.equals("APP_START_PAGE")) {
+				holder.tvLocation.setText("app开始页滑动广告");
+			} else if (adLocation.equals("APP_PHONE_ADIN")) {
+				holder.tvLocation.setText("电话弹窗广告");
+			}
+			Integer has_co = ((Advertisement) list.get(position)).getHAS_CO();
+			Integer has_money = ((Advertisement) list.get(position))
+					.getHAS_MONEY();
+			Log.i("tag", (holder == null) + "======holder=holder====="+has_money);
+			isHaveRedBag(holder, has_co, has_money);
+			holder.tvTitle.setText(((Advertisement) list.get(position))
+					.getTITLE());
+			LayoutParams layoutParams = new LayoutParams(width,
+					(int) (width * 0.6));
+			layoutParams.topMargin = MyFormat.dip2px(context, 10);
+			layoutParams.bottomMargin = MyFormat.dip2px(context, 10);
+			holder.relayout.setLayoutParams(layoutParams);
+			holder.iv.setLayoutParams(layoutParams);
+			MyFormat.setBitmap(context, holder.iv,
+					((Advertisement) list.get(position)).getCOVER_IMAGE_URL(),
+					0, 0);
+		}
+		// ===================关注广告列表布局===============================================================
+		else if (list.get(0).getClass().equals(AttentionAdvertisement.class)) {
+			Log.i("tag", "======进来了关注====");
+			holder = new ViewHolder();
+			v = init(holder);
+			v.setTag(holder);
+			holder.tvSend.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); // 下划线
+			setUISize(holder);
+			MyFormat.setBitmap(context, holder.iv,
+					((AttentionAdvertisement) list.get(position))
+							.getCOVER_IMAGE_URL(), 0, 0);
+			String name = ((AttentionAdvertisement) list.get(position))
+					.getAD_LOCATION();
+
+			if (name != null && name.equals("APP_START_PAGE")) {
+				holder.tvLocation.setText("app开始页滑动广告");
+			} else if (name != null && name.equals("APP_PHONE_ADIN")) {
+				holder.tvLocation.setText("电话弹窗广告");
+			}
+			holder.tvTitle
+					.setText(((AttentionAdvertisement) list.get(position))
+							.getTITLE());
+			holder.tvSend.setVisibility(View.VISIBLE);
+			holder.tvSend.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					showDialog("正在加载中");
+					sendAD(UserInformation.getAccess_token(), position);
+				}
+
+			});
+			Integer co = ((AttentionAdvertisement) list.get(position))
+					.getHAS_CO();
+			Integer money = ((AttentionAdvertisement) list.get(position))
+					.getHAS_MONEY();
+			isHaveRedBag(holder, co, money);
+			holder.tvDetail.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(context, GetRedPackage.class);
+					String forwardId = ((AttentionAdvertisement) list
+							.get(position)).getAD_FORWARD_ID();
+					intent.putExtra("adForwardId", forwardId);
+					intent.putExtra("adInfoId", ((AttentionAdvertisement) list
+							.get(position)).getAD_INFO_ID());
+					context.startActivity(intent);
+				}
+			});
+			deleteAD(position, holder, 3);
+		}
+		// ===================浏览记录列表布局===============================================================
+		else {
+			holder = new ViewHolder();
+			v = init(holder);
+			v.setTag(holder);
+			holder.tvSend.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); // 下划线
+			setUISize(holder);
+			MyFormat.setBitmap(context, holder.iv,
+					((AdvertisementSeeHistory) list.get(position)).getImg(), 0,
+					0);
+			String title = ((AdvertisementSeeHistory) list.get(position))
+					.getTitle();
+			holder.tvTitle.setText(title);
+			holder.tvLocation.setVisibility(View.GONE);
+			holder.tvSend.setVisibility(View.GONE);
+			holder.tvTime.setVisibility(View.VISIBLE);
+			holder.tvIsCanDraw.setVisibility(View.GONE);
+			String time = ((AdvertisementSeeHistory) list.get(position))
+					.getHistoryDate();
+			Log.i("tag", MyFormat.getTimeFormat2(time)
+					+ "=====历史记录时间=====MyFormat.getTimeFormat2(time)");
+			holder.tvTime.setText(MyFormat.getTimeFormat2(time));
+			holder.tvDetail.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(context, GetRedPackage.class);
+					intent.putExtra("adForwardId",
+							((AdvertisementSeeHistory) list.get(position))
+									.getAdForwardId());
+					intent.putExtra("adInfoId", ((AdvertisementSeeHistory) list
+							.get(position)).getId());
+					context.startActivity(intent);
+				}
+			});
+			deleteAD(position, holder, 4);
+		}
+		return v;
+	}
+
+	/**
+	 * 显示是否还有红包
+	 * 
+	 * @param holder
+	 * @param co
+	 * @param money
+	 */
+	private void isHaveRedBag(final ViewHolder holder, Integer co, Integer money) {
+		Log.i("tag",(holder.tvIsCanDraw==null)+"====holder==tvIsCanDraw===isHaveRedBag=");
+		Log.i("tag",(holder==null)+"====holder==isHaveRedBag====");
+		if (co != null || money != null) {
+			if (co == 1 || money == 1) {
+				holder.tvIsCanDraw.setText("用户可领取红包");
+			} else {
+				holder.tvIsCanDraw.setText("红包已领取完");
+			}
+		} else if (co != null && money == null) {
+			if (co == 1) {
+				holder.tvIsCanDraw.setText("用户可领取红包");
+			} else {
+				holder.tvIsCanDraw.setText("无红包");
+			}
+		} else {
+			if (money!=null&&money == 1) {
+				holder.tvIsCanDraw.setText("用户可领取红包");
+			} else {
+				holder.tvIsCanDraw.setText("无红包");
+			}
+		}
+	}
+
+	private void setUISize(final ViewHolder holder) {
+		holder.iv.setLayoutParams(new LayoutParams(width, (int) (width * 0.6)));
+		holder.relayout.setLayoutParams(new LayoutParams(
+				LayoutParams.WRAP_CONTENT, (int) (width * 0.5)));
+	}
+
+	private View init(final ViewHolder holder) {
+		View v;
+		v = inflater.inflate(R.layout.listitem_attention_advertisement, null);
+		holder.iv = (ImageView) v.findViewById(R.id.iv);
+		holder.tvLocation = (TextView) v.findViewById(R.id.tv_location);
+		holder.tvSend = (TextView) v.findViewById(R.id.tv_send);
+		holder.relayout = (RelativeLayout) v.findViewById(R.id.ralayout);
+		Log.i("tag", (holder.tvSend == null) + "===holder.tvSend=======");
+		holder.tvIsCanDraw = (TextView) v.findViewById(R.id.tv_isCanDraw);
+		holder.tvTitle = (TextView) v.findViewById(R.id.tv_title);
+		holder.tvTime = (TextView) v.findViewById(R.id.tv_time);
+		holder.tvDetail = (TextView) v.findViewById(R.id.tv_detail);
+		holder.tvDelete = (TextView) v.findViewById(R.id.tv_delete);
+		return v;
+	}
+
+	/**
+	 * 删除广告
+	 * 
+	 * @param position
+	 *            位置
+	 * @param holder
+	 * @param flag
+	 *            1.删除我的广告，2.删除转发的广告，3删除浏览的历史广告
+	 */
+	private void deleteAD(final int position, final ViewHolder holder,
+			final int flag) {
+		holder.tvDelete.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				final Gerenziliao_Dialog dialog = new Gerenziliao_Dialog(
+						context, 5, "亲,确认删除该广告吗？");
+				dialog.show();
+				WindowManager.LayoutParams lp = dialog.getWindow()
+						.getAttributes();
+				lp.width = AppContext.getScreenWidth() * 4 / 5;
+				lp.height = AppContext.getScreenWidth() / 2;
+				dialog.getWindow().setAttributes(lp);
+				dialog.setOnDeleteListener(new OnDeleteListener() {
+
+					@Override
+					public void deleteAddress() {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+						showDialog("正在删除中");
+						if (flag == 2) {
+							deleteADForward(position,
+									UserInformation.getAccess_token());
+						} else if (flag == 1) {
+							requestHttp(position,
+									UserInformation.getAccess_token());
+						} else if (flag == 3) {
+							deleteAdAttention(position,
+									UserInformation.getAccess_token());
+						} else {
+							deleteAdHistory(position,
+									UserInformation.getAccess_token());
+						}
+						Log.i("tag", "===========执行了删除接口操作==============");
+					}
+				});
+			}
+		});
+	}
+
+	public void upData(List<T> list) {
+		this.list = list;
+		Log.i("tag", list.size() + "---------upData----list.size()");
+		notifyDataSetChanged();
+	}
+
+	private void showDialog(String msg) {
+		customProgressSmall = CustomProgressSmall.initDialog(context, msg,
+				true, new OnCancelListener() {
+
+					@Override
+					public void onCancel(DialogInterface arg0) {
+						// TODO Auto-generated
+						// method stub
+						customProgressSmall.dismiss();
+					}
+				});
+		customProgressSmall.show();
+	}
+
+	/**
+	 * 转发广告
+	 */
+	private void sendAD(String access_token, final int position) {
+		RequestParams params = new RequestParams();
+		Log.i("tag", access_token + "-----requestHttp---access_token------");
+		params.addQueryStringParameter("access_token", access_token);
+		params.addQueryStringParameter("adInfoId",
+				((AttentionAdvertisement) list.get(position)).getAD_INFO_ID());
+		params.addQueryStringParameter("parentId",
+				((AttentionAdvertisement) list.get(position))
+						.getAD_FORWARD_ID());
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST,
+				"m/ad/doForwardAd", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						customProgressSmall.dismiss();
+						((BaseActivity) context).toast("转发失败");
+						Log.i("tag", msg + "--------进来了--msg------");
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						ParseJson parseJson = ParseJson.getParseJson();
+						Map<String, Object> map = ParseJson.getParseJson()
+								.parseIsSuccess(json);
+						Log.i("tag", (Boolean) map.get("isSuccess")
+								+ "--------------isSuccess-----" + json);
+						// customProgressSmall.dismiss();
+						customProgressSmall.dismiss();
+						if ((Boolean) map.get("isSuccess")) {
+							((BaseActivity) context).toast("转发成功");
+						} else if (map.get("errorCode").equals("NOT_LOGIN")) {
+							// Log.i("tag", json.toString()
+							// + "------监听上一句--------");
+							((BaseActivity) context)
+									.setRefreshListtener(new Refresh() {
+										@Override
+										public void refreshRequst(
+												String access_token) {
+											// TODO Auto-generated method stub
+											Log.i("tag", "------监听里-------");
+											sendAD(access_token, position);
+										}
+									});
+							((BaseActivity) context).RefeshToken();
+						} else if (!(Boolean) map.get("isSuccess")) {
+							Toast.makeText(context, json.optString("msg"),
+									Toast.LENGTH_LONG).show();
+						}
+					}
+				});
+	}
+
+	/**
+	 * 发起删除广告请求
+	 */
+	private void requestHttp(final int position, String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		if (((Advertisement) list.get(position)).getID() == null) {
+			Toast.makeText(context, "图片id不存在", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		params.addQueryStringParameter("id",
+				((Advertisement) list.get(position)).getID());
+		AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST,
+
+		"m/ad/deleteAd", params, new HttpCallback() {
+
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				// autoLoading.showExceptionLayout();
+				customProgressSmall.dismiss();
+				Toast.makeText(context, "删除失败", Toast.LENGTH_SHORT).show();
+				Log.i("tag", msg + "--------进来了--msg------");
+			}
+
+			@Override
+			public void onBack(JSONObject json) {
+				// TODO Auto-generated method stub
+				ParseJson parseJson = ParseJson.getParseJson();
+				Map<String, Object> map = parseJson.parseIsSuccess(json);
+				Log.i("tag", "--------进来了图片onBack------");
+				Log.i("tag", (Boolean) map.get("isSuccess")
+						+ "--------------isSuccess-----" + json);
+				// customProgressSmall.dismiss();
+				if ((Boolean) map.get("isSuccess")) {
+					list.remove(position);
+					customProgressSmall.dismiss();
+					notifyDataSetChanged();
+					Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+				} else if (map.get("errorCode") != null) {
+					((BaseActivity) context).setRefreshListtener(new Refresh() {
+
+						@Override
+						public void refreshRequst(String access_token) {
+							// TODO Auto-generated method stub
+							requestHttp(position, access_token);
+						}
+					});
+					((BaseActivity) context).RefeshToken();
+				}
+
+			}
+		});
+	}
+
+	/**
+	 * 发起删除转发广告请求
+	 */
+	private void deleteADForward(final int position, String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		if (((Advertisement) list.get(position)).getAD_FORWARD_ID() == null) {
+			Toast.makeText(context, "图片id不存在", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		params.addQueryStringParameter("id",
+				((Advertisement) list.get(position)).getID());
+		AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST,
+
+		"m/ad/deleteAdForward", params, new HttpCallback() {
+
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				// autoLoading.showExceptionLayout();
+				customProgressSmall.dismiss();
+				Toast.makeText(context, "删除失败", Toast.LENGTH_SHORT).show();
+				Log.i("tag", msg + "--------进来了--msg------");
+			}
+
+			@Override
+			public void onBack(JSONObject json) {
+				// TODO Auto-generated method stub
+				ParseJson parseJson = ParseJson.getParseJson();
+				Map<String, Object> map = parseJson.parseIsSuccess(json);
+				Log.i("tag", "--------进来了图片onBack------");
+				Log.i("tag", (Boolean) map.get("isSuccess")
+						+ "--------------isSuccess-----" + json);
+				// customProgressSmall.dismiss();
+				if ((Boolean) map.get("isSuccess")) {
+					list.remove(position);
+					customProgressSmall.dismiss();
+					notifyDataSetChanged();
+					Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+				} else {
+					if (map.get("errorCode").equals("NOT_LOGIN")) {
+						((BaseActivity) context)
+								.setRefreshListtener(new Refresh() {
+
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+										requestHttp(position, access_token);
+									}
+								});
+						((BaseActivity) context).RefeshToken();
+					} else {
+						Toast.makeText(context, json.optString("msg"),
+								Toast.LENGTH_LONG).show();
+					}
+
+				}
+			}
+		});
+	}
+
+	/**
+	 * 发起删除浏览历史广告请求
+	 */
+	private void deleteAdHistory(final int position, String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		if (((AdvertisementSeeHistory) list.get(position)).getId() == null) {
+			Toast.makeText(context, "图片id不存在", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		params.addQueryStringParameter("id",
+				((AdvertisementSeeHistory) list.get(position)).getId());
+		AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST,
+
+		"m/ad/delAdHistory", params, new HttpCallback() {
+
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				// autoLoading.showExceptionLayout();
+				customProgressSmall.dismiss();
+				Toast.makeText(context, "删除失败", Toast.LENGTH_SHORT).show();
+				Log.i("tag", msg + "--------进来了--msg------");
+			}
+
+			@Override
+			public void onBack(JSONObject json) {
+				// TODO Auto-generated method stub
+				ParseJson parseJson = ParseJson.getParseJson();
+				Map<String, Object> map = parseJson.parseIsSuccess(json);
+				Log.i("tag", "--------进来了图片onBack------");
+				Log.i("tag", (Boolean) map.get("isSuccess")
+						+ "--------------isSuccess-----" + json);
+				// customProgressSmall.dismiss();
+				if ((Boolean) map.get("isSuccess")) {
+					list.remove(position);
+					customProgressSmall.dismiss();
+					notifyDataSetChanged();
+					Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+				} else {
+					if (map.get("errorCode").equals("NOT_LOGIN")) {
+						((BaseActivity) context)
+								.setRefreshListtener(new Refresh() {
+
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+										deleteAdHistory(position, access_token);
+									}
+								});
+						((BaseActivity) context).RefeshToken();
+					} else {
+						Toast.makeText(context, json.optString("msg"),
+								Toast.LENGTH_LONG).show();
+					}
+				}
+			}
+		});
+	}
+
+	/**
+	 * 发起删除关注广告请求
+	 */
+	private void deleteAdAttention(final int position, String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		if (((AttentionAdvertisement) list.get(position)).getAD_INFO_ID() == null) {
+			Toast.makeText(context, "图片id不存在", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		params.addQueryStringParameter("id",
+				((AttentionAdvertisement) list.get(position)).getAD_INFO_ID());
+		AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST,
+
+		"m/ad/deleteAttentionAd", params, new HttpCallback() {
+
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				// autoLoading.showExceptionLayout();
+				customProgressSmall.dismiss();
+				Toast.makeText(context, "删除失败", Toast.LENGTH_SHORT).show();
+				Log.i("tag", msg + "--------进来了--msg------");
+			}
+
+			@Override
+			public void onBack(JSONObject json) {
+				// TODO Auto-generated method stub
+				ParseJson parseJson = ParseJson.getParseJson();
+				Map<String, Object> map = parseJson.parseIsSuccess(json);
+				Log.i("tag", "--------进来了图片onBack------");
+				Log.i("tag", (Boolean) map.get("isSuccess")
+						+ "--------------isSuccess-----" + json);
+				// customProgressSmall.dismiss();
+				if ((Boolean) map.get("isSuccess")) {
+					list.remove(position);
+					customProgressSmall.dismiss();
+					notifyDataSetChanged();
+					Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+				} else {
+					if (map.get("errorCode").equals("NOT_LOGIN")) {
+						((BaseActivity) context)
+								.setRefreshListtener(new Refresh() {
+
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+										deleteAdAttention(position,
+												access_token);
+									}
+								});
+						((BaseActivity) context).RefeshToken();
+					} else {
+						Toast.makeText(context, json.optString("msg"),
+								Toast.LENGTH_LONG).show();
+					}
+				}
+			}
+		});
+	}
+
+	/**
+	 * 暂停或者启动广告
+	 */
+	private void requesPauseOrStart(final int position, String access_token,
+			final String status) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		if (((Advertisement) list.get(position)).getID() == null) {
+			Toast.makeText(context, "广告不存在", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		params.addQueryStringParameter("adInfoId",
+				((Advertisement) list.get(position)).getID());
+		AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST,
+
+		"m/ad/stopOrRestartAd", params, new HttpCallback() {
+
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				// autoLoading.showExceptionLayout();
+				Toast.makeText(context, "操作失败", Toast.LENGTH_SHORT).show();
+				Log.i("tag", msg + "--------进来了--msg------");
+			}
+
+			@Override
+			public void onBack(JSONObject json) {
+				// TODO Auto-generated method stub
+				ParseJson parseJson = ParseJson.getParseJson();
+				Map<String, Object> map = parseJson.parseIsSuccess(json);
+				Log.i("tag", "--------进来了图片onBack------");
+				Log.i("tag", (Boolean) map.get("isSuccess")
+						+ "--------------isSuccess-----" + json);
+				customProgressSmall.dismiss();
+				if ((Boolean) map.get("isSuccess")) {
+					String status = ((Advertisement) list.get(position))
+							.getAD_STATUS();
+					if (status.equals("1")) {
+						((Advertisement) list.get(position)).setAD_STATUS("2");
+					} else if (status.equals("2")) {
+						((Advertisement) list.get(position)).setAD_STATUS("1");
+					}
+					notifyDataSetChanged();
+				} else {
+					if (map.get("errorCode").equals("NOT_LOGIN")) {
+						((BaseActivity) context)
+								.setRefreshListtener(new Refresh() {
+
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+
+										requesPauseOrStart(position,
+												access_token, status);
+									}
+								});
+						((BaseActivity) context).RefeshToken();
+					} else {
+						Toast.makeText(context, json.optString("msg"),
+								Toast.LENGTH_LONG).show();
+					}
+				}
+			}
+		});
+	}
+
+	class ViewHolder {
+		private ImageView iv;// 图片
+		private ImageView ivZhuan;// 转字图片
+		private TextView tvTime;// 创建时间
+		private TextView tvIsRuning;// 广告是否处于启动中;
+//		private TextView tvIsDraw;// 是否还有剩余红包
+		private TextView tvDelete;// 删除广告
+		private TextView tvLocation;// 广告位置
+		private TextView tvIsStart;// 启动，暂停广告
+		private TextView tvDetail;// 启动，暂停广告
+		private TextView tvSend;// 转发广告
+		private TextView tvIsCanDraw;// 是否可领取红包
+		private TextView tvTitle;// 广告标题
+		private TextView tvCheck;// 广告标题
+		private RelativeLayout relayout;// 标题，位置，是否可领取红包的容器
+	}
+
+	/**
+	 * 请求去支付
+	 */
+	private void requesPay(final int position, String access_token,
+			final Double money) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		if (((Advertisement) list.get(position)).getID() == null) {
+			Toast.makeText(context, "广告不存在", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		params.addQueryStringParameter("adInfoId",
+				((Advertisement) list.get(position)).getID());
+		AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST,
+
+		"m/order/saveAdOrder", params, new HttpCallback() {
+
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				// autoLoading.showExceptionLayout();
+				customProgressSmall.dismiss();
+				Toast.makeText(context, "支付失败", Toast.LENGTH_SHORT).show();
+				Log.i("tag", msg + "--------进来了--msg------");
+			}
+
+			@Override
+			public void onBack(JSONObject json) {
+				// TODO Auto-generated method stub
+				ParseJson parseJson = ParseJson.getParseJson();
+				Map<String, Object> map = parseJson.parseIsSuccess(json);
+				Log.i("tag", (Boolean) map.get("isSuccess")
+						+ "--------------isSuccess-----" + json);
+				// customProgressSmall.dismiss();
+				if ((Boolean) map.get("isSuccess")) {
+					String id = null;
+					try {
+						id = json.getJSONObject("obj").optString("id");
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					customProgressSmall.dismiss();
+					Intent intent = new Intent(context, PayActivity.class);
+					Log.i("tag", money + "****************上传的money********");
+					Log.i("tag", id + "***************上传的id***********");
+					intent.putExtra("price", money);
+					intent.putExtra("code", id);
+					context.startActivity(intent);
+				} else {
+					if (map.get("errorCode").equals("NOT_LOGIN")) {
+						((BaseActivity) context)
+								.setRefreshListtener(new Refresh() {
+
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+										requesPay(position, access_token, money);
+									}
+								});
+						((BaseActivity) context).RefeshToken();
+					} else {
+						Toast.makeText(context, json.optString("msg"),
+								Toast.LENGTH_LONG).show();
+					}
+				}
+			}
+		});
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+}

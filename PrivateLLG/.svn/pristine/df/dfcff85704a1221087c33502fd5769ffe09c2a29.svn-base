@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_120px"
+        android:padding="5dp" >
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@drawable/dingdanzhifu_fanhui" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="现场消费"
+            android:textColor="@color/black1"
+            android:textSize="20sp" />
+    </RelativeLayout>
+    <!--
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:background="@color/white"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/iv_back"
+            style="@style/layout_wrap"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:src="@drawable/turn02" />
+
+        <EditText
+            android:id="@+id/edt_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@drawable/home_search"
+            android:drawableLeft="@drawable/sousuo"
+            android:hint="@string/search_hint"
+            android:inputType="text"
+            android:padding="10dp"
+            android:textColor="@color/black3"
+            android:layout_marginRight="10dp"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="搜索"
+            android:textColor="@color/black1"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_nearby"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/xiala"
+            android:padding="10dp"
+            android:text="附近"
+            android:textColor="@color/black1"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/light_grays" />    -->
+
+    <com.llg.privateproject.view.ExpandTabView
+        android:id="@+id/xcc_expandTabView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.llg.privateproject.view.ExpandTabView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/black2" />
+    <!--
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/ly_load"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+                xmlns:ptr="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/listview_business"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/light_grays"
+                android:dividerHeight="0.5dp"
+                ptr:ptrMode="both" >
+            </com.handmark.pulltorefresh.library.PullToRefreshListView>
+        </LinearLayout>
+    </LinearLayout>    -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/ly_load"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+                xmlns:ptr="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/listview_business"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/light_grays"
+                android:dividerHeight="0.5dp"
+                android:listSelector="@android:color/transparent"
+                ptr:ptrMode="both" >
+            </com.handmark.pulltorefresh.library.PullToRefreshListView>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/searh_meiyoujilu" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="暂无数据"
+            android:textColor="@color/black1"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,579 @@
+package com.llg.privateproject.fragment;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.finddreams.sortedcontact.CityListActivity;
+import com.finddreams.sortedcontact.ClearEditText;
+import com.finddreams.sortedcontact.ConstactUtil;
+import com.finddreams.sortedcontact.PersonPinyinComarator;
+import com.finddreams.sortedcontact.PersonSortAdapter;
+import com.finddreams.sortedcontact.PinyinComparator;
+import com.finddreams.sortedcontact.SortAdapter;
+import com.finddreams.sortedcontact.sortlist.CharacterParser;
+import com.finddreams.sortedcontact.sortlist.PersonSortMode;
+import com.finddreams.sortedcontact.sortlist.SideBar;
+import com.finddreams.sortedcontact.sortlist.SortModel;
+import com.finddreams.sortedcontact.sortlist.SideBar.OnTouchingLetterChangedListener;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.exception.DbException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.llg.help.GetProgressBar;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.actvity.PhoneActivity;
+import com.llg.privateproject.actvity.PhoneDetailAty;
+import com.llg.privateproject.adapters.ContactListAdapter;
+import com.llg.privateproject.entities.Citys;
+import com.llg.privateproject.entities.ContactBean;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.view.QuickAlphabeticBar;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.AsyncQueryHandler;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnFocusChangeListener;
+import android.widget.AdapterView;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.Toast;
+
+/**
+ * 通讯录列表 yh 2015.01.03
+ * */
+
+public class FragmentPhonelist extends BaseFragment {
+	private View mBaseView;
+	private ListView sortListView;
+	private SideBar sideBar;
+	private TextView dialog;
+	private PersonSortAdapter adapter;
+	private ClearEditText mClearEditText;
+	private List<PersonSortMode> list;
+	private String path;
+	private CharacterParser characterParser;
+	private List<PersonSortMode> SourceDateList;
+
+	private PersonPinyinComarator pinyinComparator;
+	private AsyncQueryHandler asyncQueryHandler;
+	private Context context;
+	private Map<String, PersonSortMode> contactIdMap = null;
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		GetProgressBar.dismissMyProgressBar();
+	}
+
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		context = activity;
+	};
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		View v = inflater.inflate(R.layout.activity_main_contact, null);
+		sideBar = (SideBar) v.findViewById(R.id.sidrbar);
+		dialog = (TextView) v.findViewById(R.id.dialog);
+		sortListView = (ListView) v.findViewById(R.id.sortlist);
+		mClearEditText = (ClearEditText) v.findViewById(R.id.filter_edit);
+		// asyncQueryHandler = new MyAsyncQueryHandler(getActivity()
+		// .getContentResolver());
+		// init();
+		initData();
+		printContacts();
+		return v;
+	}
+
+	@Override
+	public String getFragmentName() {
+		// TODO Auto-generated method stub
+		return "FragmentPhonelist";
+	}
+
+	private void initData() {
+		// 实例化汉字转拼音类
+		characterParser = CharacterParser.getInstance();
+
+		pinyinComparator = new PersonPinyinComarator();
+
+		sideBar.setTextView(dialog);
+
+		// 设置右侧触摸监听
+		sideBar.setOnTouchingLetterChangedListener(new OnTouchingLetterChangedListener() {
+
+			@SuppressLint("NewApi")
+			@Override
+			public void onTouchingLetterChanged(String s) {
+				// 该字母首次出现的位置
+				int position = adapter.getPositionForSection(s.charAt(0));
+				if (position != -1) {
+					sortListView.setSelection(position);
+				}
+			}
+		});
+
+		sortListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// 这里要利用adapter.getItem(position)来获取当前position所对应的对象
+				// Toast.makeText(getApplication(),
+				// ((SortModel)adapter.getItem(position)).getName(),
+				// Toast.LENGTH_SHORT).show();
+				// String name = list.get(position).getName();
+				ArrayList<String> mlist = (ArrayList<String>) adapter.getItem(
+						position).getPhoneList();
+				String name = adapter.getItem(position).getName();
+				String contactId = adapter.getItem(position).getContactId();
+				int phoneCount = adapter.getItem(position).getPhoneCount();
+				Intent intent = new Intent(getActivity(), PhoneDetailAty.class);
+				intent.putExtra("name", name);
+				intent.putExtra("id", contactId);
+				intent.putExtra("phoneCount", phoneCount);
+				Log.i("tag", phoneCount + "=传递的phoneCount");
+				Log.i("tag", name + "传递的name");
+				startActivity(intent);
+			}
+		});
+	}
+
+	private void initEdtListener() {
+		List<String> constact = new ArrayList<String>();
+		// for (Iterator<String> keys = callRecords.keySet().iterator();
+		// keys
+		// .hasNext();) {
+		// String key = keys.next();
+		// constact.add(key);
+		// }
+		// String[] names = new String[] {};
+		// names = constact.toArray(names);
+		SourceDateList = filledData(list);
+		Log.i("tag", SourceDateList + "===============SourceDateList");
+
+		// 根据a-z进行排序源数据
+		Collections.sort(SourceDateList, pinyinComparator);
+		adapter = new PersonSortAdapter(getActivity(), SourceDateList);
+		sortListView.setAdapter(adapter);
+
+		mClearEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View arg0, boolean arg1) {
+				mClearEditText.setGravity(Gravity.LEFT
+						| Gravity.CENTER_VERTICAL);
+
+			}
+		});
+		// 根据输入框输入值的改变来过滤搜索
+		mClearEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// 当输入框里面的值为空，更新为原来的列表，否则为过滤数据列表
+				filterData(s.toString());
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+			}
+		});
+	}
+
+	/*
+	 * 自定义显示Contacts提供的联系人的方法
+	 */
+	public void printContacts() {
+		List<String> phonelist;
+		list = new ArrayList<PersonSortMode>();
+		contactIdMap = new HashMap<String, PersonSortMode>();
+		// 生成ContentResolver对象
+		ContentResolver contentResolver = getActivity().getContentResolver();
+
+		// 获得所有的联系人
+		/*
+		 * Cursor cursor = contentResolver.query(
+		 * ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+		 */
+		// 这段代码和上面代码是等价的，使用两种方式获得联系人的Uri
+		Cursor cursor = contentResolver.query(
+				Uri.parse("content://com.android.contacts/contacts"), null,
+				null, null, null);
+		// 循环遍历
+		if (cursor.moveToFirst()) {
+			int idColumn = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+			int displayNameColumn = cursor
+					.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+
+			do {
+				// 获得联系人的ID
+				String contactId = cursor.getString(idColumn);
+				// 获得联系人姓名
+				String displayName = cursor.getString(displayNameColumn);
+				PersonSortMode contact = new PersonSortMode();
+
+				// 使用Toast技术显示获得的联系人信息
+				// Toast.makeText(geta, "联系人姓名：" +
+				// displayName,Toast.LENGTH_LONG).show();
+
+				// 查看联系人有多少个号码，如果没有号码，返回0
+
+				int phoneCount = cursor
+						.getInt(cursor
+								.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+				Log.i("tag", displayName + "=displayName");
+				Log.i("tag", phoneCount + "=phoneCount");
+				contact.setName(displayName);
+				contact.setContactId(contactId);
+				contact.setPhoneCount(phoneCount);
+				list.add(contact);
+			} while (cursor.moveToNext());
+			if (cursor != null) {
+				cursor.close();
+			}
+			if (list.size() > 0) {
+				initEdtListener();
+			}
+			if (list.size() == 0) {
+				Toast.makeText(getActivity(), "请检测是否开启系统联系人权限",
+						Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+
+	/**
+	 * 为ListView填充数据
+	 * 
+	 * @param date
+	 * @return
+	 */
+	private List<PersonSortMode> filledData(List<PersonSortMode> list) {
+		List<PersonSortMode> mSortList = new ArrayList<PersonSortMode>();
+		if (list != null && list.size() > 0) {
+			for (int i = 0; i < list.size(); i++) {
+				PersonSortMode sortModel = new PersonSortMode();
+				sortModel.setName(list.get(i).getName());
+				// sortModel.setNumber(list.get(i).getNumber());
+				sortModel.setContactId(list.get(i).getContactId());
+				sortModel.setPhoneCount(list.get(i).getPhoneCount());
+				// sortModel.setPhoneList(list.get(i).getPhoneList());
+				// 汉字转换成拼音
+				String pinyin = characterParser.getSelling(list.get(i)
+						.getName());
+				String sortString = pinyin.substring(0, 1).toUpperCase();
+
+				// 正则表达式，判断首字母是否是英文字母
+				if (sortString.matches("[A-Z]")) {
+					sortModel.setSortLetters(sortString.toUpperCase());
+				} else {
+					sortModel.setSortLetters("#");
+				}
+
+				mSortList.add(sortModel);
+			}
+		}
+		return mSortList;
+
+	}
+
+	/**
+	 * 根据输入框中的值来过滤数据并更新ListView
+	 * 
+	 * @param filterStr
+	 */
+	private void filterData(String filterStr) {
+		List<PersonSortMode> filterDateList = new ArrayList<PersonSortMode>();
+
+		if (TextUtils.isEmpty(filterStr)) {
+			filterDateList = SourceDateList;
+		} else {
+			filterDateList.clear();
+			for (PersonSortMode sortModel : SourceDateList) {
+				String name = sortModel.getName();
+				if (name.indexOf(filterStr.toString()) != -1
+						|| characterParser.getSelling(name).startsWith(
+								filterStr.toString())) {
+					filterDateList.add(sortModel);
+				}
+			}
+		}
+
+		// 根据a-z进行排序
+		Collections.sort(filterDateList, pinyinComparator);
+		adapter.updateListView(filterDateList);
+	}
+
+	private void init() {
+		Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI; //
+		//
+		String[] projection = { ContactsContract.CommonDataKinds.Phone._ID,
+				ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+				ContactsContract.CommonDataKinds.Phone.DATA1, "sort_key",
+				ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+				ContactsContract.CommonDataKinds.Phone.PHOTO_ID,
+				ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY };
+		//
+		asyncQueryHandler.startQuery(0, null, uri, projection, null, null,
+				"sort_key COLLATE LOCALIZED asc");
+	}
+
+	// private class MyAsyncQueryHandler extends AsyncQueryHandler {
+	//
+	// public MyAsyncQueryHandler(ContentResolver cr) {
+	// super(cr);
+	// }
+	//
+	// @Override
+	// protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+	// if (cursor != null && cursor.getCount() > 0) {
+	// contactIdMap = new HashMap<String, PersonSortMode>();
+	// list = new ArrayList<PersonSortMode>();
+	// cursor.moveToFirst(); //
+	// int size = cursor.getCount();
+	// // int phoneCount = cursor
+	// // .getInt(cursor
+	// // .getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+	// Log.i("tag", size + "======size======");
+	// for (int i = 0; i < size; i++) {
+	// cursor.moveToPosition(i);
+	// String name = cursor.getString(1);
+	// // String number = cursor.getString(2);
+	// List<String> phonelist = printContacts();
+	// int contactId = cursor.getInt(4);
+	// if (contactIdMap.containsKey(contactId)) {
+	// //
+	// } else {
+	// PersonSortMode contact = new PersonSortMode();
+	// contact.setName(name);
+	// // contact.setNumber(number);
+	// contact.setPhoneList(phonelist);
+	// list.add(contact);
+	// contactIdMap.put(contactId, contact);
+	// }
+	// }
+	// if (list.size() > 0) {
+	// // setAdapter(list);
+	// initEdtListener();
+	// }
+	// }
+	// private ContactListAdapter adapter;
+	// private ListView contactList;
+	// private List<ContactBean> list;
+	// private AsyncQueryHandler asyncQueryHandler; //
+	// private QuickAlphabeticBar alphabeticBar; //
+	// private PhoneActivity context;
+	// private Map<Integer, ContactBean> contactIdMap = null;
+	//
+	// @Override
+	// public String getFragmentName() {
+	// // TODO Auto-generated method stub
+	// return "FragmentPhonelist";
+	// }
+	//
+	// @Override
+	// public void onAttach(Activity activity) {
+	// // TODO Auto-generated method stub
+	// super.onAttach(activity);
+	// context = (PhoneActivity) activity;
+	// }
+	//
+	// @Override
+	// public View onCreateView(LayoutInflater inflater, ViewGroup
+	// container,
+	// Bundle savedInstanceState) {
+	// // TODO Auto-generated method stub
+	// View v = inflater.inflate(R.layout.contact_list_view, null);
+	// ViewUtils.inject(v);
+	// contactList = (ListView) v.findViewById(R.id.contact_list);
+	// alphabeticBar = (QuickAlphabeticBar)
+	// v.findViewById(R.id.fast_scroller);
+	//
+	// // ʵ��
+	// asyncQueryHandler = new MyAsyncQueryHandler(
+	// context.getContentResolver());
+	// contactList.setOnItemClickListener(this);
+	// return v;
+	// }
+	//
+	// @Override
+	// public void onActivityCreated(Bundle savedInstanceState) {
+	// // TODO Auto-generated method stub
+	// super.onActivityCreated(savedInstanceState);
+	// init();
+	// }
+	//
+	// private void init() {
+	// Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI; //
+	// //
+	// String[] projection = {
+	// ContactsContract.CommonDataKinds.Phone._ID,
+	// ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+	// ContactsContract.CommonDataKinds.Phone.DATA1, "sort_key",
+	// ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+	// ContactsContract.CommonDataKinds.Phone.PHOTO_ID,
+	// ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY };
+	// //
+	// asyncQueryHandler.startQuery(0, null, uri, projection, null,
+	// null,
+	// "sort_key COLLATE LOCALIZED asc");
+	//
+	// }
+	//
+	// private class MyAsyncQueryHandler extends AsyncQueryHandler {
+	//
+	// public MyAsyncQueryHandler(ContentResolver cr) {
+	// super(cr);
+	// }
+	//
+	// @Override
+	// protected void onQueryComplete(int token, Object cookie, Cursor
+	// cursor) {
+	// if (cursor != null && cursor.getCount() > 0) {
+	// contactIdMap = new HashMap<Integer, ContactBean>();
+	// list = new ArrayList<ContactBean>();
+	// cursor.moveToFirst(); //
+	// for (int i = 0; i < cursor.getCount(); i++) {
+	// cursor.moveToPosition(i);
+	// String name = cursor.getString(1);
+	// String number = cursor.getString(2);
+	// String sortKey = cursor.getString(3);
+	// int contactId = cursor.getInt(4);
+	// Long photoId = cursor.getLong(5);
+	// String lookUpKey = cursor.getString(6);
+	//
+	// if (contactIdMap.containsKey(contactId)) {
+	// //
+	// } else {
+	// //
+	// ContactBean contact = new ContactBean();
+	// contact.setDesplayName(name);
+	// contact.setPhoneNum(number);
+	// contact.setSortKey(sortKey);
+	// contact.setPhotoId(photoId);
+	// contact.setLookUpKey(lookUpKey);
+	// list.add(contact);
+	//
+	// contactIdMap.put(contactId, contact);
+	// }
+	// }
+	// if (list.size() > 0) {
+	// setAdapter(list);
+	// }
+	// }
+	//
+	// super.onQueryComplete(token, cookie, cursor);
+	// }
+	//
+	// }
+	//
+	// /** 打电话 */
+	// private void call(String num) {
+	// if (!appContext.isNetworkConnected()) {
+	// toast("网络未连接");
+	// return;
+	// }
+	//
+	// RequestParams params = new RequestParams();
+	// params.addQueryStringParameter("access_token",
+	// UserInformation.getAccess_token());
+	// params.addQueryStringParameter("tel",
+	// getSharePrefence().getString("phone", null));
+	// params.addQueryStringParameter("callerDisplayNumber", num);
+	// AppContext.getHtmlUitls().xUtilsm(getActivity(), HttpMethod.POST,
+	// "m/tel/call", params, new HttpCallback() {
+	//
+	// @Override
+	// public void onError(String msg) {
+	// // TODO Auto-generated method stub
+	//
+	// if (msg.equals("401")) {
+	// toast("请登录");
+	// }
+	// }
+	//
+	// @Override
+	// public void onBack(JSONObject json) {
+	// // TODO Auto-generated method stub
+	//
+	// Log.i("tag", json.toString());
+	// try {
+	// if (json.getBoolean("success")) {
+	// if (json.getJSONObject("obj")
+	// .getString("retCode").equals("0")) {
+	// toast("电话已拨出");
+	// } else {
+	// toast("余额不足");
+	// }
+	//
+	// }
+	// } catch (JSONException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
+	// });
+	// }
+	//
+	// private void setAdapter(List<ContactBean> list) {
+	// adapter = new ContactListAdapter(context, list, alphabeticBar);
+	// contactList.setAdapter(adapter);
+	// alphabeticBar.init(context);
+	// alphabeticBar.setListView(contactList);
+	// alphabeticBar.setHight(alphabeticBar.getHeight());
+	// alphabeticBar.setVisibility(View.VISIBLE);
+	// }
+	//
+	// @Override
+	// public void onItemClick(AdapterView<?> parent, View view, int
+	// position,
+	// long id) {
+	// // TODO Auto-generated method stub
+	// toast("电话已拨出");
+	// call(list.get(position).getPhoneNum());
+	//
+	// }
+	// }
+	// // }
+}

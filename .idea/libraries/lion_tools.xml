@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="lion-tools">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/PrivateLLG/libs/lion-tools.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

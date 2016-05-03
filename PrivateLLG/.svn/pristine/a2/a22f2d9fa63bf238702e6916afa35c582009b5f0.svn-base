@@ -1,0 +1,75 @@
+package com.llg.help;
+
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ListView;
+
+/**
+ * yh 2015.6.14 设置列表高度
+ */
+public class SetListHeigt {
+
+	/** 设置列表高度 */
+	public void setlistHeight(ListView listview) {
+		BaseAdapter adapter = (BaseAdapter) listview.getAdapter();
+		if (adapter == null)
+			return;
+		int totalheight = 0;
+		for (int i = 0; i < adapter.getCount(); i++) {
+			View listitem = adapter.getView(i, null, listview);
+
+			listitem.measure(0, 0);
+			totalheight += listitem.getMeasuredHeight();
+
+		}
+
+		LayoutParams params = listview.getLayoutParams();
+		params.height = totalheight + listview.getDividerHeight()
+				* (adapter.getCount() - 1);
+		listview.setLayoutParams(params);
+
+	}
+
+	/** 设置gridview高度 */
+	public void setlistHeight(GridView gridView) {
+		BaseAdapter adapter = (BaseAdapter) gridView.getAdapter();
+		if (adapter == null)
+			return;
+		int totalheight = 0;
+		for (int i = 0; i < adapter.getCount(); i++) {
+			View listitem = adapter.getView(i, null, gridView);
+			if (listitem != null) {
+				listitem.measure(0, 0);
+
+				totalheight += listitem.getMeasuredHeight();
+			}
+		}
+
+		LayoutParams params = gridView.getLayoutParams();
+		params.height = totalheight;
+		Log.d("my", "list.measure(0,0)" + totalheight);
+		gridView.setLayoutParams(params);
+
+	}
+
+	/** 显示列表三项高度 */
+	public void setThreeitemHeight(ListView lv) {
+		BaseAdapter adapter = (BaseAdapter) lv.getAdapter();
+		if (adapter == null)
+			return;
+		View listitem = adapter.getView(11, null, lv);
+		listitem.measure(0, 0);
+		listitem.getHeight();
+		// Log.e("my", "listitem.getHeight()"+listitem.getHeight());
+		// Log.e("my", "lv.getDividerHeight()"+lv.getDividerHeight());
+
+		LayoutParams params = lv.getLayoutParams();
+		params.height = listitem.getMeasuredHeight() * 3
+				+ lv.getDividerHeight() * 2;
+		// Log.e("my", "params.height"+params.height);
+		lv.setLayoutParams(params);
+	}
+}

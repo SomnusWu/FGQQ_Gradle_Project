@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <include layout="@layout/shop_head" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/homelist_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            ptr:ptrHeaderTextColor="@color/black3"
+            ptr:ptrMode="pullUpFromBottom" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <RelativeLayout
+                    android:id="@+id/rl_shop_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" >
+ <TextView
+                        android:id="@+id/shopname1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                       
+                        android:layout_centerInParent="true"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                    
+                    <LinearLayout
+                        android:id="@+id/ll_logo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@id/shopname1"
+                        
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/stroke_white_line"
+                        android:padding="5dp" >
+
+                        <ImageView
+                            android:id="@+id/shop_head"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                   
+                    <ImageView
+                        android:id="@+id/iv_shop_background"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_shop_foreground"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#55bec2c8" />
+
+                    <TextView
+                        android:id="@+id/shopname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/ll_logo"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/care"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@id/shopname"
+                        android:layout_below="@id/shopname"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/stroke_white_line_r"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="3dp"
+                        android:text="+ 关注"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/shopimg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/shopname"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@id/care"
+                        android:background="@drawable/stroke_white_line_r"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="3dp"
+                        android:text="店铺相册"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+                <!-- 店铺板块选择 -->
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <RadioGroup
+                        android:id="@+id/rg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="horizontal"
+                        android:paddingLeft="0dp"
+                        android:paddingRight="0dp" >
+
+                        <!-- 首页 -->
+
+                        <RadioButton
+                            android:id="@+id/rb_home"
+                            style="@style/title_text_style"
+                            android:layout_width="0dp"
+                            android:layout_height="45dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:button="@null"
+                            android:checked="true"
+                            android:text="宝贝之家"
+                            android:textColor="@drawable/rb_shop_orange1_black2"
+                            android:textSize="12sp" />
+
+                        <View
+                            style="@style/small_divider"
+                            android:layout_gravity="center"
+                            android:background="@color/black3" />
+
+                        <!-- 全部宝贝 -->
+
+                        <RadioButton
+                            android:id="@+id/rb_allproduct"
+                            style="@style/title_text_style"
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:button="@null"
+                            android:text="现场消费"
+                            android:textColor="@drawable/rb_shop_orange1_black2"
+                            android:textSize="12dp" />
+
+                        <View
+                            style="@style/small_divider"
+                            android:layout_gravity="center"
+                            android:background="@color/black3" />
+                        <!-- 店铺简介 -->
+
+                        <RadioButton
+                            android:id="@+id/rb_shop_datail"
+                            style="@style/title_text_style"
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:button="@null"
+                            android:text="店铺简介"
+                            android:textColor="@drawable/rb_shop_orange1_black2"
+                            android:textSize="12sp" />
+                    </RadioGroup>
+                    <!-- 指示剂 -->
+
+                    <LinearLayout
+                        android:id="@+id/indictor"
+                        android:layout_width="107dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="44dp" >
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:background="@color/orange1" />
+                    </LinearLayout>
+                </FrameLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="0.1dp"
+                    android:background="@color/black6" />
+
+                <!-- 首页 -->
+
+                <LinearLayout
+                    android:id="@+id/ll_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" >
+
+                    <!-- 优惠券 -->
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none" >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp" >
+
+                            <GridView
+                                android:id="@+id/gv_youhuiquan"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:horizontalSpacing="10dp"
+                                android:listSelector="@color/white"
+                                android:scrollbars="none" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <com.llg.privateproject.view.MyGridView
+                        android:id="@+id/gv_hot"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:horizontalSpacing="10dp"
+                        android:listSelector="@color/white"
+                        android:numColumns="2"
+                        android:verticalSpacing="15dp" >
+                    </com.llg.privateproject.view.MyGridView>
+                </LinearLayout>
+                <!-- 现场消费 -->
+
+                <include
+                    android:id="@+id/ll_cash"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    layout="@layout/shop_cash" />
+            </LinearLayout>
+        </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+        <!-- 宝贝分类、店铺分享 -->
+
+        <LinearLayout
+            android:id="@+id/ll_fenlei_share"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <LinearLayout
+                android:id="@+id/ll_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="#22555555"
+                android:orientation="vertical"
+                android:padding="5dp" >
+
+                <TextView
+                    android:id="@+id/baobeifenlei"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:drawableLeft="@drawable/threestagepage_fenleitanchu"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:text="宝贝分类"
+                    android:textColor="@color/white" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/white" />
+
+                <TextView
+                    android:id="@+id/share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:drawableLeft="@drawable/threestagepage_fenxiangtanchu"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:text="店铺分享"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

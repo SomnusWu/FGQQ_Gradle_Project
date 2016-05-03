@@ -1,0 +1,19 @@
+package com.llg.privateproject.utils;
+
+/**
+ * 检查是否需要更新的回调接口
+ * 
+ * @date 2015-05-20 下
+ * @author gongyibing
+ * @version 1.0
+ */
+public interface ICheckIsNeededRefresh {
+	/**
+	 * 检查是否需要自动更新
+	 * 
+	 * @date 2013-12-13 上午10:09:29
+	 * @author JohnWatson
+	 * @version 1.0
+	 */
+	void checkRefresh();
+}

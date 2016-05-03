@@ -1,0 +1,23 @@
+package com.llg.privateproject.entities;
+
+import java.io.Serializable;
+/**
+ * 活动专题实体类
+ * */
+public class HuoDongZhuanTiEntity implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**id */
+	public String id;
+	/**活动名 */
+	public String name;
+	/**结束时间 */
+	public String endTime;
+	/**活动图片 */
+	public String img;
+	/**url */
+	public String url;
+}

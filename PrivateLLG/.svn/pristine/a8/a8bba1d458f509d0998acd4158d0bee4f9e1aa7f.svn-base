@@ -1,0 +1,33 @@
+package com.llg.privateproject.view;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.widget.RelativeLayout;
+
+/**
+ *  点击不可透过的
+ * @author gongyibing
+ * @version 1.0
+ * @created 2015-05-07
+ */
+public class CustomRelativeLayout extends RelativeLayout {
+
+	public CustomRelativeLayout(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+	}
+
+	public CustomRelativeLayout(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
+
+	public CustomRelativeLayout(Context context) {
+		super(context);
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return true;
+	}
+
+}

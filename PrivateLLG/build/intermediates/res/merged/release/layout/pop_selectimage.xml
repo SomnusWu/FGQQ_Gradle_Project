@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent" >
+
+    <LinearLayout
+        android:id="@+id/pop_selectimage_linlay_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/transparent"
+        android:orientation="vertical"
+        android:padding="8dp" >
+
+        <Button
+            android:id="@+id/pop_selectimage_btn_camera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_popup_selectimage_camera"
+            android:text="拍照"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/pop_selectimage_btn_folder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-1dp"
+            android:background="@drawable/selector_popup_selectimage_folder"
+            android:text="从手机相册中选择"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/pop_selectimage_btn_canle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/selector_popup_selectimage_canle"
+            android:text="取消"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</RelativeLayout>

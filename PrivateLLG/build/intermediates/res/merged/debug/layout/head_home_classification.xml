@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/layout_wrap"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText,SmallSp" >
+    
+    <LinearLayout 
+         android:layout_width="match_parent"
+         android:layout_height="50dip"
+          android:background="@color/white"
+        >
+        <TextView
+        android:id="@+id/head_city_id"
+        style="@style/layout_wrap"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:drawablePadding="3dp"
+        android:drawableRight="@drawable/home_positioning"
+        android:text="重庆市"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/home_search_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/home_search_n"
+        android:hint="@string/search_hint"
+        android:padding="5dp"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/home_sweep_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="10dp"
+        android:drawableTop="@drawable/home_scan"
+        android:text="@string/t_homeScan"
+        android:textColor="@color/gray"
+        android:textSize="8sp" />
+    </LinearLayout>
+    
+    <View  style="@style/line_style2" />
+    
+</LinearLayout>

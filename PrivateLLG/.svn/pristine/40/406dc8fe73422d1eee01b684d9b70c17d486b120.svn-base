@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+     android:background="@color/white"
+    android:padding="10dp" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/tv_net"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/toumingblack"
+            android:gravity="center"
+            android:text="没有网络，请检查网络设置"
+            android:paddingRight="10dp"
+            android:drawableRight="@drawable/net_white"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/et_charge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:background="@color/login_unchecked"
+            android:editable="false"
+            android:layout_marginTop="40dp"
+            android:hint="请输入要充值的电话号码："
+            android:inputType="number"
+            android:padding="8dp"
+            android:textColor="@color/black2" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_cart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:background="@color/login_unchecked"
+        android:hint="请输入充值卡号："
+        android:inputType="number"
+        android:layout_marginTop="15dp"
+        android:padding="8dp"
+        android:textColor="@color/black2"
+        android:textSize="13sp" />
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:background="@color/login_unchecked"
+        android:hint="请输入充值卡密码："
+        android:inputType="textEmailAddress"
+        android:padding="8dp"
+        android:textColor="@color/black2"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tv_charge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/orange1"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="提交充值"
+        android:textColor="@color/white" />
+
+</LinearLayout>

@@ -1,0 +1,92 @@
+package com.bjg.lcc.privateproject.wxapi;
+
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.entities.WXShareBean;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.smartandroid.sa.eventbus.EventBus;
+import com.tencent.mm.sdk.modelbase.BaseReq;
+import com.tencent.mm.sdk.modelbase.BaseResp;
+import com.tencent.mm.sdk.modelmsg.SendAuth;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+//                                                           IWXAPIEventHandler 
+public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler {
+	private IWXAPI api;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		// 通过WXAPIFactory工厂，获取IWXAPI的实例
+		api = WXAPIFactory.createWXAPI(this,
+				com.llg.privateproject.utils.Constants.APP_ID, true);
+		// 将该app注册到微信
+		api.registerApp(com.llg.privateproject.utils.Constants.APP_ID);
+		api.handleIntent(getIntent(), this);
+
+		// WXTextObject textObject=new WXTextObject();
+		// textObject.text="测试分析数据";
+		// //初始化WXMediaMessage
+		// WXMediaMessage msg=new WXMediaMessage();
+		// msg.mediaObject=textObject;
+		// msg.description="测试数据内容";
+		//
+		// //构造一个Req
+		// SendMessageToWX.Req req=new SendMessageToWX.Req();
+		// req.transaction=String.valueOf(System.currentTimeMillis());//transaction字段用于唯一标识一个请求
+		// req.message=msg;
+		// req.scene=SendMessageToWX.Req.WXSceneSession;
+		// api.sendReq(req);
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+
+		setIntent(intent);
+		api.handleIntent(intent, this);
+	}
+
+	@Override
+	public void onReq(BaseReq arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onResp(BaseResp arg0) {
+		// TODO Auto-generated method stub
+		// Log.d("my", "onResp(BaseResp arg0) "+arg0.toString());
+		if (arg0.errCode == BaseResp.ErrCode.ERR_OK) {
+			if (appContext.shareOrLogin == 1) {
+				String code = ((SendAuth.Resp) arg0).code;
+
+				// String url="QqSsoClient&state=mt7UGxTBW0
+
+				String url = "http://login.fgqqg.com/login?client_name=appOpenWeixinSsoClient&code="
+						+ code;
+				appContext.threedLoginUrl = url;
+			}else if(appContext.shareOrLogin == 0){//分享成功之后 需要 回调  用于app banner 页 回答问题 成功分享 之后才可以领取红包
+				//发送广播代表分享成功
+				EventBus.getDefault().post(new WXShareBean(arg0.errCode, true));
+			}
+			finish();
+		} else {
+			EventBus.getDefault().post(new WXShareBean(arg0.errCode, false));
+			finish();
+		}
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		appContext.shareOrLogin = 0;
+	}
+}

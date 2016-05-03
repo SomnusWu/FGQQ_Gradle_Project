@@ -1,0 +1,388 @@
+package com.llg.privateproject.fragment;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.datatype.Duration;
+
+import org.apache.http.impl.cookie.DateUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.provider.CallLog;
+import android.provider.ContactsContract;
+import android.provider.CallLog.Calls;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.llg.help.GetProgressBar;
+import com.llg.help.MyFormat;
+import com.llg.help.Util;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.actvity.WebLoginActivity;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseFragment.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.swiplistview.SwipeMenu;
+import com.llg.privateproject.swiplistview.SwipeMenuCreator;
+import com.llg.privateproject.swiplistview.SwipeMenuItem;
+import com.llg.privateproject.swiplistview.SwipeMenuListView;
+import com.llg.privateproject.swiplistview.SwipeMenuListView.OnMenuItemClickListener;
+
+public class FragmentPhoneRecent extends BaseFragment implements
+		SwipeMenuCreator, OnMenuItemClickListener {
+	private SwipeMenuItem itemDelete;
+	private SwipeMenuListView listview;
+	List<Map<String, String>> list;
+	private Myadapter myadapter;
+	private Context context;
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		context=activity;
+	}
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		GetProgressBar.dismissMyProgressBar();
+	}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		View v = inflater.inflate(R.layout.fgt_recent, null);
+		listview = (SwipeMenuListView) v.findViewById(R.id.listview);
+		getPhoneList();
+		listview.setMenuCreator(FragmentPhoneRecent.this);
+		myadapter = new Myadapter();
+		listview.setAdapter(myadapter);
+		listview.setOnMenuItemClickListener(FragmentPhoneRecent.this);
+		return v;
+
+	}
+
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			listview.setMenuCreator(FragmentPhoneRecent.this);
+			Myadapter myadapter = new Myadapter();
+			listview.setAdapter(myadapter);
+			listview.setOnMenuItemClickListener(FragmentPhoneRecent.this);
+		};
+	};
+
+	@Override
+	public String getFragmentName() {
+		// TODO Auto-generated method stub
+		return "FragmentPhoneRecent";
+	}
+
+	public List<Map<String, String>> getPhoneList() {
+		list = new ArrayList<Map<String, String>>();
+		Map<String, String> map;
+		Cursor cursor = (getActivity().getContentResolver()).query(
+				CallLog.Calls.CONTENT_URI, null, null, null, null);
+		if (cursor.moveToFirst()) {
+			int i = 0;
+			do {
+				i++;
+				if (i >= cursor.getCount() - 50) {
+					// CallLog calls = new CallLog();
+					// 号码
+					String number = cursor.getString(cursor
+							.getColumnIndex(Calls.NUMBER));
+					Log.i("tag", cursor.getCount() + "==========数量====");
+					// 呼叫类型
+					String type;
+					switch (Integer.parseInt(cursor.getString(cursor
+							.getColumnIndex(Calls.TYPE)))) {
+					case Calls.INCOMING_TYPE:
+						type = "呼入";
+						break;
+					case Calls.OUTGOING_TYPE:
+						type = "呼出";
+						break;
+					case Calls.MISSED_TYPE:
+						type = "未接";
+						break;
+					default:
+						type = "挂断";// 应该是挂断.根据我手机类型判断出的
+						break;
+					}
+					SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd");
+					Date date = new Date(Long.parseLong(cursor.getString(cursor
+							.getColumnIndexOrThrow(Calls.DATE))));
+					String time = sfd.format(date);
+					// String day = DateUtils.formatDate(date, "dd");
+					// ;
+					// Date date2 = new
+					// Date(SystemClock.currentThreadTimeMillis());
+					// String day2 = DateUtils.formatDate(date2, "dd");
+					// // 呼叫时间
+					// String time;
+					// if (day.equals(date2)) {
+					// SimpleDateFormat sfd2 = new SimpleDateFormat(
+					// "yyyy-MM-dd HH:mm:ss");
+					// String time2 = sfd2.format(date2);
+					// time = "今天 " + time2;
+					// } else {
+					// time = sfd.format(date);
+					// }
+					// 联系人
+					String name = cursor.getString(cursor
+							.getColumnIndexOrThrow(Calls.CACHED_NAME));
+					Log.i("tag", name+"==cursor==name");
+//					int displayNameColumn = cursor
+//							.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+
+					String id = cursor.getString(cursor
+							.getColumnIndexOrThrow(Calls._ID));
+					// 通话时间,单位:s
+					String duration = cursor.getString(cursor
+							.getColumnIndexOrThrow(Calls.DURATION));
+					map = new HashMap<String, String>();
+					map.put("time", time);
+					map.put("name", name);
+					map.put("duration", duration);
+					map.put("number", number);
+					map.put("type", type);
+					map.put("id", id + "");
+					list.add(map);
+				}
+			} while (cursor.moveToNext());
+
+		}
+       Collections.reverse(list);
+		return list;
+
+	}
+
+	@Override
+	public void onMenuItemClick(int position, SwipeMenu menu, int index) {
+		// TODO Auto-generated method stub
+		switch (index) {
+		case 0:
+			list.remove(position);
+			myadapter.notifyDataSetChanged();
+			ContentResolver resolver = getActivity().getContentResolver();
+			resolver.delete(CallLog.Calls.CONTENT_URI, "_id=?", new String[] {list.get(position).get("id")});
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	@Override
+	public void create(SwipeMenu menu) {
+		// TODO Auto-generated method stub
+		int width=AppContext.getScreenWidth()/5;
+		itemDelete = new SwipeMenuItem(getActivity());
+		itemDelete.setBackground(R.color.red);
+		itemDelete.setWidth(width);
+		itemDelete.setTitle("删除");
+		itemDelete.setTitleColor(Color.WHITE);
+		itemDelete.setTitleSize(18);
+		menu.addMenuItem(itemDelete);
+	}
+
+	private class Myadapter extends BaseAdapter {
+		private ViewHolder viewholder;
+
+		@Override
+		public int getCount() {
+			return (list == null) ? 0 : list.size();
+		}
+
+		@Override
+		public Map<String, String> getItem(int position) {
+			return list.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			final Map<String, String> map = list.get(position);
+			if (convertView == null) {
+				viewholder = new ViewHolder();
+				convertView = LayoutInflater.from(getActivity()).inflate(
+						R.layout.listitem_recent, null);
+				ViewUtils.inject(viewholder, convertView);
+				convertView.setTag(viewholder);
+			} else {
+				viewholder = (ViewHolder) convertView.getTag();
+			}
+			Log.i("tag", (viewholder == null) + "viewholder");
+			viewholder.tvPhone.setText(map.get("number"));
+			Log.i("tag", map.get("name")+"==map==name");
+			viewholder.tvName.setText(map.get("name"));
+			String type = map.get("type");
+			if (type.equals("呼入")) {
+				viewholder.ivJiantou
+						.setImageResource(R.drawable.dianhuabh_dajin);
+			} else if (type.equals("呼出")) {
+				viewholder.ivJiantou
+						.setImageResource(R.drawable.dianhuabh_dachu);
+			} else if (type.equals("未接")) {
+				viewholder.ivJiantou
+						.setImageResource(R.drawable.dianhuabh_dajin);
+			}
+			viewholder.tvTime.setText(map.get("time"));
+			int duration = 0;
+			try {
+				duration = Integer.parseInt(map.get("duration"));
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			if (type.equals("呼入") || type.equals("呼出")) {
+				if (duration / 60 >= 1 && duration / 60 < 60) {
+					int fen = duration / 60;
+					int miao = duration % 60;
+					viewholder.tvDuration.setText(fen + "分" + miao + "秒");
+				} else if (duration / 3600 >= 1) {
+					int hour = duration / 3600;
+					int m = duration % 3600;
+					int fen = m / 60;
+					if (fen >= 1) {
+						int miao = m % 60;
+						viewholder.tvDuration.setText(type + hour + "小时" + fen
+								+ "分" + m + "秒");
+					} else {
+						viewholder.tvDuration.setText(type + hour + "小时" + m
+								+ "秒");
+					}
+				} else {
+					viewholder.tvDuration.setText(type + duration + "秒");
+				}
+			} else if (type.equals("未接")) {
+				viewholder.tvDuration.setText("未接来电");
+			}
+			viewholder.ivCall.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+//					toast("电话已拨出");
+					call(map.get("number"),UserInformation.getAccess_token());
+				}
+			});
+			return convertView;
+		}
+
+		private class ViewHolder {
+			@ViewInject(R.id.tv_name)
+			private TextView tvName;
+			@ViewInject(R.id.tv_time)
+			private TextView tvTime;
+			@ViewInject(R.id.iv_jiantou)
+			private ImageView ivJiantou;
+			@ViewInject(R.id.iv_call)
+			private ImageView ivCall;
+			@ViewInject(R.id.tv_duration)
+			private TextView tvDuration;
+			@ViewInject(R.id.tv_phone)
+			private TextView tvPhone;
+		}
+	}
+
+	/** 打电话 */
+	private void call(final String number,String access_token) {
+		if (!appContext.isNetworkConnected()) {
+			toast("网络未连接");
+			return;
+		}
+		customProgressSmall.show();
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token",
+				access_token);
+		params.addQueryStringParameter("tel",
+				getSharePrefence().getString("phone", "null"));
+		params.addQueryStringParameter("callerDisplayNumber", number);
+		AppContext.getHtmlUitls().xUtils(getActivity(), HttpMethod.POST,
+				"tel/call", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						customProgressSmall.dismiss();
+						if (msg.equals("401")) {
+							startActivity(new Intent(getActivity(),
+									WebLoginActivity.class));
+						} else {
+							toast("拨打失败");
+						}
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						try {
+							if (json.getBoolean("success")) {
+								customProgressSmall.dismiss();
+								if (json.getJSONObject("obj")
+										.getString("retCode").equals("0")) {
+//									GetProgressBar.getProgressBar(context, 1);
+//									toast("电话已拨出");
+								} else {
+									toast("余额不足");
+								}
+
+							}else {
+								if (json.get("errorCode").equals("NOT_LOGIN")) {
+									// Log.i("tag", json.toString()
+									// + "------监听上一句--------");
+									setRefreshListtener(new Refresh() {
+										@Override
+										public void refreshRequst(
+												String access_token) {
+											// TODO Auto-generated method
+											// stub
+											Log.i("tag", "------监听里-------");
+											call(number,access_token);
+										}
+									});
+									RefeshToken();
+								}else {
+									customProgressSmall.dismiss();
+									toast("拨打失败");
+								}
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+}

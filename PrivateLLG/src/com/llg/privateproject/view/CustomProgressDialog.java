@@ -1,0 +1,72 @@
+/**************************************************************************************
+ * [Project]
+ *       MyProgressDialog
+ * [Package]
+ *       com.lxd.widgets
+ * [FileName]
+ *       CustomProgressDialog.java
+ * [Copyright]
+ *       Copyright 2012 LXD All Rights Reserved.
+ * [History]
+ *       Version          Date              Author                        Record
+ *--------------------------------------------------------------------------------------
+ *       1.0.0           2012-4-27         lxd (rohsuton@gmail.com)        Create
+ **************************************************************************************/
+
+package com.llg.privateproject.view;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
+import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bjg.lcc.privateproject.R;
+
+/********************************************************************
+ * [Summary] 自定义加载界面
+ *******************************************************************/
+
+public class CustomProgressDialog extends Dialog {
+
+	public CustomProgressDialog(Context context, OnCancelListener listener) {
+		super(context);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.customprogressdialog);
+		WindowManager manager = (WindowManager) context
+				.getSystemService(Context.WINDOW_SERVICE);
+		WindowManager.LayoutParams Params = getWindow().getAttributes();
+		getWindow().setBackgroundDrawableResource(R.color.white);
+		Params.width = manager.getDefaultDisplay().getWidth();
+		Params.height = manager.getDefaultDisplay().getHeight();
+		setOnCancelListener(listener);
+		Log.i("tag", Params.height + "---------Params.height");
+		getWindow().setAttributes(Params);
+	}
+
+	public void onWindowFocusChanged(boolean hasFocus) {
+		ImageView imageView = (ImageView) findViewById(R.id.loadingImageView);
+		AnimationDrawable animationDrawable = (AnimationDrawable) imageView
+				.getBackground();
+		animationDrawable.start();
+	}
+
+	/**
+	 * 
+	 * [Summary] setMessage 提示内容
+	 * 
+	 * @param strMessage
+	 * @return
+	 * 
+	 */
+	public CustomProgressDialog setMessage(String strMessage) {
+		TextView tvMsg = (TextView) findViewById(R.id.id_tv_loadingmsg);
+		if (tvMsg != null) {
+			tvMsg.setText(strMessage);
+		}
+		return this;
+	}
+}

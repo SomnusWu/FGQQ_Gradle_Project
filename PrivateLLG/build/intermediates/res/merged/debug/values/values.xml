@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="http://schemas.android.com/tools">
+    <string-array name="bottom_bar_labels">
+        <item>@string/home</item>
+        <item>@string/category</item>
+        <item>@string/shopping</item>
+        <item>@string/setting</item>
+    </string-array>
+    <string-array name="home_fenlei">
+        <item>美妆</item>
+        <item>数码</item>
+        <item>果蔬</item>
+        <item>耗材</item>
+        <item>服装</item>
+        <item>美食</item>
+        <item>家居</item>
+        <item>母婴</item>
+        <item>品牌专区</item>
+        <item>帮帮团</item>
+        <item>折扣专区</item>
+        <item>全部分类</item>
+    </string-array>
+    <array name="main_tab_icons">
+        <item>@drawable/bg_home_yellow_gray</item>
+        <item>@drawable/bg_category</item>
+        <item>@drawable/bg_cart</item>
+        <item>@drawable/bg_setting</item>
+    </array>
+    <string-array name="tab_phone_bar_labels">
+        <item>@string/tab_phone_call</item>
+        <item>@string/tab_phone_recent</item>
+        <item>@string/tab_phone_list_o1_b1</item>
+        <item>@string/tab_phone_money</item>
+        <item>@string/tab_phone_charge</item>
+    </string-array>
+    <integer-array name="tab_phone_icons">
+        <item>@drawable/phone_call</item>
+        <item>@drawable/phone_recent</item>
+        <item>@drawable/phone_list_o1_b1</item>
+        <item>@drawable/phone_money</item>
+        <item>@drawable/phone_charge</item>
+    </integer-array>
+    <string-array name="userinformation">
+        <item>待处理订单</item>
+        <item>我的商品订单</item>
+        <item>我的任务</item>
+        <item>我的关注</item>
+        <item>我的发布</item>
+        <item>我的广告</item>
+        <item>现场消费订单</item>
+        <item>我的会员</item>
+        <item>安全中心</item>
+        <item>摇一摇</item>
+        <item>反馈意见</item>
+        <item>联系我们</item>
+    </string-array>
+    <string-array name="userinformationdescribe">
+        <item>待处理订单</item>
+        <item>待收款、待收货、待评价、全部订单</item>
+        <item>同城代购送货上门、入驻平台就可以做物流</item>
+        <item>关注的店铺、关注的商品、浏览记录</item>
+        <item>需求发布中心</item>
+        <item>上传广告,红包广告</item>
+        <item>查询我的商家现场消费记录</item>
+        <item>会员等级查询及升级管理</item>
+        <item>修改密码</item>
+        <item>手动摇一摇，礼品收到手</item>
+        <item>您有好的建议或投诉请点击这里</item>
+        <item>企业地址、地图查询、联系电话</item>
+    </string-array>
+    <array name="userinformationimages">
+        <item>@drawable/personer</item>
+        <item>@drawable/guanzhu</item>
+        <item>@drawable/money</item>
+        <item>@drawable/suggest</item>
+        <item>@drawable/safe</item>
+        <item>@drawable/help</item>
+        <item>@drawable/level</item>
+        <item>@drawable/shake</item>
+        <item>@drawable/suggest</item>
+        <item>@drawable/contact</item>
+    </array>
+    <attr format="reference" name="cropImageStyle"/>
+    <color name="albumback">#E1E0DE</color>
+    <color name="app_bg">#ffffff</color>
+    <color name="background_color">#fbfbfb</color>
+    <color name="background_tab_pressed">#6633B5E5</color>
+    <color name="bantouming">#88bec2c8</color>
+    <color name="bg_row_border">#ff999999</color>
+    <color name="bg_row_normal">#ffffffff</color>
+    <color name="bg_row_normal_center">@color/bg_row_normal</color>
+    <color name="bg_row_normal_end">@color/bg_row_normal</color>
+    <color name="bg_row_normal_start">@color/bg_row_normal</color>
+    <color name="bg_row_pressed_center">#ffa5e0ff</color>
+    <color name="bg_row_pressed_end">#ffdaf2ff</color>
+    <color name="bg_row_pressed_start">#ff67cbfe</color>
+    <color name="black">#000000</color>
+    <color name="black0">#383838</color>
+    <color name="black1">#696566</color>
+    <color name="black2">#9d9b9c</color>
+    <color name="black3">#c2c2c2</color>
+    <color name="black4">#e8e8e8</color>
+    <color name="black5">#cc383838</color>
+    <color name="black6">#c6c6c6</color>
+    <color name="black7">#dadada</color>
+    <color name="black8">#e8e8e8</color>
+    <color name="blue">#5CACEE</color>
+    <color name="blue0">#0000FF</color>
+    <color name="blue1">#95bfdd</color>
+    <color name="choose_eara_item_press_color">#f4f4f4</color>
+    <color name="color_0fdccb">#0fdccb</color>
+    <color name="crop__button_bar">#f3f3f3</color>
+    <color name="crop__button_text">#666666</color>
+    <color name="crop__selector_focused">#77000000</color>
+    <color name="crop__selector_pressed">#1a000000</color>
+    <color name="cyan">#00FFFF</color>
+    <color name="dan_blue">#3184b9</color>
+    <color name="dark_pink">#e52463</color>
+    <color name="darkgreen">#024442</color>
+    <color name="divider">#E3E3E3</color>
+    <color name="drop_down_list_footer_font_color">#000000</color>
+    <color name="drop_down_list_header_font_color">#000000</color>
+    <color name="drop_down_list_header_second_font_color">#000000</color>
+    <color name="fen">#ffa09a</color>
+    <color name="fenred">#e52463</color>
+    <color name="fuxk_base_divide_line_color">#dcdcdc</color>
+    <color name="fuxk_settle_black_mark">#1A000000</color>
+    <color name="gold">#FFD700</color>
+    <color name="gray">#e52463</color>
+    <color name="graywhite">#f0f0f0</color>
+    <color name="green">#7CCD7C</color>
+    <color name="green1">#c4c128</color>
+    <color name="green2">#90cf7c</color>
+    <color name="green3">#2f761a</color>
+    <color name="haoyoufazhan">#ff8431</color>
+    <color name="home_t">#ff9d45</color>
+    <color name="home_t_n">#696566</color>
+    <color name="light_blue">#ADD8E6</color>
+    <color name="light_cyan">#E1FFFF</color>
+    <color name="light_gray">#D3D3D3</color>
+    <color name="light_grays">#F2F2F2</color>
+    <color name="light_pink">#FFB6C1</color>
+    <color name="light_yellow">#FFFFE0</color>
+    <color name="lightgreen">#4fb82b</color>
+    <color name="login_checked">#ff9d45</color>
+    <color name="login_unchecked">#c2c2c2</color>
+    <color name="login_uncheckeda">#525051</color>
+    <color name="meihong">#ffa8d7</color>
+    <color name="none_color">#00000000</color>
+    <color name="orange">#FFA500</color>
+    <color name="orange0">#f67b2e</color>
+    <color name="orange1">#ff9d45</color>
+    <color name="orange2">#fac261</color>
+    <color name="orange3">#ffd284</color>
+    <color name="pink">#FFC0CB</color>
+    <color name="plugin_camera_black">#000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+    <color name="pull_refresh_textview">#000000</color>
+    <color name="qing">#76EE00</color>
+    <color name="red">#FF0000</color>
+    <color name="red_xg">#ef5354</color>
+    <color name="result_view">#b0000000</color>
+    <color name="rosered">#e52563</color>
+    <color name="rosered1">#cf686a</color>
+    <color name="shangpinhui">#3da13c</color>
+    <color name="sidebar_item_background_activated_dark">#ff4c365d</color>
+    <color name="snow">#FFFAFA</color>
+    <color name="tab_item_default">#fafafa</color>
+    <color name="tab_item_selected">#f0f1f2</color>
+    <color name="tab_text_default">#bbbbbb</color>
+    <color name="tab_text_selected">#f8597c</color>
+    <color name="title_text_color">#ffffff</color>
+    <color name="tongchengdaigou">#f3682a</color>
+    <color name="toshop">#e8e7d2</color>
+    <color name="toshop_text">#4e4e2c</color>
+    <color name="toumingblack">#b0000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="transparent8">#88ffffff</color>
+    <color name="transparentred">#88FF0000</color>
+    <color name="transparentyellow">#88FFFF00</color>
+    <color name="tuangou">#4e91ed</color>
+    <color name="tuyellow">#DEB887</color>
+    <color name="viewfinder_frame">#a0ffffff</color>
+    <color name="viewfinder_laser">#ffff0000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="white">#ffffff</color>
+    <color name="wodehoutai">#ff7f7e</color>
+    <color name="woyaojianzhi">#4e91ed</color>
+    <color name="xianchangxiaofei">#ff4442</color>
+    <color name="xuqiufabu">#2bbbb7</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="yewulianxi">#ff6765</color>
+    <color name="yuanhuan">#88ffffff</color>
+    <declare-styleable name="CropImageView"><attr format="reference|color" name="highlightColor"/><attr format="boolean" name="showThirds"/><attr name="showHandles"><enum name="changing" value="0"/><enum name="always" value="1"/><enum name="never" value="2"/></attr></declare-styleable>
+    <declare-styleable name="IndictorView"><attr format="integer|reference" name="indictorCount"/><attr format="integer|reference" name="indictorSize"/><attr name="indictorStyle"><enum name="circle" value="0"/><enum name="square" value="1"/></attr><attr format="integer|reference" name="indictorMargin"/><attr format="color|reference" name="indictorColor"/><attr format="color|reference" name="indictorSelectedColor"/><attr name="indictorGravity"><enum name="left" value="3"/><enum name="center" value="17"/><enum name="right" value="5"/></attr></declare-styleable>
+    <declare-styleable name="KeyBoardView"><attr format="string" name="numbers"/><attr format="string" name="letters"/></declare-styleable>
+    <declare-styleable name="PullToRefresh"><attr format="reference|color" name="ptrRefreshableViewBackground"/><attr format="reference|color" name="ptrHeaderBackground"/><attr format="reference|color" name="ptrHeaderTextColor"/><attr format="reference|color" name="ptrHeaderSubTextColor"/><attr name="ptrMode"><flag name="disabled" value="0x0"/><flag name="pullFromStart" value="0x1"/><flag name="pullFromEnd" value="0x2"/><flag name="both" value="0x3"/><flag name="manualOnly" value="0x4"/><flag name="pullDownFromTop" value="0x1"/><flag name="pullUpFromBottom" value="0x2"/></attr><attr format="reference|boolean" name="ptrShowIndicator"/><attr format="reference" name="ptrDrawable"/><attr format="reference" name="ptrDrawableStart"/><attr format="reference" name="ptrDrawableEnd"/><attr format="reference|boolean" name="ptrOverScroll"/><attr format="reference" name="ptrHeaderTextAppearance"/><attr format="reference" name="ptrSubHeaderTextAppearance"/><attr name="ptrAnimationStyle"><flag name="rotate" value="0x0"/><flag name="flip" value="0x1"/></attr><attr format="reference|boolean" name="ptrScrollingWhileRefreshingEnabled"/><attr format="reference|boolean" name="ptrListViewExtrasEnabled"/><attr format="reference|boolean" name="ptrRotateDrawableWhilePulling"/><attr format="reference|color" name="ptrAdapterViewBackground"/><attr format="reference" name="ptrDrawableTop"/><attr format="reference" name="ptrDrawableBottom"/></declare-styleable>
+    <declare-styleable name="RoundImageView"><attr format="color|reference" name="circlebg"/><attr format="reference" name="src"/></declare-styleable>
+    <declare-styleable name="TabWidget"><attr format="reference" name="bottom_labels"/><attr format="reference" name="tab_name"/></declare-styleable>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="crop__bar_height">48dp</dimen>
+    <dimen name="dimen_100px">44.44dp</dimen>
+    <dimen name="dimen_120px">53.28dp</dimen>
+    <dimen name="dimen_12sp">12sp</dimen>
+    <dimen name="dimen_14sp">14sp</dimen>
+    <dimen name="dimen_16sp">16sp</dimen>
+    <dimen name="dimen_30px">13.33dp</dimen>
+    <dimen name="dimen_40px">40dp</dimen>
+    <dimen name="head50">50dp</dimen>
+    <dimen name="header_footer_internal_padding">20dp</dimen>
+    <dimen name="header_footer_left_right_padding">25dp</dimen>
+    <dimen name="header_footer_top_bottom_padding">10dp</dimen>
+    <dimen name="indicator_corner_radius">12dp</dimen>
+    <dimen name="indicator_internal_padding">4dp</dimen>
+    <dimen name="indicator_right_padding">10dp</dimen>
+    <dimen name="ui_10_dip">10dip</dimen>
+    <drawable name="white">#ffffffff</drawable>
+    <item name="auto_focus" type="id"/>
+    <item name="decode" type="id"/>
+    <item name="decode_failed" type="id"/>
+    <item name="decode_succeeded" type="id"/>
+    <item name="encode_failed" type="id"/>
+    <item name="encode_succeeded" type="id"/>
+    <item name="gridview" type="id"/>
+    <item name="id_circle_menu_item_center" type="id"/>
+    <item name="id_circle_menu_item_image" type="id"/>
+    <item name="id_circle_menu_item_text" type="id"/>
+    <item name="launch_product_query" type="id"/>
+    <item name="quit" type="id"/>
+    <item name="restart_preview" type="id"/>
+    <item name="return_scan_result" type="id"/>
+    <item name="scrollview" type="id"/>
+    <item name="search_book_contents_failed" type="id"/>
+    <item name="search_book_contents_succeeded" type="id"/>
+    <item name="webview" type="id"/>
+    <string name="about_us">关于我们</string>
+    <string name="action_settings">Settings</string>
+    <string name="album">返回</string>
+    <string name="app_name">风购全球</string>
+    <string name="app_recommend">应用推荐</string>
+    <string name="app_tip">支付结果提示</string>
+    <string name="baidutieba">百度贴吧</string>
+    <string name="baidutieba_client_inavailable">目前您的百度贴吧版本过低或未安装，需要安装百度贴吧才能使用</string>
+    <string name="bluetooth">蓝牙</string>
+    <string name="buyserver">http://192.168.0.123:8082/llgweb/</string>
+    <string name="buyservershare">http://www.fgqqg.com/pages/m/prod/m_</string>
+    <string name="camera_cancel">取消</string>
+    <string name="cancel">取消</string>
+    <string name="category">分类</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="connection_Exception">连接异常</string>
+    <string name="content_edit_hint">欢迎在这儿发表宝贵的意见哦~</string>
+    <string name="crop__cancel">取消</string>
+    <string name="crop__done">完成</string>
+    <string name="crop__pick_error">没有图片资源</string>
+    <string name="crop__saving">保存图片中…</string>
+    <string name="crop__wait">请等待…</string>
+    <string name="data_Exception">获取数据异常</string>
+    <string name="douban">豆瓣</string>
+    <string name="dropbox">Dropbox</string>
+    <string name="email">邮件</string>
+    <string name="empty_string">网络未连接</string>
+    <string name="evernote">印象笔记</string>
+    <string name="exception">数据加载失败</string>
+    <string name="facebook">Facebook</string>
+    <string name="facebookmessenger">Facebook Messenger</string>
+    <string name="failed_upload_img">上传图片失败,请重新上传</string>
+    <string name="feedback">意见反馈</string>
+    <string name="finish">完成</string>
+    <string name="flickr">Flickr</string>
+    <string name="foursquare">FourSquare</string>
+    <string name="google_plus_client_inavailable">Google+ 版本过低或者没有安装，需要升级或安装Google+才能使用！</string>
+    <string name="googleplus">Google+</string>
+    <string name="h_company_detail_price_value">￥%1$s</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="home">商城</string>
+    <string name="image_desc">图片</string>
+    <string name="image_server_url"/>
+    <string name="instagram">Instagram</string>
+    <string name="instagram_client_inavailable">Instagram版本过低或者没有安装，需要升级或安装Instagram才能使用！</string>
+    <string name="instapager_email_or_password_incorrect">Email或密码不正确</string>
+    <string name="instapaper">Instapaper</string>
+    <string name="instapaper_email">邮箱</string>
+    <string name="instapaper_login">登录</string>
+    <string name="instapaper_logining">登录中…</string>
+    <string name="instapaper_pwd">密码</string>
+    <string name="kaixin">开心网</string>
+    <string name="kakaostory">KakaoStory</string>
+    <string name="kakaostory_client_inavailable">目前您的KakaoStory版本过低或未安装，需要安装KakaoStory才能使用</string>
+    <string name="kakaotalk">KakaoTalk</string>
+    <string name="kakaotalk_client_inavailable">目前您的KakaoTalk版本过低或未安装，需要安装KakaoTalk才能使用</string>
+    <string name="laiwang">来往</string>
+    <string name="laiwang_client_inavailable">目前您的来往版本过低或未安装，需要安装来往才能使用</string>
+    <string name="laiwangmoments">来往动态</string>
+    <string name="line">Line</string>
+    <string name="line_client_inavailable">目前您的Line版本过低或未安装，需要安装Line才能使用</string>
+    <string name="linkedin">领英</string>
+    <string name="list_friends">%s的朋友</string>
+    <string name="loginurl">http://192.168.0.123:8080/cas</string>
+    <string name="mingdao">明道</string>
+    <string name="mingdao_share_content">网页分享</string>
+    <string name="mobile_number">手机号</string>
+    <string name="mobile_number_hint">方便我们尽快反馈</string>
+    <string name="multi_share">图文分享</string>
+    <string name="mvalue">XMLHttpRequest</string>
+    <string name="neteasemicroblog">网易微博</string>
+    <string name="new_Dataexception">未获取新数据</string>
+    <string name="no_photo">相册没有图片</string>
+    <string name="not_login">NOT_LOGIN</string>
+    <string name="only_choose_num">最多只能选择9张图片</string>
+    <string name="p2refresh_doing_end_refresh">加载中…</string>
+    <string name="p2refresh_doing_head_refresh">正在刷新…</string>
+    <string name="p2refresh_end_click_load_more">点击加载</string>
+    <string name="p2refresh_end_load_more">更    多</string>
+    <string name="p2refresh_head_load_more">加载更多</string>
+    <string name="p2refresh_pull_to_refresh">下拉刷新</string>
+    <string name="p2refresh_refresh_lasttime">最近更新 : </string>
+    <string name="p2refresh_release_refresh">松开刷新</string>
+    <string formatted="false" name="pay_result_callback_msg">微信支付结果：%s</string>
+    <string name="photo">选择相册</string>
+    <string name="pinterest">Pinterest</string>
+    <string name="pinterest_client_inavailable">Pinterest版本过低或者没有安装，需要升级或安装Pinterest才能使用！</string>
+    <string name="pocket">Pocket</string>
+    <string name="preview">预览</string>
+    <string name="pull_to_refresh">下拉刷新</string>
+    <string name="pull_to_refresh_from_bottom_pull_label">Pull to load more…</string>
+    <string name="pull_to_refresh_from_bottom_refreshing_label">@string/pull_to_refresh_refreshing_label</string>
+    <string name="pull_to_refresh_from_bottom_release_label">Release to load more…</string>
+    <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
+    <string name="pull_to_refresh_refreshing_label">Loading…</string>
+    <string name="pull_to_refresh_release_label">Release to refresh…</string>
+    <string name="qq">QQ</string>
+    <string name="qq_client_inavailable">QQ 版本过低或者没有安装，需要升级或安装QQ才能使用！</string>
+    <string name="qzone">QQ空间</string>
+    <string name="recommend_to_weixin_friend">推荐给微信好友</string>
+    <string name="refreshing">刷新中…</string>
+    <string name="release_to_refresh">松开刷新</string>
+    <string name="renren">人人网</string>
+    <string name="retry">重试</string>
+    <string name="search">搜索</string>
+    <string name="search_hint">商品</string>
+    <string name="select_a_friend">请选择一个朋友</string>
+    <string name="select_one_plat_at_least">请选择一个目标平台</string>
+    <string name="setting">推荐</string>
+    <string name="shake2share">摇晃手机！</string>
+    <string name="share">分享</string>
+    <string name="share_canceled">分享已取消</string>
+    <string name="share_completed">分享成功</string>
+    <string name="share_failed">分享失败</string>
+    <string name="share_to">分享到</string>
+    <string name="share_to_baidutieba">分享到百度贴吧</string>
+    <string name="share_to_mingdao">分享到明道</string>
+    <string name="share_to_qq">分享到QQ</string>
+    <string name="share_to_qzone">分享到QQ空间</string>
+    <string name="share_to_qzone_default">来自%s的分享</string>
+    <string name="sharing">分享操作正在后台进行…</string>
+    <string name="shopping">购物车</string>
+    <string name="shortmessage">信息</string>
+    <string name="sinaweibo">新浪微博</string>
+    <string name="sohumicroblog">搜狐微博</string>
+    <string name="sohusuishenkan">搜狐随身看</string>
+    <string name="t_Connection">网络异常</string>
+    <string name="t_homeScan">扫一扫</string>
+    <string name="tab_phone">电话</string>
+    <string name="tab_phone_call">拨号键盘</string>
+    <string name="tab_phone_charge">充值</string>
+    <string name="tab_phone_list_o1_b1">通讯录</string>
+    <string name="tab_phone_money">余额</string>
+    <string name="tab_phone_recent">最近通话</string>
+    <string name="tab_shop_main">商品汇</string>
+    <string name="tencentweibo">腾讯微博</string>
+    <string name="test_data_server_url">http://192.168.0.196:8083/buyapp/common/</string>
+    <string name="test_data_server_urlm">http://192.168.0.196:8083/buyapp/</string>
+    <string name="test_image_server_url">http://192.168.0.123:7777/</string>
+    <string name="tumblr">Tumblr</string>
+    <string name="twitter">Twitter</string>
+    <string name="unfinished">完成</string>
+    <string name="use_login_button">请改用“登录”按钮</string>
+    <string name="vkontakte">VK</string>
+    <string name="website">http://www.mob.com</string>
+    <string name="wechat">微信好友</string>
+    <string name="wechat_client_inavailable">目前您的微信版本过低或未安装微信，需要安装微信才能使用</string>
+    <string name="wechatfavorite">微信收藏</string>
+    <string name="wechatmoments">微信朋友圈</string>
+    <string name="weibo_oauth_regiseter">应用授权</string>
+    <string name="weibo_upload_content">分享图片</string>
+    <string name="whatsapp">WhatsApp</string>
+    <string name="whatsapp_client_inavailable">目前您的WhatsApp版本过低或未安装，需要安装WhatsApp才能使用</string>
+    <string name="yixin">易信</string>
+    <string name="yixin_client_inavailable">目前您的易信版本过低或未安装，需要安装易信才能使用</string>
+    <string name="yixinmoments">易信朋友圈</string>
+    <string name="youdao">有道云笔记</string>
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    <style name="Crop"/>
+    <style name="Crop.ActionButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/crop__selectable_background</item>
+    </style>
+    <style name="Crop.ActionButtonText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingRight">20dp</item>
+        <!-- Offsets left drawable -->
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:textColor">@color/crop__button_text</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+    <style name="Crop.ActionButtonText.Cancel">
+        <item name="android:drawableLeft">@drawable/crop__ic_cancel</item>
+        <item name="android:text">@string/crop__cancel</item>
+    </style>
+    <style name="Crop.ActionButtonText.Done">
+        <item name="android:drawableLeft">@drawable/crop__ic_done</item>
+        <item name="android:text">@string/crop__done</item>
+    </style>
+    <style name="Crop.DoneCancelBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/crop__bar_height</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:divider">@drawable/crop__divider</item>
+        <item name="android:showDividers" ns1:ignore="NewApi">middle</item>
+        <item name="android:dividerPadding" ns1:ignore="NewApi">12dp</item>
+        <item name="android:background">@color/crop__button_bar</item>
+    </style>
+    <style name="Custom_Progress" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="MyDialogTopRight" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="MyTransparent" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@drawable/xml_seat_shape</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@+android:style/Animation.Translucent</item>
+    </style>
+    <style name="Theme.Timetodo" parent="@android:style/Theme.Holo.Light">
+        <!--
+         <item name="android:windowTranslucentStatus">true</item>
+    <item name="android:windowTranslucentNavigation">true</item>
+
+
+
+
+        -->
+    </style>
+    <style name="agreemdialog" parent="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+    </style>
+    <style name="animbottom" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
+    </style>
+    <style name="btn_input_amount_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#333333</item>
+        <item name="android:background">@drawable/selector_btn_keyboard</item>
+    </style>
+    <style name="btn_input_item_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <!-- <item name="android:background">@drawable/selector_btn_keyboard</item> -->
+    </style>
+    <style name="company_text_font_style" parent="layout_wrap">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="exception"/>
+    <style name="exception.message">
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">0dip</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="exception.title">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginBottom">5dip</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="exception_button">
+        <item name="android:layout_marginTop">25dip</item>
+    </style>
+    <style name="gallery_point_style" parent="layout_full">
+        <item name="android:gravity">bottom</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:paddingRight">5dp</item>
+    </style>
+    <style name="guidestyle" parent="@android:style/Theme.Light.NoTitleBar"/>
+    <style name="layout_full">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+    </style>
+    <style name="layout_horizontal" parent="layout_full">
+        <item name="android:layout_width">0px</item>
+    </style>
+    <style name="layout_input_amount_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginBottom">1dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <style name="layout_vertical" parent="layout_full">
+        <item name="android:layout_height">0dip</item>
+    </style>
+    <style name="layout_wrap">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="line_style1" parent="layout_full">
+        <item name="android:background">@drawable/dian_line_white</item>
+        <item name="android:paddingLeft">0.0dip</item>
+        <item name="android:paddingRight">0.0dip</item>
+        <item name="android:layout_height">3dip</item>
+    </style>
+    <style name="line_style2" parent="layout_full">
+        <item name="android:background">@color/light_gray</item>
+        <item name="android:paddingLeft">0.0dip</item>
+        <item name="android:paddingRight">0.0dip</item>
+        <item name="android:layout_height">0.5dip</item>
+    </style>
+    <style name="line_style3" parent="layout_full">
+        <item name="android:background">@color/orange2</item>
+        <item name="android:paddingLeft">0.0dip</item>
+        <item name="android:paddingRight">0.0dip</item>
+        <item name="android:layout_height">0.5dip</item>
+    </style>
+    <style name="line_style4" parent="layout_full">
+        <item name="android:background">@drawable/dian_line_product_e8</item>
+        <item name="android:paddingLeft">0.0dip</item>
+        <item name="android:paddingRight">0.0dip</item>
+        <item name="android:layout_height">3dip</item>
+    </style>
+    <style name="payStyle" parent="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:divider">@null</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- <item name="android:backgroundDimEnabled">false</item> -->
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+    </style>
+    <style name="ratingbarstyle" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_yellowstar</item>
+        <item name="android:minHeight">15dp</item>
+        <item name="android:progress">100</item>
+    </style>
+    <style name="setting_text_style">
+        <item name="android:textSize">16.0dip</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:paddingLeft">20dip</item>
+        <item name="android:paddingTop">12dip</item>
+        <item name="android:paddingBottom">12dip</item>
+    </style>
+    <style name="small_divider">
+        <item name="android:layout_width">1dip</item>
+        <item name="android:layout_height">35dip</item>
+        <item name="android:background">#fff</item>
+    </style>
+    <style name="style_window_showmenu" parent="@android:Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/animbottom</item>
+        <item name="android:windowFrame">@null</item>
+        <!-- 边框 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 无标题 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 背景透明 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 模糊 -->
+    </style>
+    <style name="title_bar_style">
+        <item name="android:background">@drawable/bkg</item>
+        <item name="android:paddingLeft">0.0dip</item>
+        <item name="android:paddingRight">0.0dip</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">150dp</item>
+    </style>
+    <style name="title_text_style">
+        <item name="android:textSize">20.0dip</item>
+        <item name="android:textColor">@color/title_text_color</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+</resources>

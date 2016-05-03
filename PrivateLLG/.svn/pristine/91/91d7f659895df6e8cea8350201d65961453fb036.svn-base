@@ -1,0 +1,82 @@
+package com.llg.help;
+
+import java.io.UnsupportedEncodingException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+
+import com.smartandroid.sa.aysnc.Log;
+import com.tencent.android.tpush.XGPushBaseReceiver;
+import com.tencent.android.tpush.XGPushClickedResult;
+import com.tencent.android.tpush.XGPushRegisterResult;
+import com.tencent.android.tpush.XGPushShowedResult;
+import com.tencent.android.tpush.XGPushTextMessage;
+
+public class XG extends XGPushBaseReceiver{
+
+	@Override
+	public void onDeleteTagResult(Context arg0, int arg1, String arg2) {
+		// TODO Auto-generated method stub
+	
+	}
+
+	@Override
+	public void onNotifactionClickedResult(Context arg0,
+			XGPushClickedResult arg1) {
+		
+		try {
+			JSONObject obj=new JSONObject(arg1.getCustomContent());
+			String objectId="";
+			String objectType="";
+			if(obj.has("objectId")&&obj.get("objectId")!=null){
+				
+				objectId=obj.get("objectId").toString();
+			}
+			if(obj.has("objectType")&&obj.get("objectType")!=null){
+				
+				objectType=obj.get("objectType").toString();
+			}
+			if(objectId.length()>5){
+			
+			MyFormat.toSomeWhere(arg0, objectType, objectId, "", "");
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onNotifactionShowedResult(Context arg0, XGPushShowedResult arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRegisterResult(Context arg0, int arg1,
+			XGPushRegisterResult arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSetTagResult(Context arg0, int arg1, String arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTextMessage(Context arg0, XGPushTextMessage arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUnregisterResult(Context arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

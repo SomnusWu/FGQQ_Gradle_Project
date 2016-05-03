@@ -1,0 +1,85 @@
+package com.llg.privateproject.adapters;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.llg.privateproject.AppContext;
+import com.bjg.lcc.privateproject.R;
+import android.content.Context;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+/**优惠券适配器
+ * yh
+ * 2015.07.28
+ * */
+public class YouhuiquanAdapter extends BaseAdapter {
+	
+	
+Context context;
+List<Map<String,Object>>list;
+	/**优惠券适配器
+	 * */
+	public YouhuiquanAdapter(Context context,List<Map<String,Object>>list){
+		this.context=context;
+		this.list=list;
+	}
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return list==null?0:list.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return list.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+
+	@Override
+	public View getView(final int position, View v, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		ViewHolder vh=null;
+		Map<String,Object> map= list.get(position);
+		LayoutParams lp=parent.getLayoutParams();
+		lp.width=list.size()*(AppContext.getScreenWidth()/3-(list.size())*2);
+		lp.height=LayoutParams.WRAP_CONTENT;
+		parent.setLayoutParams(lp);
+		if(v==null){
+			v=View.inflate(context, R.layout.shop_youhuiquan_item, null);
+			vh=new ViewHolder();
+			vh.miane=(TextView) v.findViewById(R.id.miane);
+			vh.man=(TextView) v.findViewById(R.id.man);
+			v.setTag(vh);
+		}else{
+			vh=(ViewHolder) v.getTag();
+		}
+		vh.miane.setText(map.get("miane").toString());
+		vh.man.setText("满"+map.get("man").toString()+"可用");
+		v.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(context, "优惠券"+position, Toast.LENGTH_SHORT).show();
+			}
+		});
+		return v;
+	}
+	class ViewHolder{
+		TextView miane;
+		TextView man;
+	}
+
+}

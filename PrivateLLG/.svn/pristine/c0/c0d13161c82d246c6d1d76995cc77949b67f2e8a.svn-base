@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingRight="20dp"
+    android:paddingLeft="20dp"
+    android:orientation="horizontal" >
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="满"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/black2"/>
+    <TextView android:id="@+id/man"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:layout_gravity="center_vertical"
+        android:text="100"
+        android:textColor="@color/black2"/>
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="省"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/black2"/>
+    <TextView android:id="@+id/sheng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:layout_gravity="center_vertical"
+        android:text="100"
+        android:textColor="@color/black2"/>
+    <View android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="2dp"
+        android:layout_gravity="center_vertical"
+        />
+    <ImageView android:id="@+id/iv_checked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gouwuche_weixuanzhong"
+        android:padding="5dp"
+        android:layout_gravity="center_vertical"
+        />
+
+</LinearLayout>

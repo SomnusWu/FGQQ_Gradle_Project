@@ -1,0 +1,74 @@
+package com.llg.privateproject.entities;
+
+public class Advertisement {
+	private Integer HAS_MONEY;//是否还有现金
+	public Integer getHAS_MONEY() {
+		return HAS_MONEY;
+	}
+	public void setHAS_MONEY(Integer hAS_MONEY) {
+		HAS_MONEY = hAS_MONEY;
+	}
+	public Integer getHAS_CO() {
+		return HAS_CO;
+	}
+	public void setHAS_CO(Integer hAS_CO) {
+		HAS_CO = hAS_CO;
+	}
+	public String getFORWARD_OR_MY() {
+		return FORWARD_OR_MY;
+	}
+	public void setFORWARD_OR_MY(String fORWARD_OR_MY) {
+		FORWARD_OR_MY = fORWARD_OR_MY;
+	}
+	public String getAD_LOCATION() {
+		return AD_LOCATION;
+	}
+	public void setAD_LOCATION(String aD_LOCATION) {
+		AD_LOCATION = aD_LOCATION;
+	}
+	public String getID() {
+		return ID;
+	}
+	public void setID(String iD) {
+		ID = iD;
+	}
+	public String getCREATE_DATE() {
+		return CREATE_DATE;
+	}
+	public void setCREATE_DATE(String cREATE_DATE) {
+		CREATE_DATE = cREATE_DATE;
+	}
+	public String getCOVER_IMAGE_ID() {
+		return COVER_IMAGE_ID;
+	}
+	public void setCOVER_IMAGE_ID(String cOVER_IMAGE_ID) {
+		COVER_IMAGE_ID = cOVER_IMAGE_ID;
+	}
+	public String getTITLE() {
+		return TITLE;
+	}
+	public void setTITLE(String tITLE) {
+		TITLE = tITLE;
+	}
+	private Integer HAS_CO;//是否还有co币
+	private String FORWARD_OR_MY;//是转发广告还是我的广告
+	private String AD_LOCATION;//广告种类
+	private String ID;//广告ID
+	private String CREATE_DATE;//广告创建时间
+	private String COVER_IMAGE_ID;//封面图片ID
+	private String TITLE;//标题
+	private String AD_STATUS;//广告状态
+	private String COVER_IMAGE_URL;//图片地址
+	public String getCOVER_IMAGE_URL() {
+		return COVER_IMAGE_URL;
+	}
+	public void setCOVER_IMAGE_URL(String cOVER_IMAGE_URL) {
+		COVER_IMAGE_URL = cOVER_IMAGE_URL;
+	}
+	public String getAD_STATUS() {
+		return AD_STATUS;
+	}
+	public void setAD_STATUS(String aD_STATUS) {
+		AD_STATUS = aD_STATUS;
+	}
+}

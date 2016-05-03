@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal" >
+    <RelativeLayout android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
+  <View android:id="@+id/v1"
+            android:layout_width="85dp"
+            android:layout_height="42.5dp"
+            android:visibility="gone"
+            android:background="@color/white" />
+  <View
+      android:id="@+id/v2"
+      android:layout_below="@id/v1"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:background="@drawable/stroke_vertical_xuxian_c6" />
+    <ImageView 
+        android:id="@+id/iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/wdedingdan_process_gray"/>
+    </RelativeLayout>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="85dp"
+   
+    
+    android:layout_gravity="center_vertical">
+        <View android:layout_width="1dp"
+        android:layout_height="1dp"
+           android:layout_centerVertical="true"
+        android:id="@+id/v"/>
+    <TextView
+        android:layout_above="@id/v"
+        android:id="@+id/wuliuguocheng"
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="这里是物流流程"
+        android:layout_centerVertical="true"
+        android:textColor="@color/black2"/>
+
+    <TextView 
+        android:id="@+id/wuliutime"
+        android:layout_below="@id/v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="这里显示时间"
+        android:textColor="@color/black2"
+      
+        android:textSize="12sp"
+        />
+    <View android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/dian_line_product_e8"/>
+</RelativeLayout>
+</LinearLayout>

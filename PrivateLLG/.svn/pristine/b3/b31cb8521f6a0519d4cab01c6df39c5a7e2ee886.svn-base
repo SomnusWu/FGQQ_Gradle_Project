@@ -1,0 +1,339 @@
+package com.llg.privateproject.view;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.actvity.LoginActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.CommonUtils;
+import com.bjg.lcc.privateproject.R;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+import android.widget.Toast;
+/**产品尺寸对话框
+ * yh
+ * 2015.6.21
+ * 
+ * */
+public class ProductDetailSizeDialog extends Dialog implements android.view.View.OnClickListener,
+OnGestureListener{
+	/**返回按钮*/
+private ImageView iv_cancel;
+/**产品图片*/
+private ImageView iv_pic;
+/**产品价格*/
+private TextView tv_price;
+/**产品库存*/
+private TextView tv_desc;
+/**选择尺寸*/
+private TextView tv_size;
+/**减少数量按钮*/
+private ImageView jian;
+/**购买数量*/
+private TextView bay_count;
+/**增加数量*/
+private ImageView plus;
+/**立即购买*/
+private TextView now_buy;
+/**加入购物车*/
+private TextView to_collect;
+/**库存数*/
+private int count1;
+/**选择数量*/
+private int count2;
+/**手势检测器*/
+private GestureDetector detector;
+private Context context;
+private int num;
+private Map<String,Object>map;
+private LinearLayout guige_ll;
+	/**num:1,商品规格,2 店铺简介*/
+	public ProductDetailSizeDialog(Context context,int num,Map<String,Object>map) {
+		super(context, R.style.agreemdialog);
+		// TODO Auto-generated constructor stub
+		this.context=context;
+		this.num=num;
+		this.map=map;
+	}
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		if(num==1){
+		 init();}else if(num==2){
+			 initShopintroduction();
+		 }
+	}
+	/**商品规格选择*/
+	void init(){
+		setContentView(R.layout.product_detail_size);
+		
+		guige_ll=(LinearLayout) findViewById(R.id.guige_ll);
+		iv_cancel=(ImageView) findViewById(R.id.iv_cancle);
+		iv_pic=(ImageView) findViewById(R.id.iv_pic);
+		tv_price=(TextView) findViewById(R.id.tv_price);
+		tv_desc=(TextView) findViewById(R.id.tv_desc);
+		tv_size=(TextView) findViewById(R.id.tv_size);
+		jian=(ImageView) findViewById(R.id.jian);
+		bay_count=(TextView) findViewById(R.id.bay_count);
+		plus=(ImageView) findViewById(R.id.plus);
+		now_buy=(TextView) findViewById(R.id.now_buy);
+		to_collect=(TextView) findViewById(R.id.to_collect);
+		addSpec(null);
+		iv_cancel.setOnClickListener(this);
+		jian.setOnClickListener(this);
+		plus.setOnClickListener(this);
+		now_buy.setOnClickListener(this);
+		to_collect.setOnClickListener(this);
+		
+		count1=Integer.parseInt(tv_desc.getText().toString());
+		 count2=Integer.parseInt(bay_count.getText().toString());
+		 detector=new GestureDetector(context, this);
+	}
+	/**店铺简介*/
+	void initShopintroduction(){
+		setContentView(R.layout.shopintroduction);
+		detector=new GestureDetector(context, this);
+		iv_cancel=(ImageView) findViewById(R.id.iv_cancle);
+		ImageView shop_head=(ImageView) findViewById(R.id.shop_head);
+		LayoutParams params=(LayoutParams) shop_head.getLayoutParams();
+		params.width=AppContext.getScreenWidth()/8;
+		params.height=AppContext.getScreenWidth()/8;
+		shop_head.setLayoutParams(params);
+		ImageView onlineservice=(ImageView) findViewById(R.id.onlineservice);
+		ImageView telphone=(ImageView) findViewById(R.id.telphone);
+		ImageView qrcode=(ImageView) findViewById(R.id.qrcode);
+		
+		TextView shopname=(TextView) findViewById(R.id.shopname);
+		shopname.setText(map.get("name").toString());
+		MyFormat.setBitmap(context, shop_head,map.get("logo").toString(), params.width, params.height);
+
+		TextView care=(TextView) findViewById(R.id.care);
+		TextView dsc=(TextView) findViewById(R.id.dsc);
+		if(map.get("logistics")!=null){
+			dsc.setText(map.get("logistics").toString());
+		}
+		TextView wuliuscore=(TextView) findViewById(R.id.wuliuscore);
+		if(map.get("remarks")!=null){
+			wuliuscore.setText(map.get("remarks").toString());
+		}
+		
+		TextView serverscore=(TextView) findViewById(R.id.serverscore);
+		
+		if(map.get("serve")!=null){
+			serverscore.setText(map.get("serve").toString());
+		}
+		TextView productscore=(TextView) findViewById(R.id.productscore);
+		
+		if(map.get("information")!=null){
+			productscore.setText(map.get("information").toString());
+		}
+		TextView phone=(TextView) findViewById(R.id.phone);
+		if(map.get("phone")!=null){
+			phone.setText(map.get("phone").toString());
+		}
+		TextView shopname1=(TextView) findViewById(R.id.shopname1);
+		if(map.get("name")!=null){
+			shopname1.setText(map.get("name").toString());
+		}
+		TextView address=(TextView) findViewById(R.id.address);
+		if(map.get("address")!=null){
+			address.setText(map.get("address").toString());
+		}
+		TextView createdate=(TextView) findViewById(R.id.createdate);
+		if(map.get("createDate")!=null){
+			createdate.setText(map.get("createDate").toString());
+		}else{
+			createdate.setText("暂无");
+		}
+//		dsc.setMovementMethod(ScrollingMovementMethod.getInstance());
+		 iv_cancel.setOnClickListener(this);
+		 care.setOnClickListener(this);
+		 onlineservice.setOnClickListener(this);
+		 telphone.setOnClickListener(this);
+		 qrcode.setOnClickListener(this);
+	}
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.iv_cancle://隐藏
+			if(isShowing()){
+			cancel();}
+			break;
+		case R.id.jian://数量减
+			if(count2>=1){
+				bay_count.setText(""+ --count2);
+			}else{
+				Toast.makeText(getContext(), "数量为零", Toast.LENGTH_SHORT).show();
+				
+			}
+			break;
+		case R.id.plus://数量加
+			
+			if(count1>count2){
+				bay_count.setText(""+ ++count2);
+			}else{
+				Toast.makeText(getContext(), "库存不足", Toast.LENGTH_SHORT).show();
+				
+			}
+			break;
+		case R.id.now_buy://立即购买
+			Toast.makeText(getContext(), "立即购买", Toast.LENGTH_SHORT).show();
+			
+			break;
+		case R.id.to_collect://加入购物车
+			Toast.makeText(getContext(), "加入购物车", Toast.LENGTH_SHORT).show();
+			
+			break;
+		case R.id.care://店铺关注
+		
+			if(((AppContext) context.getApplicationContext()).isNetworkConnected()){
+				attion();
+				}else{
+					Toast.makeText(context, R.string.t_Connection, Toast.LENGTH_SHORT).show();
+					
+				}
+			
+			
+			break;
+		case R.id.onlineservice://在线客服
+			Toast.makeText(getContext(), "在线客服", Toast.LENGTH_SHORT).show();
+			
+			break;
+		case R.id.telphone://店铺电话
+			Toast.makeText(getContext(), "店铺电话", Toast.LENGTH_SHORT).show();
+			
+			break;
+		case R.id.qrcode://我的二维码
+			Toast.makeText(getContext(), "我的二维码", Toast.LENGTH_SHORT).show();
+			
+			break;
+			
+		default:
+			break;
+		}
+	}
+	/***关注*/
+private  void attion(){
+	if(!AppContext.isLogin){
+		Toast.makeText(context, "关注前请先登录", Toast.LENGTH_SHORT).show();
+		context.startActivity(new Intent(context, LoginActivity.class));
+		return;
+	}
+	RequestParams params=new RequestParams();
+	params.addQueryStringParameter("access_token", AppContext.getUserInformation().getAccess_token());
+	params.addQueryStringParameter("type", String.valueOf(2));
+	params.addQueryStringParameter("objectId", map.get("id").toString());//objectId  
+	AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST, "m/attention/addAttention", params, new HttpCallback() {
+		
+		@Override
+		public void onError(String msg) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onBack(JSONObject json) {
+			// TODO Auto-generated method stub
+			try {
+				if(json.getBoolean("success")){
+					Toast.makeText(context, "已经关注", Toast.LENGTH_SHORT).show();
+				
+				}else{
+					Toast.makeText(context, json.getString("msg"), Toast.LENGTH_SHORT).show();
+			
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	} );
+}
+	/**添加规格*/
+	private void addSpec(Map<String, Object>map){
+		for (int i = 0; i < 3; i++) {
+			View view=View.inflate(context, R.layout.product_detailsize_item, null);
+			view=View.inflate(context, R.layout.product_detailsize_item, null);
+			TextView title=(TextView)view.findViewById(R.id.guige_title);
+			title.setText("标题"+i);
+			GridView gv=(GridView) view.findViewById(R.id.guige_gv);
+			List<String> list=new ArrayList<String>();
+			for (int j = 0; j <5; j++) {
+				list.add("j"+j);
+			}
+			gv.setAdapter(new ArrayAdapter<String>(context,R.layout.productdetail_size_item_item, list));
+			guige_ll.addView(view);
+		}
+	}
+	@Override
+	public boolean onDown(MotionEvent e) {
+		// TODO Auto-generated method stub
+		this.cancel();
+		return false;
+	}
+	@Override
+	public void onShowPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+		this.cancel();
+	}
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public void onLongPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		// TODO Auto-generated method stub
+		if((e2.getX()-e1.getX())>20){
+			this.cancel();
+		}
+		return true;
+	}
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO Auto-generated method stub
+		return detector.onTouchEvent(event);
+	}
+	
+}

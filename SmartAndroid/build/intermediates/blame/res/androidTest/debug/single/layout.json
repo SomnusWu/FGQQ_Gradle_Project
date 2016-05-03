@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\exception_loading_content.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\layout\\exception_loading_content.xml"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_main.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\exception_no_internet.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\layout\\exception_no_internet.xml"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\exception_failure.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\SmartAndroid\\build\\intermediates\\bundles\\debug\\res\\layout\\exception_failure.xml"
+    }
+]

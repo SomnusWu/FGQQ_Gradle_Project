@@ -1,0 +1,201 @@
+package com.llg.privateproject.actvity;
+
+import java.sql.Wrapper;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONObject;
+
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.DialogInterface.OnCancelListener;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.LinearLayout.LayoutParams;
+
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.adapters.AdvertisementAdapter;
+import com.llg.privateproject.entities.Advertisement;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.fragment.BaseActivity.Refresh;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.view.CustomProgressSmall;
+import com.smartandroid.sa.view.AutoLoading;
+
+public class MineAdvertisementAty extends BaseActivity implements
+		OnRefreshListener2<ListView> {
+	@ViewInject(R.id.listview)
+	private PullToRefreshListView listView;
+	@ViewInject(R.id.ly_listview)
+	private LinearLayout ly;
+	@ViewInject(R.id.iv)
+	private ImageView iv;
+	private int page = 1;
+	private CustomProgressSmall customProgressSmall;
+	private AdvertisementAdapter adapter;
+	private List<Advertisement> tlist;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aty_mine_advertisement);
+		ViewUtils.inject(this);
+		initUI();
+		initAutoLoadingNoShow(ly);
+		if (AppContext.getUserInformation().isLogin()) {
+			autoLoading.showLoadingLayout();
+			requestHttp(AppContext.getUserInformation().getAccess_token());
+		} else {
+			goWebLoginActivity();
+			finish();
+		}
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == 1 && resultCode == RESULT_OK) {
+			page = 1;
+			requestHttp(AppContext.getUserInformation().getAccess_token());
+		}
+	};
+
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			if (msg.what == 1) {
+				autoLoading.hideAll();
+				// android.widget.FrameLayout.LayoutParams params = new
+				// android.widget.FrameLayout.LayoutParams(
+				// LayoutParams.MATCH_PARENT, La);
+				// ly.setLayoutParams(params);
+				adapter.upData(tlist);
+			}
+		};
+	};
+
+	/**
+	 * 初始化界面
+	 */
+	private void initUI() {
+		tlist = new ArrayList<Advertisement>();
+		listView.setOnRefreshListener(this);
+		adapter = new AdvertisementAdapter(this, tlist);
+		listView.setAdapter(adapter);
+		listView.setOnRefreshListener(this);
+	}
+
+	@OnClick({ R.id.iv_back, R.id.iv_put })
+	public void onClick(View v) {
+		Log.i("tag", "++++++++++++++++++=----------------tag");
+		switch (v.getId()) {
+		case R.id.iv_back:
+			finish();
+			break;
+		case R.id.iv_put:
+			startActivityForResult(new Intent(this, PutAdvertisementAty.class),
+					1);
+			break;
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * 发起广告列表请求
+	 */
+	private void requestHttp(String access_token) {
+		RequestParams params = new RequestParams();
+		Log.i("tag", access_token + "-----requestHttp---access_token------");
+		params.addQueryStringParameter("access_token", access_token);
+		params.addQueryStringParameter("pageNo", page + "");
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/ad/getMyPublishAd", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						autoLoading.showExceptionLayout();
+						Log.i("tag", msg + "--------进来了--msg------");
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						ParseJson parseJson = ParseJson.getParseJson();
+						Map<String, Object> map = ParseJson.getParseJson()
+								.parseIsSuccess(json);
+						Log.i("tag", (Boolean) map.get("isSuccess")
+								+ "--------------isSuccess-----" + json);
+						// customProgressSmall.dismiss();
+						if ((Boolean) map.get("isSuccess")) {
+							List<Advertisement> list = parseJson
+									.parseAdvertisementList(json);
+							connectData(list);
+						} else if (map.get("errorCode").equals("NOT_LOGIN")) {
+							// Log.i("tag", json.toString()
+							// + "------监听上一句--------");
+							setRefreshListtener(new Refresh() {
+								@Override
+								public void refreshRequst(String access_token) {
+									// TODO Auto-generated method stub
+									Log.i("tag", "------监听里-------");
+									requestHttp(access_token);
+								}
+							});
+							RefeshToken();
+						}
+					}
+				});
+	}
+
+	/**
+	 * @param list
+	 *            根据page拼接数据
+	 */
+	private void connectData(List<Advertisement> list) {
+		if (list != null) {
+			if (page == 1) {
+				tlist.clear();
+				tlist.addAll(list);
+			} else {
+				tlist.addAll(list);
+			}
+		}
+		handler.sendEmptyMessage(1);
+	}
+
+	// 下拉
+	@Override
+	public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+		// TODO Auto-generated method stub
+		page = 1;
+		requestHttp(AppContext.getUserInformation().getAccess_token());
+	}
+
+	// 上拉
+	@Override
+	public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+		// TODO Auto-generated method stub
+		page = page + 1;
+		requestHttp(AppContext.getUserInformation().getAccess_token());
+	}
+}

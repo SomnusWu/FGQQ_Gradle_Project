@@ -1,0 +1,449 @@
+package com.llg.privateproject.actvity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.bjg.lcc.privateproject.R;
+import com.llg.privateproject.adapters.OrderAdapter;
+<<<<<<< .mine
+=======
+import com.llg.privateproject.adapters.OrderAdapter.ChangeInvoice;
+import com.llg.privateproject.adapters.ShoppingCardAdapter;
+>>>>>>> .r3418
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.view.Gerenziliao_Dialog;
+import com.llg.privateproject.view.Gerenziliao_Dialog.PreferentialListener;
+import com.smartandroid.sa.view.AutoLoading;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
+import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+/**
+ * 订单结算页面 yh 2015.07.14
+ * */
+public class OrderClearActivity extends BaseActivity implements
+		PreferentialListener,ChangeInvoice
+		{
+	/** 订单布局文件 */
+	@ViewInject(R.id.sv)
+	private ScrollView sv;
+	/** 订单GridView */
+	@ViewInject(R.id.order_gv)
+	private GridView order_gv;
+	/** 运费 */
+	@ViewInject(R.id.youhui0)
+	private TextView youhui0;
+	/** 运费额 */
+	@ViewInject(R.id.youhui)
+	private TextView youhui;
+	/** 订单可用优惠 */
+	@ViewInject(R.id._youhui)
+	private TextView _youhui;
+	/** 订单可用优惠 */
+	@ViewInject(R.id._youhui0)
+	private TextView _youhui0;
+	/** 商品总净额 */
+	@ViewInject(R.id.total_price)
+	private TextView total_price;
+	/** 支付金额 */
+	@ViewInject(R.id.total_prices)
+	private TextView total_prices;
+	OrderAdapter adapter;
+	/** 订单列表 */
+	List<Map<String, Object>> list;
+	/** 订单层部分数据 */
+	Map<String, Object> prepayCartModelMap;
+	private AutoLoading AutoLoading;
+	@ViewInject(R.id.ll)
+	private LinearLayout ll;
+	AppContext appContext;
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 1:// 访问成功
+				
+				youhui.setText("本单运费:￥"+MyFormat.getPriceFormat(prepayCartModelMap.get("allPdPrice").toString()));
+//				youhui0.setText("本次消费可用CO币抵扣:"+prepayCartModelMap.get("allCoPrice").toString()+"元");
+				_youhui.setText("我的CO币:"+prepayCartModelMap.get("myco").toString());
+				_youhui0.setText("本次消费可用CO币抵扣:"+prepayCartModelMap.get("allCoPrice").toString()+"元");
+				total_price.setText("￥"+MyFormat.getPriceFormat(prepayCartModelMap.get("prodPrice").toString()));
+				total_prices.setText("￥"+MyFormat.getPriceFormat(prepayCartModelMap.get("payPrice").toString()));
+				break;
+
+			}
+		};
+	};
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.order_clear);
+		ViewUtils.inject(this);
+		init();
+	}
+
+	private void init() {
+		initAutoLoading(ll);
+		appContext = getAppContext();
+		if (appContext.isNetworkConnected()) {
+
+				getPrepay("forceGetPrepay", AppContext
+						.getUserInformation().getAccess_token());
+			
+		} else {
+			toast(R.string.t_Connection);
+		}
+		autoLoading.setClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (appContext.isNetworkConnected()) {
+
+					if (AppContext.getUserInformation().isLogin()) {
+						getPrepay("forceGetPrepay", AppContext
+								.getUserInformation().getAccess_token());
+					} else {
+						Intent intent = new Intent(OrderClearActivity.this,
+								WebLoginActivity.class);
+						startActivity(intent);
+
+					}
+				} else {
+					toast(R.string.t_Connection);
+				}
+			}
+		});
+		list = new ArrayList<Map<String, Object>>();
+		prepayCartModelMap = new HashMap<String, Object>();
+		adapter = new OrderAdapter(this, list,this);
+		order_gv.setAdapter(adapter);
+		// testData();
+	}
+
+	/**
+	 * 获取结算订单
+	 * 
+	 * @param:method:forceGetPrepay强制从数据库获取订单信息,method:fastGetPrepay从缓存中获取订单信息
+	 * 
+	 * */
+	private void getPrepay(final String method, String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/prepay/" + method, params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						// setRefreshListtener(new Refresh() {
+						// @Override
+						// public void refreshRequst(
+						// String access_token) {
+						// // TODO Auto-generated method stub
+						//
+						// getPrepay(method, AppContext
+						// .getUserInformation()
+						// .getAccess_token());
+						// }
+						// });
+						// RefeshToken();
+						autoLoading.showExceptionLayout();
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						autoLoading.hideAll();
+						try {
+							if (json.getBoolean("success")) {
+								JSONObject obj = json.getJSONObject("obj");
+								JSONObject prepayCartModel = obj
+										.getJSONObject("prepayCartModel");
+								
+								prepayCartModelMap.put("myco",
+										prepayCartModel.getInt("myco"));// 我的co
+								prepayCartModelMap.put("allCoPrice",
+										prepayCartModel.getInt("allCoPrice"));// 使用co数
+								prepayCartModelMap.put("difCoPrice",
+										prepayCartModel.getInt("difCoPrice"));// 需补足co
+								prepayCartModelMap.put("useCo",
+										prepayCartModel.getBoolean("useCo"));// 选择是否可用
+								prepayCartModelMap
+										.put("allPdPrice", prepayCartModel
+												.getString("allPdPrice"));// 运费总价
+								prepayCartModelMap
+								.put("prodPrice", prepayCartModel
+										.getString("prodPrice"));// 商品原总价
+								prepayCartModelMap.put("payPrice",
+										prepayCartModel.getString("payPrice"));// 支付价格
+								prepayCartModelMap.put("allCount",
+										prepayCartModel.getString("allCount"));//所有商品数
+								prepayCartModelMap.put("checked",
+										prepayCartModel.getString("checked"));//
+							
+								
+								if (obj.getJSONObject("receiveAddress") != null) {// 获取地址
+									JSONObject jsonObject = obj
+											.getJSONObject("receiveAddress");
+
+								}
+					
+								JSONArray shopModels = prepayCartModel
+										.getJSONArray("shopModels");
+					
+							
+								Map<String, Object> map;// 店铺
+								if (shopModels.length() > 0) {
+									for (int i = 0; i < shopModels.length(); i++) {
+										JSONObject object = shopModels
+												.getJSONObject(i);
+										map = new HashMap<String, Object>();
+										map.put("shopId",
+												object.getString("shopId"));
+										map.put("shopName",
+												object.getString("shopName"));
+										map.put("shopActivity", "店铺活动" + i);
+										map.put("shopProductCount",
+												object.getString("allCount"));//数量
+										map.put("shopTotalprice",
+												object.getString("payPrice"));//支付运费
+										map.put("pdPrice",
+												object.getString("pdPrice"));// 运费
+										map.put("postTime", "时间不限");
+										map.put("payment", "网上支付");
+//										prepayCartModelMap.put("invoiceType",
+//												obj.getString("invoiceType"));// 发票类型
+//										prepayCartModelMap.put("invoiceTitle",
+//												obj.getString("invoiceTitle"));// 发票开头
+										if(obj.getString("invoiceType")!=null){
+											
+											map.put("invoiceType",obj.getString("invoiceType"));
+											map.put("invoiceHead", obj.getString("invoiceTitle"));
+										}else
+											map.put("invoiceType","0");
+										map.put("invoiceHead", "不开发票");
+										{
+											
+										}
+										map.put("invoiceCategory", "");
+										JSONArray specs = object
+												.getJSONArray("specs");
+									
+										if (specs.length() > 0) {
+											Map<String, Object> map1;// 商品
+											List<Map<String, Object>> listProducts = new ArrayList<Map<String, Object>>();
+
+											for (int j = 0; j < specs.length(); j++) {
+												map1 = new HashMap<String, Object>();
+												JSONObject object2 = specs
+														.getJSONObject(j);
+												map1.put("productId", object2
+														.getString("specId"));//规格id
+												map1.put("productName", object2
+														.getString("prodName"));//商品名
+												map1.put("productImg", object2
+														.getString("iconPath"));//图片地址
+												map1.put("productDsc", object2
+														.getString("prodName"));
+												map1.put(
+														"productPrice",
+														object2.getString("price"));
+												map1.put(
+														"productCount",
+														object2.getString("allCheckedCount"));
+												map1.put(
+														"allCheckedPrice",
+														object2.getString("allCheckedPrice"));
+
+												listProducts.add(map1);
+
+											}
+											map.put("listProducts",
+													listProducts);
+											// Log.d("my",
+											// "listProducts.size()"+listProducts.size());
+											listProducts = null;
+										}
+
+										list.add(map);
+							
+									}
+								}
+								handler.sendEmptyMessage(1);
+								adapter.notifyDataSetChanged();
+
+							} else if (json.getString("errorCode").equals(
+									"NOT_LOGIN")) {
+								// Log.i("tag", json.toString()
+								// + "------监听上一句--------");
+								setRefreshListtener(new Refresh() {
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+
+										getPrepay(method, AppContext
+												.getUserInformation()
+												.getAccess_token());
+									}
+								});
+								RefeshToken();
+							}
+
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						autoLoading.hideAll();
+						handler.post(new Runnable() {
+
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								// sv.fullScroll(ScrollView.FOCUS_UP);
+								// sv.scrollTo(0, 0);
+								sv.smoothScrollTo(0, 0);
+							}
+						});
+					}
+				});
+	}
+
+	/** 订单测试数据 */
+	void testData() {
+		Map<String, Object> map;// 店铺
+		for (int i = 1; i < 4; i++) {
+			map = new HashMap<String, Object>();
+			map.put("shopId", "" + i);
+			map.put("shopName", "店铺名" + i);
+			map.put("shopActivity", "店铺活动" + i);
+			Map<String, Object> map1;// 商品
+			List<Map<String, Object>> listProducts = new ArrayList<Map<String, Object>>();
+			int j = 0;
+			int count = 0;
+			float totalPrice = 0;
+			for (j = 1; j < 5; j++) {
+				map1 = new HashMap<String, Object>();
+				map1.put("productId", "" + i + j);
+				map1.put("productName", "商品名" + i + j);
+				map1.put("productImg", "商品图片地址" + i + j);
+				map1.put("productDsc", "商品描述" + i + j);
+				map1.put("productPrice", "" + i + j);
+				map1.put("productCount", "" + j);
+				count += j;
+				listProducts.add(map1);
+				totalPrice += Float.parseFloat(map1.get("productPrice")
+						.toString())
+						* Float.parseFloat(map1.get("productCount").toString());
+			}
+
+			map.put("shopProductCount", "" + count);
+			map.put("shopTotalprice", "" + totalPrice);
+			map.put("listProducts", listProducts);
+			map.put("postTime", "时间不限");
+			map.put("payment", "网上支付");
+			map.put("invoiceHead", "不开发票");
+			map.put("invoiceCategory", "");
+			// Log.d("my", "listProducts.size()"+listProducts.size());
+			listProducts = null;
+			list.add(map);
+		}
+		adapter.notifyDataSetChanged();
+		handler.post(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				// sv.fullScroll(ScrollView.FOCUS_UP);
+				// sv.scrollTo(0, 0);
+				sv.smoothScrollTo(0, 0);
+			}
+		});
+		//
+	}
+
+	@OnClick({ R.id.turn, R.id.rl_address, R.id.ll_preferential,
+			R.id.tijiaodingdan })
+	public void myclick(View v) {
+		switch (v.getId()) {
+		case R.id.turn:// 返回
+			finish();
+			break;
+		case R.id.rl_address:// 选择收货地址
+			startActivity(new Intent(this, OrderAddressListActivity.class));
+			Toast.makeText(this, "请选择收货地址", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.ll_preferential:// 选择优惠
+//			Gerenziliao_Dialog dialog = new Gerenziliao_Dialog(this, 9, this);
+//			dialog.show();
+//			LayoutParams lp = dialog.getWindow().getAttributes();
+//			lp.width = AppContext.getScreenWidth();
+//			lp.height = AppContext.getScreenHeight();
+//			dialog.getWindow().setAttributes(lp);
+//			Toast.makeText(this, "选择优惠", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.tijiaodingdan:// 提交订单
+			Toast.makeText(this, "提交订单", Toast.LENGTH_SHORT).show();
+			break;
+
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+
+	}
+
+	@Override
+	public void setPreferential(String coin, String voucher) {
+		// TODO Auto-generated method stub
+		if (coin.length() > 0 && voucher.length() > 0) {
+			youhui.setText("CO币可抵扣：" + coin + "元," + "满省优惠已省：" + voucher);
+		} else if (coin.length() > 0 && voucher.length() < 1) {
+			youhui.setText("CO币可抵扣：" + coin + "元");
+		} else if (coin.length() < 1 && voucher.length() < 1) {
+
+			youhui.setText("未使用优惠");
+		} else if (coin.length() < 1 && voucher.length() > 0) {
+
+			youhui.setText("满省优惠已省：" + voucher);
+		}
+
+	}
+
+	@Override
+	public void getInvoiceType(String invoiceCategory, String invoiceType) {
+		// TODO Auto-generated method stub
+		Log.d("my", "invoiceCategory"+invoiceCategory);
+		Log.d("my", "invoiceType"+invoiceType);
+	}
+}

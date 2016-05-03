@@ -1,0 +1,191 @@
+package com.llg.privateproject.actvity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.bjg.lcc.privateproject.R;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.adapters.BalanceAdapter;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+/**收支明细表
+ * yh
+ * 2016.1.18
+ * */
+public class Balance extends BaseActivity implements
+OnRefreshListener2<ListView> {
+
+	@ViewInject(R.id.title)
+	private TextView title;
+	@ViewInject(R.id.listview_withdraw_history)
+	private PullToRefreshListView listView;
+	@ViewInject(R.id.ly_load)
+	private LinearLayout lyLoad;
+	@ViewInject(R.id.empty)
+	private LinearLayout lyEmpty;
+	private int page = 1;
+	private List<Map<String, Object>> tlist;
+	private BalanceAdapter adapter;
+	private int oldPosition;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aty_withdraw_history);
+		ViewUtils.inject(this);
+		initUI();
+		requestDrawHistory(UserInformation.getAccess_token());
+	}
+
+	private void initUI() {
+		if(getIntent().getIntExtra("type", 0)==0){
+			title.setText("收支明细");
+		}else{
+			title.setText("收益明细");
+			
+		}
+		initAutoLoading(lyLoad);
+		autoLoading.setClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				autoLoading.showLoadingLayout();
+				requestDrawHistory(UserInformation.getAccess_token());
+			}
+		});
+		tlist = new ArrayList<Map<String, Object>>();
+		adapter = new BalanceAdapter(this, tlist);
+		listView.setEmptyView(lyEmpty);
+		listView.setAdapter(adapter);
+		listView.setOnRefreshListener(this);
+	}
+
+	@OnClick({ R.id.iv_back })
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.iv_back:
+			finish();
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		if (autoLoading.getVisibelyLoad()) {
+			finish();
+			return;
+		}
+	}
+
+	/**
+	 * 收益明细
+	 */
+	private void requestDrawHistory(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addQueryStringParameter("pageNo", page + "");
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/customer/getCashAdvanceHistory", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						// autoLoading.showExceptionLayout();
+						autoLoading.showExceptionLayout();
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+					
+						try {
+							if (json.getBoolean("success")) {
+								// json.getJSONObject("");
+
+								autoLoading.hideAll();
+								JSONArray ar=json.getJSONObject("obj").getJSONArray("");
+								if (ar.length()>0) {
+									Map<String, Object> map;
+									for (int i = 0; i < ar.length(); i++) {
+										map=new HashMap<String, Object>();
+										map.put("date", "date");
+										map.put("dsc", "dsc");
+										map.put("money", "money");
+										map.put("type", "type");
+										tlist.add(map);
+									}
+									adapter.notifyDataSetChanged();
+									listView.onRefreshComplete();
+//								listView.getRefreshableView()
+//										.setSelectionFromTop(
+//												oldPosition,
+//												Balance.this.TRIM_MEMORY_BACKGROUND);
+								}
+							} else {
+								if (json.get("errorCode")!=null&&json.get("errorCode").equals("NOT_LOGIN")) {
+									setRefreshListtener(new Refresh() {
+										@Override
+										public void refreshRequst(
+												String access_token) {
+											// TODO Auto-generated method stub
+											requestDrawHistory(access_token);
+										}
+									});
+									RefeshToken();
+								}else {
+									Toast.makeText(Balance.this, json.optString("msg"),
+											Toast.LENGTH_LONG).show();
+								}
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+
+	@Override
+	public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+		// TODO Auto-generated method stub
+		page = 1;
+		requestDrawHistory(UserInformation.getAccess_token());
+	}
+
+	@Override
+	public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+		// TODO Auto-generated method stub
+		page = page + 1;
+		oldPosition = tlist.size();
+		requestDrawHistory(UserInformation.getAccess_token());
+	}
+}

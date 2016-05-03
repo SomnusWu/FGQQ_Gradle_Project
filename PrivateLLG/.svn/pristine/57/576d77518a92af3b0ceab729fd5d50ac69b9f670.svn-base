@@ -1,0 +1,329 @@
+package com.llg.privateproject.actvity;
+
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.telephony.TelephonyManager;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.llg.privateproject.entities.KeyBoradBean;
+import com.llg.privateproject.fragment.FGQQCallFragment;
+import com.llg.privateproject.fragment.FragmentPhoneCharge;
+import com.llg.privateproject.fragment.FragmentPhoneMoney;
+import com.llg.privateproject.fragment.FragmentPhoneRecent;
+import com.llg.privateproject.fragment.FragmentPhonelist;
+import com.llg.privateproject.receiver.MyPhoneBroadcastReceiver;
+import com.llg.privateproject.utils.Constants;
+import com.llg.privateproject.utils.LogManag;
+import com.llg.privateproject.utils.StringUtils;
+import com.llg.privateproject.view.KeyBoradBottomView;
+import com.llg.privateproject.view.KeyBoradBottomView.KeyBoradBottom;
+import com.llg.privateproject.view.KeyBoradBottomView.iKeyBoradBottomInterFace;
+import com.llg.privateproject.view.MyTabWidget;
+import com.llg.privateproject.view.MyTabWidget.OnTabSelectedListener;
+import com.smartandroid.sa.eventbus.EventBus;
+import com.smartandroid.sa.sql.util.Log;
+
+/**
+ * 打电话 yh 2016.01.03
+ * 
+ * */
+public class PhoneActivity extends FragmentActivity implements
+		OnCheckedChangeListener, OnTabSelectedListener {
+
+	public final static String TAG = "PhoneActivity";
+	public final static String B_PHONE_STATE = TelephonyManager.ACTION_PHONE_STATE_CHANGED;
+	private MyPhoneBroadcastReceiver mBroadcastReceiver;
+
+	private FragmentManager fm;
+	@ViewInject(R.id.fl_phone)
+	private FrameLayout fl_phone;
+	@ViewInject(R.id.rg_phone)
+	private RadioGroup rg_phone;
+
+	@ViewInject(R.id.tab_widget)
+	private MyTabWidget mPhoneTab;
+	@ViewInject(R.id.keyborad_bottom_view)
+	private KeyBoradBottomView KeyBoradBottomView;
+	private int mIndex = Constants.HOME_FRAGMENT_INDEX;
+	/*
+	 * 拨号界面
+	 */
+	private FGQQCallFragment mQQGCallFragment;
+	// private FragmentPhoneCall fpCall;
+	private FragmentPhoneRecent fpRecent;
+	private FragmentPhonelist fpl;
+	private FragmentPhoneMoney fpm;
+	private FragmentPhoneCharge fpc;
+	private FragmentTransaction ft;
+
+	@Override
+	protected void onCreate(Bundle arg0) {
+		// TODO Auto-generated method stub
+		super.onCreate(arg0);
+		setContentView(R.layout.phoneactivity);
+		ViewUtils.inject(this);
+		fm = getSupportFragmentManager();
+		rg_phone.setOnCheckedChangeListener(this);
+		mQQGCallFragment = new FGQQCallFragment();
+
+		// fpCall = new FragmentPhoneCall();
+
+		ft = fm.beginTransaction();
+		// ft.add(R.id.fl_phone, fpCall);
+		// ft.show(fpCall);
+		ft.add(R.id.fl_phone, mQQGCallFragment);
+		ft.show(mQQGCallFragment);
+		ft.commit();
+
+		initEvents();
+		registerThis();
+
+	}
+
+	// 按钮1-注册广播
+	public void registerThis() {
+		Log.i(TAG, "registerThis");
+		mBroadcastReceiver = new MyPhoneBroadcastReceiver();
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(B_PHONE_STATE);
+		intentFilter.setPriority(Integer.MAX_VALUE);
+		registerReceiver(mBroadcastReceiver, intentFilter);
+	}
+
+	// 按钮2-撤销广播
+	public void unregisterThis() {
+		Log.i(TAG, "unregisterThis");
+		if (mBroadcastReceiver != null) {
+			unregisterReceiver(mBroadcastReceiver);
+		}
+		EventBus.getDefault().unregister(this);// 反注册EventBus
+
+	}
+
+	/**
+	 * 处理消息
+	 * 
+	 * @param event
+	 */
+	public void onEventMainThread(KeyBoradBean event) {
+		String msg = "onEventMainThread收到了消息：" + event.getKeyborad();
+		LogManag.d("keyborad", msg);
+		if (StringUtils.isEmpty(event.getKeyborad())) {
+			KeyBoradBottomView.setVisibility(View.GONE);
+		} else {
+			KeyBoradBottomView.setVisibility(View.VISIBLE);
+			keyboradEvent();
+		}
+	}
+
+	private void keyboradEvent() {
+		KeyBoradBottomView
+				.setMiKeyBoradBottomInterFace(new iKeyBoradBottomInterFace() {
+
+					@Override
+					public void boradBottomItem(KeyBoradBottom item) {
+						// TODO Auto-generated method stub
+
+						EventBus.getDefault().post(item);
+						// switch (item) {
+						// case KeyBoradSwitch:
+						// // 如果键盘是开着的 就关闭掉
+						// EventBus.getDefault().post(KeyBoradBottom.KeyBoradSwitch);
+						// break;
+						// case KeyBoradCall:
+						// EventBus.getDefault().post(KeyBoradBottom.KeyBoradCall);
+						// break;
+						// case KeyBoradDelete:
+						// EventBus.getDefault().post(KeyBoradBottom.KeyBoradDelete);
+						// break;
+						//
+						// default:
+						// break;
+						// }
+					}
+				});
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		onTabSelected(mIndex);
+	}
+
+	private void initEvents() {
+		mPhoneTab.setOnTabSelectedListener(this);
+		// 注册EventBus
+		EventBus.getDefault().register(this);
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		// TODO Auto-generated method stub
+		FragmentTransaction ft = fm.beginTransaction();
+		hideFragments(ft);
+		Log.d("my", "checkedId" + checkedId);
+
+		switch (checkedId) {
+		case R.id.rb_list:// 通讯录
+
+			if (fpl == null) {
+				try {
+					fpl = new FragmentPhonelist();
+					ft.add(R.id.fl_phone, fpl);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+
+			} else {
+				try {
+					ft.show(fpl);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+			break;
+		case R.id.rb_recent:// 最近通话
+			if (fpRecent == null) {
+				fpRecent = new FragmentPhoneRecent();
+				ft.add(R.id.fl_phone, fpRecent);
+			} else {
+				ft.show(fpRecent);
+			}
+			break;
+		case R.id.rb_money:// 余额
+			if (fpm == null) {
+				fpm = new FragmentPhoneMoney();
+				ft.add(R.id.fl_phone, fpm);
+			} else {
+				ft.show(fpm);
+			}
+			break;
+		case R.id.rb_charge:// 充值
+			if (fpc == null) {
+				Log.i("tag", "-------------0--------------------");
+				fpc = new FragmentPhoneCharge();
+				Log.i("tag", "-------------1--------------------");
+				ft.add(R.id.fl_phone, fpc);
+			} else {
+				ft.show(fpc);
+			}
+			break;
+		case R.id.rb_call:// 拨号键盘
+			if (mQQGCallFragment == null) {
+				mQQGCallFragment = new FGQQCallFragment();
+				ft.add(R.id.fl_phone, mQQGCallFragment);
+			} else {
+				ft.show(mQQGCallFragment);
+			}
+			break;
+
+		}
+		ft.commit();
+	}
+
+	private void hideFragments(FragmentTransaction ft) {
+		if (fpl != null) {// 通讯录
+			Log.d("my", "隐藏通讯录");
+			// fm.findFragmentByTag("list");
+			ft.hide(fpl);
+		}
+		if (fpm != null) {
+			ft.hide(fpm);
+		}
+		if (fpc != null) {
+			ft.hide(fpc);
+		}
+		if (fpRecent != null) {
+			ft.hide(fpRecent);
+		}
+		if (mQQGCallFragment != null) {
+			ft.hide(mQQGCallFragment);
+		}
+	}
+
+	@Override
+	public void onTabSelected(int index) {
+		// TODO Auto-generated method stub
+		FragmentTransaction transaction = fm.beginTransaction();
+		hideFragments(transaction);
+
+		if (Constants.HOME_FRAGMENT_INDEX != index) {
+			// 关闭键盘底部 
+			KeyBoradBottomView.setVisibility(View.GONE);
+			//将键盘弹起
+//			EventBus.getDefault().post(KeyBoradBottom.KeyBoradSwitch);
+		}
+		switch (index) {
+		case Constants.HOME_FRAGMENT_INDEX:
+			if (null == mQQGCallFragment) {
+				mQQGCallFragment = new FGQQCallFragment();
+				transaction.add(R.id.fl_phone, mQQGCallFragment);
+			} else {
+				transaction.show(mQQGCallFragment);
+			}
+			break;
+		case Constants.CATEGORY_FRAGMENT_INDEX:
+			if (null == fpRecent) {
+				fpRecent = new FragmentPhoneRecent();
+				transaction.add(R.id.fl_phone, fpRecent);
+			} else {
+				transaction.show(fpRecent);
+			}
+			break;
+		case Constants.COLLECT_FRAGMENT_INDEX:
+			if (null == fpl) {
+				fpl = new FragmentPhonelist();
+				transaction.add(R.id.fl_phone, fpl);
+			} else {
+				transaction.show(fpl);
+			}
+			break;
+		case Constants.SETTING_FRAGMENT_INDEX:
+			if (null == fpm) {
+				fpm = new FragmentPhoneMoney();
+				transaction.add(R.id.fl_phone, fpm);
+				// Bundle bundle=new Bundle();
+				// bundle.putString("msg", message);
+				// Log.e("my", "msgmssggsafdsadf+:"+message);
+				// mSettingFragment.setArguments(bundle);
+			} else {
+				transaction.show(fpm);
+			}
+			break;
+		case Constants.PHONE_CHARGE_INDEX:
+			if (null == fpc) {
+				fpc = new FragmentPhoneCharge();
+				transaction.add(R.id.fl_phone, fpc);
+				// Bundle bundle=new Bundle();
+				// bundle.putString("msg", message);
+				// Log.e("my", "msgmssggsafdsadf+:"+message);
+				// mSettingFragment.setArguments(bundle);
+			} else {
+				transaction.show(fpc);
+			}
+			break;
+		default:
+			break;
+		}
+		mIndex = index;
+		transaction.commitAllowingStateLoss();
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		unregisterThis();
+	}
+
+}

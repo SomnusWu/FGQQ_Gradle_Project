@@ -1,0 +1,51 @@
+package com.llg.privateproject.entities;
+
+public class Advertisement {
+	private String createDate;
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
+	public String getAdLocation() {
+		return adLocation;
+	}
+
+	public void setAdLocation(String adLocation) {
+		this.adLocation = adLocation;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public String getAdStatus() {
+		return adStatus;
+	}
+
+	public void setAdStatus(String adStatus) {
+		this.adStatus = adStatus;
+	}
+
+	private String adLocation;
+	private String imageUrl;
+	private String adStatus;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	private String id;
+}

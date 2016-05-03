@@ -1,0 +1,98 @@
+package com.llg.help;
+
+import java.util.logging.LogRecord;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+
+import com.llg.privateproject.AppContext;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.QueueingConsumer;
+
+/**
+ * 接收推送消息 yh 2015.6.19
+ * 
+ * */
+@SuppressLint("HandlerLeak")
+public class Recv02 implements Runnable {
+
+	static String EXCHANGE_NAME = "PublishTest";
+
+	Context context;
+	MyCallback myCallback;
+
+	public interface MyCallback {
+		public void setMymessage(String message);
+	}
+
+	Handler handler = new Handler() {
+
+		public void handleMessage(Message msg) {
+
+			switch (msg.what) {
+			case 10:
+				String mes = msg.obj.toString();
+				myCallback.setMymessage(mes);
+				break;
+
+			default:
+				break;
+			}
+		}
+
+	};
+
+	/** 接收推送 */
+	public Recv02(Context context, MyCallback myCallback) {
+		this.context = context;
+
+		this.myCallback = myCallback;
+	};
+
+	public void recv() throws Exception {
+		ConnectionFactory factory = new ConnectionFactory();
+		factory.setHost("192.168.0.121");
+		factory.setPort(5672);
+		factory.setUsername("llgcode");
+		factory.setPassword("llgcode");
+
+		Connection conn = factory.newConnection();
+		Channel channel = conn.createChannel();
+
+		channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+		String queueName = channel.queueDeclare().getQueue();
+		channel.queueBind(queueName, EXCHANGE_NAME, "");
+
+		System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+
+		QueueingConsumer consumer = new QueueingConsumer(channel);
+		channel.basicConsume(queueName, true, consumer);
+
+		while (true) {
+			QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+			String message = new String(delivery.getBody());
+			Message mes = new Message();
+			mes.obj = message;
+			mes.what = 10;
+			handler.sendMessage(mes);
+			System.out.println(" [x] Received '" + message + "'");
+		}
+
+	}
+
+	@Override
+	public void run() {
+		try {
+			recv();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}

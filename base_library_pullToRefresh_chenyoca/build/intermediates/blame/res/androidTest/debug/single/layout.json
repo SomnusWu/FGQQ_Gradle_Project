@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\base_library_pullToRefresh_chenyoca\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\pull_to_refresh_header_vertical.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\base_library_pullToRefresh_chenyoca\\build\\intermediates\\bundles\\debug\\res\\layout\\pull_to_refresh_header_vertical.xml"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\base_library_pullToRefresh_chenyoca\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\pull_to_refresh_header.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\base_library_pullToRefresh_chenyoca\\build\\intermediates\\bundles\\debug\\res\\layout\\pull_to_refresh_header.xml"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\base_library_pullToRefresh_chenyoca\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\pull_to_refresh_header_horizontal.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\base_library_pullToRefresh_chenyoca\\build\\intermediates\\bundles\\debug\\res\\layout\\pull_to_refresh_header_horizontal.xml"
+    }
+]

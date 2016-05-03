@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/welcome"
+    android:orientation="vertical" >
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bjg_tanchuangguanggao_yangshibeijing"
+        android:orientation="vertical"
+        android:paddingBottom="5dp" >
+
+        <LinearLayout
+            android:id="@+id/lll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp" >
+
+            <View
+              
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="2" />
+
+            <TextView
+                android:id="@+id/tv_finish"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_weight="4"
+                android:background="@drawable/stroke_grayline_r2"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="离开"
+                android:textColor="@color/black2" />
+
+            <View
+                  android:id="@+id/v"
+                  android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_see"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_weight="4"
+                android:background="@drawable/stroke_meihong_r"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="查看更多"
+                android:textColor="@color/meihong" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="2" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/fgqqg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/lll"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="5dp"
+            android:text="FGQQG.COM"
+            android:textColor="@color/black2"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/fgqqg"
+            android:orientation="horizontal" >
+
+            <View
+                android:id="@+id/v1"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@color/black2" />
+
+            <TextView
+                android:id="@+id/red_package_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="风购全球"
+                android:textColor="@color/black2"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/v2"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@color/black2" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <WebView
+        android:id="@+id/wv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+</FrameLayout>

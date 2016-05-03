@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.smartandroid.sa.view.ReScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:scrollbars="none" >
+
+    <LinearLayout
+        android:id="@+id/lyLoad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+        <!-- 没有搜索到显示 -->
+	<LinearLayout
+	    android:id="@+id/ll_weizhaodao"
+	     android:layout_width="wrap_content"
+	    android:layout_height="match_parent"
+	    android:layout_marginTop="50dp"
+	      android:layout_gravity="center"
+	      android:layout_weight="1"
+	      android:orientation="vertical">
+	    <ImageView android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:src="@drawable/searh_weizhaodao"/>
+	    <TextView android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:text="没有搜索到相关产品"
+	        android:layout_marginTop="10dp"
+	        android:textColor="@color/black2"/>
+	    <!--热搜布局  -->
+	</LinearLayout>
+        <LinearLayout
+            android:id="@+id/hot_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="热搜"
+                android:textColor="@color/black1" />
+
+            <com.llg.privateproject.view.MyGridView
+                android:id="@+id/hot_gv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="5dp"
+                android:listSelector="@color/white"
+                android:numColumns="4"
+                android:verticalSpacing="5dp" />
+        </LinearLayout>
+<!-- 历史搜索布局 -->
+        <LinearLayout
+            android:id="@+id/history_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            
+             >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="历史搜索"
+                android:textColor="@color/black1" />
+
+            <View
+                style="@style/line_style2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/black3" />
+
+            <com.llg.privateproject.view.MyGridView
+                android:id="@+id/history_gv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:listSelector="@color/white" />
+
+            <LinearLayout
+                android:id="@+id/ll_cear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/stroke_lightgray"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="10dp" >
+
+                <TextView
+                    android:id="@+id/tv_clearn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="清除历史搜索"
+                    android:textColor="@color/black2" />
+            </LinearLayout>
+        </LinearLayout>
+        <!--  搜索提示布局-->
+           <com.llg.privateproject.view.MyGridView
+                android:id="@+id/search_result_gv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:listSelector="@color/white" />
+    </LinearLayout>
+
+</com.smartandroid.sa.view.ReScrollView>

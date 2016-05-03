@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp" >
+     <RelativeLayout android:layout_width="match_parent"
+	     android:layout_height="wrap_content"
+	     android:orientation="horizontal">
+	 <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/kuai_03"
+        android:padding="5dp"
+        android:textColor="@color/black1"
+        android:text=" 品牌推荐"/>
+	 <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:padding="5dp"
+        android:layout_alignParentRight="true"
+        android:text=" more》"
+        android:textColor="@color/black2"
+       />
+	 </RelativeLayout>
+	
+   
+
+        <com.llg.privateproject.view.MyGridView 
+            android:id="@+id/pinpiantuijian_gv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:listSelector="@null"
+              android:verticalSpacing="1dp"
+	         android:horizontalSpacing="1dp"
+	         android:padding="1dp"
+	         android:background="@color/black3"
+            android:numColumns="3">
+            
+        </com.llg.privateproject.view.MyGridView>
+   
+
+</LinearLayout>

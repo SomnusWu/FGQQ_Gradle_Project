@@ -1,0 +1,305 @@
+package com.llg.privateproject.actvity;
+
+import java.util.Map;
+
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.MyFormat;
+import com.llg.help.ScreenManager;
+import com.llg.help.Util;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.entities.AdvertisementDetail;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.LogManag;
+
+/**
+ * 广告详情
+ * 
+ * @author cc
+ * 
+ */
+public class AdvertisementDetailAty extends BaseActivity {
+	private Bundle bundle;
+	private String adInfoId;
+	@ViewInject(R.id.ly_load)
+	private LinearLayout lyLoad;
+
+	@ViewInject(R.id.ll_imgs_detail)
+	private LinearLayout ll_imgs_detail;
+	// 广告图片
+	@ViewInject(R.id.iv)
+	private ImageView iv;
+	// 广告位分类
+	@ViewInject(R.id.tv_kind)
+	private TextView tvKind;
+	// 广告创建时间
+	@ViewInject(R.id.tv_time)
+	private TextView tvTime;
+	// 广告投入现金金额
+	@ViewInject(R.id.tv_money)
+	private TextView tvMoney;
+	// 广告随机领取范围
+	@ViewInject(R.id.tv_random)
+	private TextView tvRandom;
+	// 广告投入酷币总额
+	@ViewInject(R.id.tv_cobi_total)
+	private TextView tvCobiTotal;
+	// 广告每人可领取酷币数
+	@ViewInject(R.id.tv_co_draw)
+	private TextView tvCoDraw;
+	// 广告剩余红包和酷币
+	@ViewInject(R.id.tv_remain)
+	private TextView tvRemain;
+
+	@ViewInject(R.id.ly_shengyu)
+	private LinearLayout lyShengyu;
+	@ViewInject(R.id.relay_redbag)
+	private RelativeLayout relaytoutRedbag;
+	private AdvertisementDetail advertisementDetail;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.aty_advertisement_detail);
+		ViewUtils.inject(this);
+		initUI();
+		intiData();
+		if (adInfoId != null) {
+			requestAdvisetisementDetail(UserInformation.getAccess_token());
+		}
+	}
+
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			if (advertisementDetail != null) {
+				autoLoading.hideAll();
+				if (advertisementDetail.getAD_STATUS().equals("3")) {
+					relaytoutRedbag.setVisibility(View.GONE);
+					lyShengyu.setVisibility(View.GONE);
+				} else {
+					relaytoutRedbag.setVisibility(View.VISIBLE);
+					lyShengyu.setVisibility(View.VISIBLE);
+				}
+
+				ll_imgs_detail.removeAllViews();
+				for (int i = 0; i < advertisementDetail.getMORE_IMAGES().size(); i++) {
+					ImageView img_detail = new ImageView(
+							AdvertisementDetailAty.this);
+					img_detail.setLayoutParams(new LayoutParams(
+							LayoutParams.MATCH_PARENT,
+							LayoutParams.WRAP_CONTENT));
+					img_detail.setScaleType(ScaleType.FIT_XY);
+					MyFormat.setBitmap(AdvertisementDetailAty.this, img_detail,
+							advertisementDetail.getMORE_IMAGES().get(i)
+									.getIMAGE_URL(), 0, 0);
+					ll_imgs_detail.addView(img_detail);
+				}
+
+				tvTime.setText(advertisementDetail.getCREATE_DATE() + "");
+				tvKind.setText(advertisementDetail.getAD_LOCATION());
+				int coTotal = (advertisementDetail.getCO_AMOUNT() == null) ? 0
+						: advertisementDetail.getCO_AMOUNT().intValue();
+				tvCobiTotal.setText("酷币总额" + coTotal + "个");
+				Integer integerMin = (advertisementDetail.getCO_MIN() == null) ? 0
+						: advertisementDetail.getCO_MIN().intValue();
+				Float floatMoney = (advertisementDetail.getMONEY() == null) ? 0
+						: advertisementDetail.getMONEY().floatValue();
+				Float floatMoneyMin = (advertisementDetail.getMONEY_MIN() == null) ? 0
+						: advertisementDetail.getMONEY_MIN().floatValue();
+				Float floatMoneyBig = (advertisementDetail.getMONEY_MAX() == null) ? 0
+						: advertisementDetail.getMONEY_MAX().floatValue();
+				tvCoDraw.setText("每人可领" + integerMin + "个");
+				tvMoney.setText("红包总金额"
+						+ MyFormat.getPriceFormat(floatMoney + "") + "元,");
+				tvRandom.setText("随机领取范围" + floatMoneyMin + "-" + floatMoneyBig
+						+ "元,");
+				double double1 = (advertisementDetail.getMONEY() == null) ? 0
+						: advertisementDetail.getMONEY().doubleValue();
+				double double2 = (advertisementDetail.getRECEIVED_MONEY() == null) ? 0
+						: advertisementDetail.getRECEIVED_MONEY().doubleValue();
+				Integer integer = (advertisementDetail.getCO_AMOUNT() == null) ? 0
+						: advertisementDetail.getCO_AMOUNT();
+				Integer integer2 = (advertisementDetail.getRECEIVED_CO() == null) ? 0
+						: advertisementDetail.getRECEIVED_CO().intValue();
+				tvRemain.setText("剩余现金"
+						+ MyFormat.getPriceFormat((double1 - double2) + "")
+						+ "元," + "剩余酷币" + (integer - integer2) + "个");
+			}
+			SaveHistory(UserInformation.getAccess_token());
+		};
+	};
+
+	/**
+	 * 初始化数据
+	 */
+	private void intiData() {
+		bundle = getIntent().getExtras();
+		if (bundle != null) {
+			adInfoId = bundle.getString("adInfoId");
+		}
+	}
+
+	private void initUI() {
+		LayoutParams params = (LayoutParams) iv.getLayoutParams();
+		params.width = AppContext.getScreenWidth() - Util.dip2px(this, 20);
+		params.height = LayoutParams.WRAP_CONTENT;
+		params.bottomMargin = Util.dip2px(this, 10);
+		params.leftMargin = Util.dip2px(this, 10);
+		params.topMargin = Util.dip2px(this, 10);
+		iv.setLayoutParams(params);
+		iv.setMaxHeight(AppContext.getScreenWidth());
+		iv.setMaxHeight(AppContext.getScreenWidth() * 30);
+		ScreenManager.getScreenManager().pushActivity(this);
+		initAutoLoading(lyLoad);
+		autoLoading.setClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				requestAdvisetisementDetail(AppContext.getUserInformation()
+						.getAccess_token());
+			}
+		});
+	}
+
+	@OnClick({ R.id.iv_back, R.id.tv_start })
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.iv_back:
+			finish();
+			break;
+		case R.id.tv_start:
+			if (AppContext.getUserInformation().isLogin()) {
+				Intent intent = new Intent(this, AdvertisementCommentAty.class);
+				intent.putExtra("adInfoId", adInfoId);
+				startActivity(intent);
+			} else {
+				goWebLoginActivity();
+				finish();
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * 发起查询广告详情请求
+	 */
+	private void requestAdvisetisementDetail(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addQueryStringParameter("adInfoId", adInfoId);
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/ad/getAdInfo", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						// autoLoading.showExceptionLayout();
+						autoLoading.showExceptionLayout();
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						ParseJson parseJson = ParseJson.getParseJson();
+						Map<String, Object> map = parseJson
+								.parseIsSuccess(json);
+						LogManag.d("xq", json.toString());
+
+						if ((Boolean) map.get("isSuccess")) {
+							advertisementDetail = ParseJson.getParseJson()
+									.parseAdvertisementDetail(json);
+							handler.sendEmptyMessage(1);
+						} else {
+							if (map.get("errorCode").equals("NOT_LOGIN")) {
+								setRefreshListtener(new Refresh() {
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+										requestAdvisetisementDetail(access_token);
+									}
+								});
+								RefeshToken();
+							} else {
+								autoLoading.showExceptionLayout();
+								toast(json.optString("msg"));
+							}
+						}
+					}
+				});
+	}
+
+	/**
+	 * 保存历史
+	 */
+	private void SaveHistory(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addQueryStringParameter("adInfoId", adInfoId);
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		Log.i("tag", adInfoId + "--------进来了--adInfoId------");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/ad/saveHistory", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						// autoLoading.showExceptionLayout();
+						autoLoading.showExceptionLayout();
+						Log.i("tag", msg + "--------进来了--msg------");
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						ParseJson parseJson = ParseJson.getParseJson();
+						Map<String, Object> map = parseJson
+								.parseIsSuccess(json);
+						Log.i("tag", (Boolean) map.get("isSuccess")
+								+ "--------------isSuccess-----" + json);
+						if ((Boolean) map.get("isSuccess")) {
+
+						} else if (map.get("errorCode").equals("NOT_LOGIN")) {
+							setRefreshListtener(new Refresh() {
+								@Override
+								public void refreshRequst(String access_token) {
+									// TODO Auto-generated method stub
+									Log.i("tag", "------监听里-------");
+									SaveHistory(access_token);
+								}
+							});
+							RefeshToken();
+						}
+					}
+				});
+	}
+}

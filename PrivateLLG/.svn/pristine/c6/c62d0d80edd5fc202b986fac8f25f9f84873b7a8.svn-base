@@ -1,0 +1,66 @@
+package com.llg.privateproject.adapters;
+
+import java.util.List;
+
+import com.bjg.lcc.privateproject.R;
+
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.TextView;
+
+public class PhoneCallAdapter extends BaseAdapter {
+	private Context context;
+	private List<String> list;
+	private LayoutInflater inflater;
+
+	public PhoneCallAdapter(Context context, List<String> list) {
+		// TODO Auto-generated constructor stub
+		this.context = context;
+		inflater = LayoutInflater.from(context);
+		this.list = list;
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return (list == null) ? 0 : list.size();
+	}
+
+	@Override
+	public String getItem(int arg0) {
+		// TODO Auto-generated method stub
+		return list.get(arg0);
+	}
+
+	@Override
+	public long getItemId(int arg0) {
+		// TODO Auto-generated method stub
+		return arg0;
+	}
+
+	@Override
+	public View getView(int arg0, View v, ViewGroup arg2) {
+		// TODO Auto-generated method stub
+		ViewHolder holder = null;
+		if (v == null) {
+			holder = new ViewHolder();
+			v = inflater.inflate(R.layout.griditem_phone_call, null);
+			holder.tv = (TextView) v.findViewById(R.id.btn);
+			v.setTag(holder);
+		} else {
+			holder = (ViewHolder) v.getTag();
+		}
+		holder.tv.setText(list.get(arg0));
+		return v;
+	}
+
+	private class ViewHolder {
+		private TextView tv;
+	}
+
+}

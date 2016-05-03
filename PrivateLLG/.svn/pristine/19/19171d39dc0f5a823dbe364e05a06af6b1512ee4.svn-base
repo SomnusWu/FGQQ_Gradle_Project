@@ -1,0 +1,235 @@
+package com.llg.privateproject.actvity;
+
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.llg.privateproject.fragment.CategoryFragment;
+import com.llg.privateproject.fragment.FragmentPhoneCall;
+import com.llg.privateproject.fragment.FragmentPhoneCharge;
+import com.llg.privateproject.fragment.FragmentPhoneMoney;
+import com.llg.privateproject.fragment.FragmentPhoneRecent;
+import com.llg.privateproject.fragment.FragmentPhonelist;
+import com.llg.privateproject.fragment.FGQQCallFragment;
+import com.llg.privateproject.fragment.HomeFragment;
+import com.llg.privateproject.fragment.RecommendCommodities;
+import com.llg.privateproject.fragment.ShoppingCartFragment;
+import com.llg.privateproject.utils.Constants;
+import com.llg.privateproject.view.MyTabWidget;
+import com.llg.privateproject.view.MyTabWidget.OnTabSelectedListener;
+import com.smartandroid.sa.sql.util.Log;
+
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.widget.FrameLayout;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+
+/**
+ * 打电话 yh 2016.01.03
+ * 
+ * */
+public class PhoneActivity extends FragmentActivity implements
+		OnCheckedChangeListener, OnTabSelectedListener {
+	private FragmentManager fm;
+	@ViewInject(R.id.fl_phone)
+	private FrameLayout fl_phone;
+	@ViewInject(R.id.rg_phone)
+	private RadioGroup rg_phone;
+	
+	@ViewInject(R.id.tab_widget)
+	private MyTabWidget mPhoneTab;
+	private int mIndex = Constants.HOME_FRAGMENT_INDEX;
+	/*
+	 * 拨号界面
+	 */
+	private FGQQCallFragment mQQGCallFragment;
+//	private FragmentPhoneCall fpCall;
+	private FragmentPhoneRecent fpRecent;
+	private FragmentPhonelist fpl;
+	private FragmentPhoneMoney fpm;
+	private FragmentPhoneCharge fpc;
+	private FragmentTransaction ft;
+
+	@Override
+	protected void onCreate(Bundle arg0) {
+		// TODO Auto-generated method stub
+		super.onCreate(arg0);
+		setContentView(R.layout.phoneactivity);
+		ViewUtils.inject(this);
+		fm = getSupportFragmentManager();
+		rg_phone.setOnCheckedChangeListener(this);
+		mQQGCallFragment = new FGQQCallFragment();
+		
+//		fpCall = new FragmentPhoneCall();
+		
+		ft = fm.beginTransaction();
+//		ft.add(R.id.fl_phone, fpCall);
+//		ft.show(fpCall);
+		ft.add(R.id.fl_phone, mQQGCallFragment);
+		ft.show(mQQGCallFragment);
+		ft.commit();
+		
+		initEvents();
+	}
+	
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		onTabSelected(mIndex);
+	}
+	
+	private void initEvents(){
+		mPhoneTab.setOnTabSelectedListener(this);
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		// TODO Auto-generated method stub
+		FragmentTransaction ft = fm.beginTransaction();
+		hideFragments(ft);
+		Log.d("my", "checkedId" + checkedId);
+		switch (checkedId) {
+		case R.id.rb_list://通讯录
+			
+			if (fpl == null) {
+				try {
+					fpl = new FragmentPhonelist();
+					ft.add(R.id.fl_phone, fpl);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				
+			} else {
+				try {
+					ft.show(fpl);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+			break;
+		case R.id.rb_recent://最近通话
+			if (fpRecent == null) {
+				fpRecent = new FragmentPhoneRecent();
+				ft.add(R.id.fl_phone, fpRecent);
+			} else {
+				ft.show(fpRecent);
+			}
+			break;
+		case R.id.rb_money://余额
+			if (fpm == null) {
+				fpm = new FragmentPhoneMoney();
+				ft.add(R.id.fl_phone, fpm);
+			} else {
+				ft.show(fpm);
+			}
+			break;
+		case R.id.rb_charge://充值
+			if (fpc == null) {
+				Log.i("tag", "-------------0--------------------");
+				fpc = new FragmentPhoneCharge();
+				Log.i("tag", "-------------1--------------------");
+				ft.add(R.id.fl_phone, fpc);
+			} else {
+				ft.show(fpc);
+			}
+			break;
+		case R.id.rb_call://拨号键盘
+			if (mQQGCallFragment == null) {
+				mQQGCallFragment = new FGQQCallFragment();
+				ft.add(R.id.fl_phone, mQQGCallFragment);
+			} else {
+				ft.show(mQQGCallFragment);
+			}
+			break;
+		
+		}
+		ft.commit();
+	}
+
+	private void hideFragments(FragmentTransaction ft) {
+		if (fpl != null) {// 通讯录
+			Log.d("my", "隐藏通讯录");
+			// fm.findFragmentByTag("list");
+			ft.hide(fpl);
+		}
+		if (fpm != null) {
+			ft.hide(fpm);
+		}
+		if (fpc != null) {
+			ft.hide(fpc);
+		}
+		if (fpRecent != null) {
+			ft.hide(fpRecent);
+		}
+		if (mQQGCallFragment != null) {
+			ft.hide(mQQGCallFragment);
+		}
+	}
+
+	@Override
+	public void onTabSelected(int index) {
+		// TODO Auto-generated method stub
+		FragmentTransaction transaction = fm.beginTransaction();
+		hideFragments(transaction);
+		switch (index) {
+		case Constants.HOME_FRAGMENT_INDEX:
+			
+			if (null == mQQGCallFragment) {
+				mQQGCallFragment = new FGQQCallFragment();
+				transaction.add(R.id.fl_phone, mQQGCallFragment);
+			} else {
+				transaction.show(mQQGCallFragment);
+			}
+			break;
+		case Constants.CATEGORY_FRAGMENT_INDEX:
+			if (null == fpRecent) {
+				fpRecent = new FragmentPhoneRecent();
+				transaction.add(R.id.fl_phone, fpRecent);
+			} else {
+				transaction.show(fpRecent);
+			}
+			break;
+		case Constants.COLLECT_FRAGMENT_INDEX:
+			if (null == fpl) {
+				fpl = new FragmentPhonelist();
+				transaction.add(R.id.fl_phone, fpl);
+			} else {
+				transaction.show(fpl);
+			}
+			break;
+		case Constants.SETTING_FRAGMENT_INDEX:
+			if (null == fpm) {
+				fpm = new FragmentPhoneMoney();
+				transaction.add(R.id.fl_phone, fpm);
+				// Bundle bundle=new Bundle();
+				// bundle.putString("msg", message);
+				// Log.e("my", "msgmssggsafdsadf+:"+message);
+				// mSettingFragment.setArguments(bundle);
+			} else {
+				transaction.show(fpm);
+			}
+			break;
+		case Constants.PHONE_CHARGE_INDEX:
+			if (null == fpc) {
+				fpc = new FragmentPhoneCharge();
+				transaction.add(R.id.fl_phone, fpc);
+				// Bundle bundle=new Bundle();
+				// bundle.putString("msg", message);
+				// Log.e("my", "msgmssggsafdsadf+:"+message);
+				// mSettingFragment.setArguments(bundle);
+			} else {
+				transaction.show(fpc);
+			}
+			break;
+		default:
+			break;
+		}
+		mIndex = index;
+		transaction.commitAllowingStateLoss();
+	}
+
+}

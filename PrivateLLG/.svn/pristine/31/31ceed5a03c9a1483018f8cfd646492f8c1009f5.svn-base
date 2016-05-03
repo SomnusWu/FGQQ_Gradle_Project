@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/transparent"
+    android:orientation="vertical" >
+
+   <!--  <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/abc_ab_stacked_transparent_dark_holo"
+        android:scaleType="center"
+        android:src="@drawable/abc_ab_bottom_transparent_light_holo"
+        tools:ignore="ContentDescription" /> -->
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.bjg.lcc.alipay.pay.payfragment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

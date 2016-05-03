@@ -1,0 +1,164 @@
+package com.llg.privateproject.adapters;
+
+import java.util.List;
+import java.util.Map;
+
+import com.llg.help.GetProgressBar;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.bjg.lcc.privateproject.R;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.FrameLayout.LayoutParams;
+
+/**
+ * 关注窗口店铺列表适配器 yh 2015.08.12
+ * */
+public class GuanzhuShopAdapter extends BaseAdapter {
+	Context context;
+	List<Map<String, Object>> list;
+	boolean isShowcb = false;
+
+	/** 关注窗口店铺列表适配器 */
+	public GuanzhuShopAdapter(Context context, List<Map<String, Object>> list,
+			boolean isShowcb) {
+		this.context = context;
+		this.list = list;
+		this.isShowcb = isShowcb;
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return list == null ? 0 : list.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return list.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+
+	@Override
+	public View getView(int position, View v, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		ViewHolder holder = null;
+		final Map<String, Object> map = list.get(position);
+		if (v == null) {
+			v = View.inflate(context, R.layout.guanzhu_shop_item, null);
+
+			holder = new ViewHolder();
+			holder.cb = (CheckBox) v.findViewById(R.id.cb);
+			holder.shopHead = (ImageView) v.findViewById(R.id.shopHead);
+			holder.shopName = (TextView) v.findViewById(R.id.commodity_name_tv);
+			;
+			holder.shopGride = (ImageView) v.findViewById(R.id.commenter_grade);
+			holder.shopTrends = (TextView) v.findViewById(R.id.shop_trends);
+			holder.shopDsc = (TextView) v.findViewById(R.id.commodity_price_tv);
+			holder.shopScore = (TextView) v.findViewById(R.id.company_price);
+			holder.shop_Score = (ImageView) v
+					.findViewById(R.id.company_gouwuche);
+
+			android.widget.LinearLayout.LayoutParams lp = (android.widget.LinearLayout.LayoutParams) holder.shopHead
+					.getLayoutParams();
+			int wid = AppContext.getScreenWidth();
+
+			lp.width = wid * 26 / 100;
+			lp.height = wid * 15 / 100;
+			holder.shopHead.setLayoutParams(lp);
+			android.widget.LinearLayout.LayoutParams lp1 = (android.widget.LinearLayout.LayoutParams) holder.shop_Score
+					.getLayoutParams();
+			int wid1 = AppContext.getScreenWidth();
+			int score = 1;
+			if (map.get("score").toString() == null
+					|| map.get("score").toString().equals("null")) {
+
+			} else {
+				score = Short.parseShort(map.get("score").toString());
+			}
+			lp1.width = score * 2;
+
+			holder.shop_Score.setLayoutParams(lp1);
+
+			v.setTag(holder);
+		} else {
+			holder = (ViewHolder) v.getTag();
+		}
+		// map.put("shopId",
+		// array2.getString(0));// [0]
+		// // 店铺Id
+		// map.put("shopName",
+		// array2.getString(1));// [1]
+		// // 店铺名称
+		// map.put("dsc", array2.getString(2)); // [2]备注
+		// map.put("trends",
+		// array2.getString(3)); // [3]关注数
+		// map.put("score",
+		// array2.getString(4)); // [4]好评率
+		// map.put("img", array2.getString(5)); // [5]图片
+		// map.put("isGuanzhu", true);
+
+		MyFormat.setBitmap(context, holder.shopHead, map.get("img").toString(),
+				0, 0);
+		holder.shopName.setText(map.get("shopName").toString());
+		holder.shopDsc.setText(map.get("dsc").toString());
+		holder.shopTrends.setText(map.get("trends").toString());
+		holder.shopScore.setText("好评率" + map.get("score").toString() + "%");
+
+		// holder.shopGride.setBackgroundResource(resid);
+
+		if (isShowcb) {
+			holder.cb.setVisibility(View.VISIBLE);
+			holder.cb.setChecked(true);
+		} else {
+
+			holder.cb.setVisibility(View.GONE);
+		}
+		holder.cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				// TODO Auto-generated method stub
+
+				map.put("isGuanzhu", isChecked);
+
+				Toast.makeText(context, "" + isChecked, Toast.LENGTH_SHORT)
+						.show();
+			}
+		});
+		return v;
+	}
+
+	class ViewHolder {
+		ImageView shopHead;
+		TextView shopName;
+		ImageView shopGride;
+		TextView shopTrends;
+		TextView shopDsc;
+		TextView shopScore;
+		ImageView shop_Score;
+		CheckBox cb;
+	}
+
+	/** 设置被关注商品列表项复选框是否可见 */
+	public void setIsguanzhu(boolean isShowcb) {
+		this.isShowcb = isShowcb;
+	}
+
+}

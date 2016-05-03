@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_solid_white_r" >
+
+   
+
+        <LinearLayout
+            android:id="@+id/agreement_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
+            android:paddingTop="10dp" >
+
+            <TextView
+                android:id="@+id/agreement_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:text="风购全球实名认证协议"
+                android:textColor="@color/black1"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/agreement_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/agreement_title"
+                android:layout_centerHorizontal="true"
+                android:maxLines="20"
+                android:minLines="9"
+                android:padding="10dp"
+                android:paddingTop="10sp"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbarThumbVertical="@drawable/btm_agreem"
+                android:scrollbars="vertical"
+                android:text="邻邻狗实名认证协议内容"
+                android:textColor="@color/black1"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/v"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@id/agreement_ll"
+            android:background="@color/orange2" />
+
+        <TextView
+            android:id="@+id/turn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/v"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/btm_agreem"
+            android:paddingBottom="2dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:paddingTop="2dp"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+   
+<View
+    android:layout_below="@id/turn"
+     android:layout_width="wrap_content"
+    android:layout_height="1dp"/>
+   
+
+</RelativeLayout>

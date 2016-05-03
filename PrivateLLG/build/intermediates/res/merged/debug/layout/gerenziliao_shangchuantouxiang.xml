@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#00000000"
+        >
+<RelativeLayout 
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="30dp"
+     >
+
+
+
+
+
+    <TextView
+        android:id="@+id/bendishangchuan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/stroke_orange2_val"
+        
+        android:layout_marginBottom="20dp"
+        android:paddingLeft="35dp"
+       
+       
+        android:paddingRight="35dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="本地上传"
+        android:textColor="@color/orange2"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/paizhaoshangchuan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bendishangchuan"
+        
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/stroke_orange2_val"
+        android:paddingBottom="10dp"
+        android:paddingLeft="35dp"
+       
+        android:paddingRight="35dp"
+        android:paddingTop="10dp"
+        android:text="拍照上传"
+        android:textColor="@color/orange2"
+        android:textSize="16sp" />
+
+</RelativeLayout>
+ <ImageView
+        android:id="@+id/turn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       android:padding="10dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/turn" />
+</RelativeLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical" >
+    
+<TextView
+    android:id="@+id/et_charge"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@color/black2"
+    android:layout_marginTop="20dp"
+    android:hint="请输入要充值的电话号码："
+    android:layout_marginBottom="15dp"
+   android:editable="false"
+    android:inputType="number"
+    android:padding="8dp"
+    android:background="@drawable/stroke_lightgray"/>
+<EditText
+    android:id="@+id/et_cart"
+     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@color/black2"
+    android:hint="请输入充值卡号："
+    android:inputType="number"
+    android:textSize="13sp"
+    android:layout_marginBottom="15dp"
+    android:padding="8dp"
+    android:background="@drawable/stroke_lightgray"/>
+<EditText 
+    android:id="@+id/et_password"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@color/black2"
+    android:textSize="13sp"
+    android:hint="请输入充值卡密码："
+    android:layout_marginBottom="15dp"
+    android:inputType="textEmailAddress"
+    android:padding="8dp"
+    android:background="@drawable/stroke_lightgray"/>
+<TextView 
+    android:id="@+id/tv_charge"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@color/white"
+    android:text="提交充值"
+ android:gravity="center"
+ android:paddingTop="10dp"
+ android:paddingBottom="10dp"
+    android:background="@color/orange1"/>
+</LinearLayout>

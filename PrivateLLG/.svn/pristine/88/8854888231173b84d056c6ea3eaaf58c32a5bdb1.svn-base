@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="2"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+           android:id="@+id/shangpinhui"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2.5dp"
+            android:layout_weight="1.27"
+            android:background="@color/tongchengdaigou"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@color/tongchengdaigou"
+                android:drawableLeft="@drawable/bjg_shouye_tub3_qqg"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="商品汇"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2.5dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                 android:id="@+id/yewulianxi"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="2.5dp"
+                android:layout_weight="1"
+                android:background="@color/xuqiufabu"
+                android:orientation="horizontal" >
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/bjg_shouye_tub9_ywlx"
+                    android:drawablePadding="7dp"
+                    android:gravity="center"
+                    android:text="业务联系"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                 android:id="@+id/haoyoufazhan"
+                
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="2.5dp"
+                android:layout_weight="1"
+                android:background="@color/woyaojianzhi"
+                android:orientation="horizontal" >
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/bjg_shouye_tub8_hyfz"
+                    android:drawablePadding="7dp"
+                    android:gravity="center"
+                    android:text="好友发展"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="1.5"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/xianchangxiaofei"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2.5dp"
+            android:layout_weight="1.27"
+            android:background="@color/xianchangxiaofei"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@color/xianchangxiaofei"
+                android:drawableLeft="@drawable/bjg_shouye_tub2_xcxf"
+                android:drawablePadding="7dp"
+                android:gravity="center"
+                android:text="现场消费"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wodehoutai"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2.5dp"
+            android:layout_weight="1"
+            android:background="@color/wodehoutai"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/bjg_shouye_tub7_wdht"
+                android:drawablePadding="7dp"
+                android:gravity="center"
+                android:text="我的后台"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="1.5"
+        android:orientation="horizontal" >
+
+        <!-- android:background="@color/shangpinhui" -->
+
+        <LinearLayout
+             android:id="@+id/tongchengdaigou"
+            
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2.5dp"
+            android:layout_weight="1.27"
+            android:background="#b5b5b5"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/bjg_shouye_tub1_tcdg"
+                android:drawablePadding="7dp"
+                android:gravity="center"
+                android:text="同城代购"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+<!--    android:background="@color/haoyoufazhan" -->
+        <LinearLayout
+            android:id="@+id/xuqiufabu"
+           
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2.5dp"
+            android:layout_weight="1"
+            android:background="#b5b5b5"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/bjg_shouye_tub5_xqfb"
+                android:drawablePadding="7dp"
+                android:gravity="center"
+                android:text="需求发布"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="1.5"
+        android:orientation="horizontal" >
+
+        <!-- android:background="@color/tuangou" -->
+
+        <LinearLayout
+            android:id="@+id/tuangou"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2.5dp"
+            android:layout_weight="1.27"
+            android:background="#b5b5b5"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/bjg_shouye_tub4_tg"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text=" 优   惠    "
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+	<!-- android:background="@color/yewulianxi" -->
+        <LinearLayout
+            android:id="@+id/woyaojianzhi"
+           
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2.5dp"
+            android:layout_weight="1"
+            android:background="#b5b5b5"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/bjg_shouye_tub6_wyjz"
+                android:drawablePadding="7dp"
+                android:gravity="center"
+                android:text="我要兼职"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

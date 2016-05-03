@@ -1,0 +1,63 @@
+package com.llg.privateproject.camera;
+
+import java.io.File;
+
+import android.os.Environment;
+
+/**
+ * 缓存文件位置管理类
+ * 
+ * @author Zero @date 2014年8月10日
+ * @version 1.0
+ */
+public class FileManager {
+
+	/** 项目在SD卡的根目录下创建的文件夹 */
+	public static final String SDCARD_FOLDER_NAME = "TooCMS";
+
+	/**
+	 * 获取缓存文件路径
+	 * 
+	 * @return String
+	 */
+	public static String getSaveFilePath() {
+		return getRootFilePath() + SDCARD_FOLDER_NAME + File.separator
+				+ "picture_cache" + File.separator;
+	}
+
+	/**
+	 * 获取压缩文件临时存储路径
+	 * 
+	 * @return String
+	 */
+	public static String getCompressFilePath() {
+		return getRootFilePath() + SDCARD_FOLDER_NAME + File.separator
+				+ "compress_cache" + File.separator;
+	}
+
+	/**
+	 * 获取压缩文件临时存储路径
+	 * 
+	 * @return String
+	 */
+	public static String getCrashLogFilePath() {
+		return getRootFilePath() + SDCARD_FOLDER_NAME + File.separator
+				+ "crash_log" + File.separator;
+	}
+
+	public static boolean hasSDCard() {
+		String status = Environment.getExternalStorageState();
+		return status.equals(Environment.MEDIA_MOUNTED);
+	}
+
+	public static String getRootFilePath() {
+		if (hasSDCard()) {
+			return Environment.getExternalStorageDirectory().getAbsolutePath()
+					+ "/";// filePath:/sdcard/
+		} else {
+			return Environment.getDataDirectory().getAbsolutePath() + "/data/"; // filePath:
+																				// /data/data/
+		}
+	}
+
+}

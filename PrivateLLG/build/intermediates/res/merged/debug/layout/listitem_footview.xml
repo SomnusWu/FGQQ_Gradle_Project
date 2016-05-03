@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ly_submit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/light_grays" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_gray_biankuang"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="提交"
+            android:textColor="@color/dark_pink" >
+        </TextView>
+</LinearLayout>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:ignore="InefficientWeight,NestedWeights,ContentDescription" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <CheckBox
+            android:id="@+id/cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/cb_gouwuche"
+            android:button="@null"
+              />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/stroke_lightgray"
+            android:orientation="horizontal"
+            android:padding="1dp" >
+
+            <ImageView
+                android:id="@+id/commodity_logo_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:scaleType="fitXY" />
+        </FrameLayout>
+
+        <RelativeLayout
+            style="@style/layout_wrap"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="10dp" >
+
+            <!-- 商品名称 -->
+
+            <TextView
+                android:id="@+id/commodity_name_tv"
+                style="@style/company_text_font_style"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:lines="2"
+                android:paddingBottom="0dp"
+                android:text="这里是商品的描述信息"
+                android:textColor="@color/black2"
+                android:textSize="14sp" />
+            <!-- 商品价格 -->
+
+            <TextView
+                android:id="@+id/commodity_price_tv"
+                style="@style/company_text_font_style"
+                android:layout_below="@id/commodity_name_tv"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/black3"
+                android:textSize="12sp" />
+            <!-- 好评10% 5200人 -->
+
+            <TextView
+                android:id="@+id/company_intro_tv"
+                style="@style/company_text_font_style"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/commodity_name_tv"
+                android:layout_weight="1"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/black3"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/ll_"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/commodity_price_tv"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/company_price"
+                    style="@style/company_text_font_style"
+                    android:layout_below="@id/commodity_price_tv"
+                    android:layout_gravity="center"
+                    android:paddingBottom="1dp"
+                    android:paddingTop="1dp"
+                    android:singleLine="true"
+                    android:text="价格"
+                    android:textColor="@color/orange1"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/company_zhe1"
+                    style="@style/company_text_font_style"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:background="@drawable/bg_text_activity_solid_fense_r"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="2dp"
+                    android:singleLine="true"
+                    android:text="9.1折"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/company_zhe2"
+                    style="@style/company_text_font_style"
+                    android:layout_below="@id/commodity_price_tv"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/bg_text_activity_solid_fense_r"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="2dp"
+                    android:singleLine="true"
+                    android:text="9.5折"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/company_gouwuche"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/company_intro_tv"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/erji_jiarugouwuche" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        style="@style/line_style4"
+        android:layout_width="match_parent"
+        android:layout_height="3dp" />
+
+</LinearLayout>

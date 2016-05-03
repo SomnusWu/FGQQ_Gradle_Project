@@ -1,0 +1,211 @@
+package com.llg.privateproject.adapters;
+
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONObject;
+
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.actvity.AdvertisementDetailAty;
+import com.llg.privateproject.adapters.BusinessAdapter.ViewHolder;
+import com.llg.privateproject.entities.Advertisement;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.CommonUtils;
+import com.llg.privateproject.view.CustomProgressSmall;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+public class AdvertisementAdapter extends BaseAdapter {
+	private List<Advertisement> list;
+	private Context context;
+	private LayoutInflater inflater;
+	private CustomProgressSmall customProgressSmall;
+
+	public AdvertisementAdapter(Context context, List<Advertisement> list) {
+		// TODO Auto-generated constructor stub
+		this.context = context;
+		inflater = LayoutInflater.from(context);
+		this.list = list;
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return (list == null) ? 0 : list.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+
+	@Override
+	public View getView(final int position, View v, ViewGroup arg2) {
+		// TODO Auto-generated method stub
+		final ViewHolder holder;
+		if (v == null) {
+			holder = new ViewHolder();
+			v = inflater.inflate(R.layout.listitem_advertisement, null);
+			holder.iv = (ImageView) v.findViewById(R.id.iv);
+			holder.tvTime = (TextView) v.findViewById(R.id.tv_time);
+			holder.tvIsDraw = (TextView) v.findViewById(R.id.tv_isCanDraw);
+			holder.tvIsRuning = (TextView) v.findViewById(R.id.tv_isRuning);
+			holder.tvLocation = (TextView) v.findViewById(R.id.tv_location);
+			holder.tvDelete = (TextView) v.findViewById(R.id.tv_delete);
+			holder.tvIsStart = (TextView) v.findViewById(R.id.tv_isStart);
+			holder.tvDetail = (TextView) v.findViewById(R.id.tv_detail);
+			v.setTag(holder);
+		} else {
+			holder = (ViewHolder) v.getTag();
+		}
+		Log.i("tag", list.get(position).getAdLocation()
+				+ "-------------list.get(position).getAdLocation()");
+		holder.tvTime.setText(list.get(position).getAdLocation());
+		if (list.get(position).getAdStatus().equals("1")) {
+			holder.tvIsStart.setText("暂停广告");
+			holder.tvIsRuning.setText("广告进行中");
+		} else if (list.get(position).getAdStatus().equals("2")) {
+			holder.tvIsStart.setText("启动广告");
+			holder.tvIsRuning.setText("广告闲置中");
+		}
+		holder.tvDetail.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(context,
+						AdvertisementDetailAty.class);
+				String id = list.get(position).getId();
+				if (id != null) {
+					intent.putExtra("adInfoId", list.get(position).getId());
+				}
+				context.startActivity(intent);
+			}
+		});
+		holder.tvDelete.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				customProgressSmall = CustomProgressSmall.initDialog(context,
+						"正在删除中", true, new OnCancelListener() {
+
+							@Override
+							public void onCancel(DialogInterface arg0) {
+								// TODO Auto-generated method stub
+								customProgressSmall.dismiss();
+							}
+						});
+				customProgressSmall.show();
+				requestHttp(position);
+			}
+		});
+		// holder.tvIsDraw.setText(list.get(position).getCreateDate());
+		holder.tvTime.setText(list.get(position).getCreateDate());
+		ViewTreeObserver vto = holder.iv.getViewTreeObserver();
+		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				if (position == list.size()) {
+					holder.iv.getViewTreeObserver()
+							.removeGlobalOnLayoutListener(this);
+				}
+				int width = holder.iv.getWidth();
+				holder.iv.setLayoutParams(new LayoutParams(width,
+						(int) (width * 0.4)));
+			}
+		});
+		Log.i("tag", list.get(position).getImageUrl() + "----ImageUrl()----");
+		MyFormat.setBitmap(context, holder.iv,
+				list.get(position).getImageUrl(), 0, 0);
+
+		return v;
+	}
+
+	public void upData(List<Advertisement> list) {
+		this.list = list;
+		Log.i("tag", list.size() + "-------------list.size()");
+		notifyDataSetChanged();
+	}
+
+	/**
+	 * 发起删除广告请求
+	 */
+	private void requestHttp(final int position) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", AppContext
+				.getUserInformation().getAccess_token());
+		params.addQueryStringParameter("id", list.get(position).getId());
+		AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST,
+
+		"m/ad/deleteAd", params, new HttpCallback() {
+
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				// autoLoading.showExceptionLayout();
+				Toast.makeText(context, "删除失败", Toast.LENGTH_SHORT).show();
+				Log.i("tag", msg + "--------进来了--msg------");
+			}
+
+			@Override
+			public void onBack(JSONObject json) {
+				// TODO Auto-generated method stub
+				ParseJson parseJson = ParseJson.getParseJson();
+				Map<String, Object> map = parseJson.parseIsSuccess(json);
+				Log.i("tag", "--------进来了图片onBack------");
+				Log.i("tag", (Boolean) map.get("isSuccess")
+						+ "--------------isSuccess-----" + json);
+				// customProgressSmall.dismiss();
+				if ((Boolean) map.get("isSuccess")) {
+					list.remove(position);
+					customProgressSmall.dismiss();
+					notifyDataSetChanged();
+					Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+	}
+
+	class ViewHolder {
+		private ImageView iv;// 图片
+		private TextView tvTime;// 创建时间
+		private TextView tvIsRuning;// 广告是否处于启动中;
+		private TextView tvIsDraw;// 是否还有剩余红包
+		private TextView tvDelete;// 删除广告
+		private TextView tvLocation;// 广告位置
+		private TextView tvIsStart;// 启动，暂停广告
+		private TextView tvDetail;// 启动，暂停广告
+	}
+
+}

@@ -1,0 +1,796 @@
+package com.llg.privateproject.actvity;
+
+import java.util.Map;
+import java.util.Random;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.webkit.CookieManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
+
+import com.bjg.lcc.jsonparser.ParseJson;
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.llg.help.ScreenManager;
+import com.llg.help.Util;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.entities.Customer;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.LogManag;
+import com.llg.privateproject.utils.StringUtils;
+import com.llg.privateproject.utils.TelephonyManagerUtils;
+import com.llg.privateproject.utils.VersionUtils;
+import com.tencent.android.tpush.XGPushManager;
+import com.tencent.mm.sdk.modelmsg.SendAuth;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
+
+/**
+ * 登录
+ * 
+ * @author Administrator
+ * 
+ */
+public class WebLoginActivity extends BaseActivity implements IUiListener {
+	@ViewInject(R.id.mwebView)
+	private WebView webView;
+	// private String mredirect_uri = "http://www.baidu.com";
+	private String baseuri = "http://192.168.0.188:8083/buyapp/";
+	private String mredirect_uri = baseuri + "/common/tokenBack";
+	private String response_type = "code";
+	private String scope = "read+write";
+	private String client_id = "mobile-client";
+	private String client_secret = "mobile";
+	private Customer customer;
+	// private Activity activity;
+	private String state = "002681f3-41fc-43fb-a254-eb75e87d5677";
+	private String url;
+	private String tokenUrl;
+	private String mjson;
+	private IWXAPI api;
+	private Tencent mTencent;// 三方平台
+	private String qqappid = "1104586221";
+	private ProgressDialog progressDialog;
+	private Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 1:
+				getCusId();
+				break;
+
+			case 3:
+				if (AppContext.ispush) {
+					XGPushManager.registerPush(getApplicationContext(),
+							AppContext.userid);
+				}
+				break;
+			}
+		};
+	};
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aty_weblogin);
+
+		api = WXAPIFactory.createWXAPI(this,
+				com.llg.privateproject.utils.Constants.APP_ID, true);
+		api.registerApp(com.llg.privateproject.utils.Constants.APP_ID);
+		baseuri = getResources().getString(R.string.test_data_server_urlm);
+		Random random = new Random();
+		int r = random.nextInt();
+		state = String.valueOf(r);
+		mredirect_uri = getResources()
+				.getString(R.string.test_data_server_urlm) + "common/tokenBack";
+		url = baseuri + "oauth/authorize?response_type=" + response_type
+				+ "&scope=" + scope + "&client_id=" + client_id
+				+ "&redirect_uri=" + mredirect_uri + "&state=" + state + "";
+		tokenUrl = baseuri + "oauth/token";
+		CookieManager cookieManager = CookieManager.getInstance();
+		cookieManager.removeAllCookie();
+		ScreenManager.getScreenManager().pushActivity(this);
+		initWebviewSetting();
+		// webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+
+		LogManag.d("onCreate ", "onCreateonCreate");
+		webView.setWebViewClient(new WebViewClient() {
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
+				// 截取 账号登录的时候的url 做处理
+				if (url.startsWith(mredirect_uri)) {
+					Map<String, String> mapRequest = Util.URLRequest(url);
+					String mstate = mapRequest.get("state");// 取得状态码
+					String code = mapRequest.get("code");// 取得code,可以换取token值
+					webLoginFinish(mstate, code);
+					return true;
+				}
+
+				// 使用自己的WebView组件来响应Url加载事件，而不是使用默认浏览器器加载页面
+				if (url.startsWith("fgqqg")) {
+					return false;
+				}
+				if (url.equals(WebLoginActivity.this.getResources().getString(
+						R.string.buyserver)
+						+ "")) {
+					Intent intent = new Intent(WebLoginActivity.this,
+							RegisterActivity.class);
+					intent.putExtra("type", 1);
+					startActivity(intent);
+					finish();
+				}
+				if (url.startsWith("https://open.weixin.qq.com")) {// 判断微信登录
+					weixinLogin();
+					return true;
+				}
+				if (url.startsWith("https://graph.qq.com/oauth2.0/authorize")) {// 判断qq登录
+					mTencent = Tencent.createInstance(qqappid,
+							WebLoginActivity.this.getApplicationContext());
+					if (!mTencent.isSessionValid()) {
+						// "get_user_info"
+						mTencent.login(WebLoginActivity.this, "all",
+								WebLoginActivity.this);
+						
+					}
+					return true;
+				}
+
+				if (url.equals("http://www.fgqqg.com/common/toApp?objectType=0&objectId=0")) {
+					url = WebLoginActivity.this.url;
+				}
+				view.loadUrl(url);
+				// Log.i("my", "-------------shouldOverrideUrlLoading" + url);
+				// 相应完成返回true
+				return true;
+				// return super.shouldOverrideUrlLoading(view, url);
+			}
+
+			// 页面开始加载
+			@Override
+			public void onPageStarted(WebView view, String url, Bitmap favicon) {
+				super.onPageStarted(view, url, favicon);
+				Log.d("my", url);
+				if (!progressDialog.isShowing()) { // 网页开始加载时，显示进度条。
+					progressDialog.show();
+				}
+				// if (url.startsWith(mredirect_uri)) {// 判断是不是成功回调了
+				// Map<String, String> mapRequest = Util.URLRequest(url);
+				// String mstate = mapRequest.get("state");// 取得状态码
+				// String code = mapRequest.get("code");// 取得code,可以换取token值
+				//
+				// if (!AppContext.isLogin) {
+				// webLoginFinish(mstate, code);
+				// return;
+				// }
+				// x++;
+				// if (mstate != null && mstate.equals(state) && code !=
+				// null
+				// && code.length() > 0) {// 状态码和传入的state相等才可以
+				// RequestParams params = initRequestParams(code);
+				// HttpUtils httpUtils = new HttpUtils();
+				// httpUtils.send(HttpMethod.POST, tokenUrl, params,
+				// new RequestCallBack<String>() {
+				// public void onFailure(
+				// com.lidroid.xutils.exception.HttpException arg0,
+				// String msg) {
+				// getSharePrefence().edit().clear();
+				// };
+				//
+				// public void onSuccess(
+				// com.lidroid.xutils.http.ResponseInfo<String> arg0) {
+				// mjson = arg0.result;
+				// savaToken(mjson);
+				//
+				// requestNet(UserInformation
+				// .getAccess_token());
+				// }
+				// });
+				// }
+				// }
+
+				// }
+
+				// private int x = 1;
+				//
+				// private void webLoginFinish(String mstate, String code) {
+				// if (mstate != null && mstate.equals(state) && code != null
+				// && code.length() > 0) {// 状态码和传入的state相等才可以
+				// RequestParams params = initRequestParams(code);
+				// HttpUtils httpUtils = new HttpUtils();
+				// httpUtils.send(HttpMethod.POST, tokenUrl, params,
+				// new RequestCallBack<String>() {
+				// public void onFailure(
+				// com.lidroid.xutils.exception.HttpException arg0,
+				// String msg) {
+				// getSharePrefence().edit().clear();
+				// };
+				//
+				// public void onSuccess(
+				// com.lidroid.xutils.http.ResponseInfo<String> arg0) {
+				// mjson = arg0.result;
+				// savaToken(mjson);
+				// requestNet(UserInformation
+				// .getAccess_token());
+				// }
+				// });
+				// }
+
+			}
+
+			// 页面加载完成
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				super.onPageFinished(view, url);
+				// webView.loadUrl("https://www.baidu.com");
+				if (progressDialog.isShowing()) { // 加载完毕后，进度条不显示
+					progressDialog.dismiss();
+				}
+			}
+
+			// WebView加载的所有资源url
+			@Override
+			public void onLoadResource(WebView view, String url) {
+				super.onLoadResource(view, url);
+			}
+
+			@Override
+			public void onReceivedError(WebView view, int errorCode,
+					String description, String failingUrl) {
+				super.onReceivedError(view, errorCode, description, failingUrl);
+			}
+		});
+		// 网页加载进度条
+		progressDialog = ProgressDialog.show(this, null, "正在加载,请稍后...");
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		if (appContext.threedLoginUrl.length() > 0) {
+			webView.loadUrl(appContext.threedLoginUrl);
+			appContext.threedLoginUrl = "";
+
+		}
+	}
+
+	private void weixinLogin() {
+		final SendAuth.Req req = new SendAuth.Req();
+		req.scope = "snsapi_userinfo";
+		req.state = "carjob_wx_login";
+		boolean is = api.sendReq(req);
+		if (is) {
+			appContext.shareOrLogin = 1;
+		}
+
+	}
+
+	private void dealLogin() {
+		LogManag.d("customer --- >", customer.toString());
+		if (customer != null) {
+			if (!(customer.getId().equals(UserInformation.getId()))) {
+				startActivity(new Intent(WebLoginActivity.this,
+						NewHomeActivity.class));
+				ScreenManager.getScreenManager().popOtherActivity(
+						NewHomeActivity.class);
+				Toast.makeText(WebLoginActivity.this, "登录成功", Toast.LENGTH_LONG)
+						.show();
+			} else {
+				finish();
+			}
+		} else {
+			finish();
+		}
+	}
+
+	@SuppressLint("JavascriptInterface")
+	private void initWebviewSetting() {
+		ViewUtils.inject(this);
+		// 设置支持JavaScript脚本
+
+		WebSettings webSettings = webView.getSettings();
+		webSettings.setJavaScriptEnabled(true);
+		// 设置可以访问文件
+		webSettings.setAllowFileAccess(true);
+		// 设置可以支持缩放
+		webSettings.setSupportZoom(true);
+		// 设置默认缩放方式尺寸是far
+		webSettings.setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
+		// 设置出现缩放工具
+		webSettings.setBuiltInZoomControls(true);
+		webSettings.setDefaultFontSize(20);
+		// url="http://192.168.0.249:8082/llgweb/m/top/springFestival2016?cusId=124530630465&"+"t="+System.currentTimeMillis();
+
+		// webView.addJavascriptInterface(new JavaScriptObject(this),
+		// "android");
+		webView.loadUrl(url);
+	}
+
+	// public class JavaScriptObject {
+	// Context mContxt;
+	//
+	// // sdk17版本以上加上注解
+	// public JavaScriptObject(Context mContxt) {
+	// this.mContxt = mContxt;
+	// }
+	//
+	// public void androidLogin(String flag, String message, String _code,
+	// String _state, String token, String refreshtoken) {
+	// // Toast.makeText(mContxt, "flag=>"+flag+"code->"+code+,
+	// // Toast.LENGTH_LONG).show();
+	// LogManag.d("登录 - ->", "flag=>" + flag + "code->" + _code
+	// + "state->" + _state + "token->" + token + "refreshToken->"
+	// + refreshtoken + "message -- >" + message);
+	// // if ("1".equals(flag) && state.equals(_state)) {
+	// if (!StringUtils.isEmpty(token)) {// 登录成功
+	// // 保存token
+	// getSharePrefence()
+	// .edit()
+	// .putLong("tokenTime",
+	// SystemClock.currentThreadTimeMillis())
+	// .putString("access_token", token)
+	// .putString("refresh_token", refreshtoken)
+	// .putBoolean("isLogin", true).commit();
+	//
+	// UserInformation.setAccess_token(token);
+	// UserInformation.setRefreshToken(refreshtoken);
+	// UserInformation.setLogin(true);
+	// AppContext.isLogin = true;
+	// handler.sendEmptyMessage(1);
+	// // 获取用户信息
+	// requestNet(UserInformation.getAccess_token());
+	// } else if (!StringUtils.isEmpty(_code)) {
+	// // 使用code获取token
+	// webLoginFinish(_state, _code);
+	// } else {
+	// // runOnUiThread(new Runnable() {
+	// // public void run() {
+	// toast(message);
+	// // }
+	// // });
+	//
+	// }
+	// // }
+	// }
+	// }
+
+	/**
+	 * 通过state ,code 来获取token
+	 * 
+	 * @param mstate
+	 * @param code
+	 */
+	private void webLoginFinish(String mstate, String code) {
+		if (mstate != null && mstate.equals(state) && code != null
+				&& code.length() > 0) {// 状态码和传入的state相等才可以
+			RequestParams params = initRequestParams(code);
+			HttpUtils httpUtils = new HttpUtils();
+			httpUtils.send(HttpMethod.POST, tokenUrl, params,
+					new RequestCallBack<String>() {
+						public void onFailure(HttpException arg0, String msg) {
+							getSharePrefence().edit().clear();
+						};
+
+						public void onSuccess(
+								com.lidroid.xutils.http.ResponseInfo<String> arg0) {
+							mjson = arg0.result;
+							savaToken(mjson);
+							requestNet(UserInformation.getAccess_token());
+						}
+					});
+		}
+
+	}
+
+	/**
+	 * 拦截返回键
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// 是否触发按键为back键
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			back();
+			return true;
+			// 如果不是back键正常响应
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
+	}
+
+	private void back() {
+		finish();
+	}
+
+	/**
+	 * 保存token到本地sharedPrefences
+	 * 
+	 * @param json
+	 *            获取登录成功后返回的json
+	 */
+
+	private void savaToken(String json) {
+		String access_token;
+		String refresh_token;
+		try {
+			access_token = new JSONObject(json).optString("access_token");
+			refresh_token = new JSONObject(json).optString("refresh_token");
+			// 存放token的时间
+			getSharePrefence()
+					.edit()
+					.putLong("tokenTime", SystemClock.currentThreadTimeMillis())
+					.putString("access_token", access_token)
+					.putString("refresh_token", refresh_token)
+					.putBoolean("isLogin", true).commit();
+
+			UserInformation.setRefreshToken(refresh_token);
+			UserInformation.setAccess_token(access_token);
+			UserInformation.setLogin(true);
+			AppContext.isLogin = true;
+			// handler.sendEmptyMessage(1);
+			// RefeshToken();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 初始化params
+	 * 
+	 * @param code
+	 *            返回的code，获取token的参数
+	 * @return params
+	 */
+	private RequestParams initRequestParams(String code) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("grant_type", "authorization_code");
+		params.addQueryStringParameter("code", code);
+		params.addQueryStringParameter("client_id", client_id);
+		params.addQueryStringParameter("client_secret", client_secret);
+		params.addQueryStringParameter("redirect_uri", mredirect_uri);
+		params.addQueryStringParameter("app_id",
+				TelephonyManagerUtils.getDeviceId(getApplicationContext()));
+		params.addQueryStringParameter("app_version",
+				VersionUtils.getVersionName(getApplicationContext()));
+		return params;
+	}
+
+	private void getCusId() {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", AppContext
+				.getUserInformation().getAccess_token());
+		params.addQueryStringParameter("app_id",
+				TelephonyManagerUtils.getDeviceId(getApplicationContext()));
+		params.addQueryStringParameter("app_version",
+				VersionUtils.getVersionName(getApplicationContext()));
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/security/getCurrCus", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						if (msg.equals("401")) {
+							// SharedPreferences userPreferences = mActivity
+							// .getSharedPreferences("userInformation1",
+							// Context.MODE_PRIVATE);
+							// Editor editor = userPreferences.edit();
+							// AppContext.isLogin = false;
+							// UserInformation.setLogin(false);
+							// // editor.putString("userid", "");
+							// editor.putString("userType", "");
+							// editor.putString("appellation", "");
+							// editor.commit();
+
+						}
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+
+						try {
+							if (json.getBoolean("success")) {
+								// Log.i("tag",
+								// System.currentTimeMillis()+"==onBack==onBack====执行了onBack===onBack===onBack====");
+								SharedPreferences userPreferences = getSharedPreferences(
+										"userInformation1",
+										Context.MODE_PRIVATE);
+								Editor editor = userPreferences.edit();
+								String userid = "0";
+								String userType = "0";
+								String isShop = "N";
+								String userTypeStr = "会员";
+								String appellation = "快乐天使";
+								userid = json.getJSONObject("obj").getString(
+										"id");
+								userType = json.getJSONObject("obj").getString(
+										"userType");
+								if (json.getJSONObject("obj").getString(
+										"appellation") == null) {
+									appellation = "快乐天使";
+								} else {
+									appellation = json.getJSONObject("obj")
+											.getString("appellation");
+								}
+								String pictureUrl = "";
+								if (json.getJSONObject("obj").getString(
+										"pictureUrl") != null) {
+									pictureUrl = json.getJSONObject("obj")
+											.getString("pictureUrl");
+								}
+								if (json.getJSONObject("attributes").getString(
+										"isShop") != null) {
+									isShop = json.getJSONObject("attributes")
+											.getString("isShop");
+								}
+								if (json.getJSONObject("attributes").getString(
+										"userTypeStr") != null) {
+									userTypeStr = json.getJSONObject(
+											"attributes").getString(
+											"userTypeStr");
+								}
+								editor.putString("userid", userid);
+								editor.putString("userType", userType);
+								editor.putString("isShop", isShop);
+								editor.putString("userTypeStr", userTypeStr);
+								editor.putString("appellation", appellation);
+								editor.putString("pictureUrl", pictureUrl);
+								editor.putBoolean("isLogin", true);
+								editor.commit();
+
+								getSharedPreferences("userInformation1",
+										Context.MODE_PRIVATE).getBoolean(
+										"isLogin", true);
+								AppContext.userid = userid;
+								AppContext.userType = userType;
+								AppContext.isShop = isShop;
+								AppContext.userTypeStr = userTypeStr;
+								AppContext.appellation = appellation;
+								AppContext.isLogin = true;
+
+								// usergrade.setText(AppContext.userTypeStr);
+								// username.setText(AppContext.appellation);
+								handler.sendEmptyMessage(3);
+								finish();
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+
+	/**
+	 * 进入个人资料页面时的发起网络请求
+	 */
+	private void requestNet(String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		// params.addHeader("Content-Type", "application/json");
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		// Log.i("tag", getSharePrefence().getString("access_token", "")
+		// + "-发起个人请求requestNet的--Access_token------");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/customer/getCustomer", params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						// dealError(msg);
+						Log.i("tag", msg
+								+ "-------requestNet--onError-msg------");
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						Log.i("tag", "登录个人资料-->" + json.toString());
+						Map<String, Object> map = ParseJson.getParseJson()
+								.parseIsSuccess(json);
+						if ((Boolean) map.get("isSuccess")) {
+							customer = ParseJson.getParseJson().parseCustomer(
+									json);
+							try {// 判断电话是否有?
+								String mobile = json
+										.getJSONObject("attributes").getString(
+												"mobile");
+								// String mobile = json.getString(
+								// "mobile");
+								String isShop = json
+										.getJSONObject("attributes").getString(
+												"isShop");
+								// String isShop = json.getString("isShop");
+
+								customer.setIsShop(isShop);
+								customer.setMobile(mobile);
+
+								if (!StringUtils.isEmpty(mobile)) {
+									getSharePrefence().edit()
+											.putString("phone", mobile)
+											.commit();
+								}
+								Log.i("tag",
+										getSharePrefence().getString("phone",
+												"null"));
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								LogManag.d("JSONExeption-->", e.getMessage());
+								e.printStackTrace();
+							}
+
+							if (customer == null) {
+								toast("登录失败");
+								return;
+							}
+
+							// 将token保存下来
+
+							SharedPreferences userPreferences = getSharedPreferences(
+									"userInformation1", Context.MODE_PRIVATE);
+							Editor editor = userPreferences.edit();
+							editor.putString("userid", customer.getId());
+							editor.putString("userType", customer.getUserType());
+							editor.putString("isShop", customer.getIsShop());
+							editor.putString("userTypeStr",
+									customer.getUserTypeStr());
+							editor.putString("appellation",
+									customer.getAppellation());
+							editor.putString("pictureUrl",
+									customer.getPictureUrl());
+							editor.putBoolean("isLogin", true);
+							editor.commit();
+
+							getSharedPreferences("userInformation1",
+									Context.MODE_PRIVATE).getBoolean("isLogin",
+									true);
+							AppContext.userid = customer.getId();
+							AppContext.userType = customer.getUserType();
+							AppContext.isShop = customer.getIsShop();
+							AppContext.userTypeStr = customer.getUserTypeStr();
+							AppContext.appellation = customer.getAppellation();
+							AppContext.isLogin = true;
+
+							handler.sendEmptyMessage(3);
+							// -------------------------
+							getSharePrefence().edit()
+									.putString("id", customer.getId()).commit();
+							UserInformation.setId(customer.getId());
+							dealLogin();
+
+							finish();
+						} else if (map.get("errorCode").equals("NOT_LOGIN")) {
+							setRefreshListtener(new Refresh() {
+								@Override
+								public void refreshRequst(String access_token) {
+									// TODO Auto-generated method stub
+									Log.i("tag", "------监听里-------");
+									requestNet(access_token);
+								}
+							});
+							RefeshToken();
+						}
+					}
+				});
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Tencent.onActivityResultData(requestCode, resultCode, data, this);
+	}
+
+	@Override
+	public void onCancel() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onComplete(Object arg0) {// qq登录成功回调
+		// TODO Auto-generated method stub
+
+		JSONObject obj;
+		try {
+			obj = new JSONObject(arg0.toString());
+			String token = obj.getString("access_token");
+			String opeid = obj.getString("openid");
+			String url = "http://login.fgqqg.com/login?client_name=MqqSsoClient&code="
+					+ token
+					+ ":"
+					+ opeid
+					+ ":"
+					+ qqappid
+					+ "&service=http%3A%2F%2Fm.fgqqg.com%2FloginCheck.do";
+			webView.loadUrl(url);
+			Log.d("my", "arg0.tostring:" + url);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onError(UiError arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void qqLogin() {
+
+	}
+	// private void qqLogin(){
+	// platform = ShareSDK.getPlatform(this, QQ.NAME);
+	// platform.setPlatformActionListener(this);
+	// platform.showUser(null);// 执行登录，登录后在回调里面获取用户资料
+	// //
+	// platform.showUser(“3189087725”);//获取账号为“3189087725”的资料platform.showUser(null);
+	// platform.authorize();
+	// }
+	// @Override
+	// public void onCancel(Platform arg0, int arg1) {
+	// // TODO Auto-generated method stub
+	//
+	// }
+	// @Override
+	// public void onComplete(Platform arg0, int arg1, HashMap<String, Object>
+	// res) {
+	// // TODO Auto-generated method stub
+	//
+	// Log.e("my","onComplete+++arg0.toString" + arg0.toString() + arg1
+	// + res.toString());
+	//
+	// // 解析部分用户资料字段
+	// String id, name, description, profile_image_url;
+	//
+	// id = res.get("id").toString();// ID
+	// name = res.get("name").toString();// 用户名
+	// description = res.get("description").toString();// 描述
+	// profile_image_url = res.get("profile_image_url").toString();// 头像链接
+	//
+	// String str = "ID: " + id + ";\n" + "用户名： " + name + ";\n" + "描述："
+	// + description + ";\n" + "用户头像地址：" + profile_image_url + "token"
+	// + res.get("").toString();
+	// System.out.println("用户资料: " + str);
+	// Log.e("my","用户资料" + str);
+	// }
+	// @Override
+	// public void onError(Platform arg0, int arg1, Throwable arg2) {
+	// // TODO Auto-generated method stub
+	// Log.e("my","用户资料" + arg2);
+	// }
+}

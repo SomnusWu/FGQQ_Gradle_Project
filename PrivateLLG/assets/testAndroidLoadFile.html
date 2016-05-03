@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    
+    <title>Test</title>
+    
+	<meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Test</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	
+	<script src="file:///android_asset/js/jquery.min.js"></script>
+
+  </head>
+  
+  <body onload="test()">
+    	我是测试值:<input type="text" id="test" value="测试">
+    	<br/>
+    	我是显示值:<input type="text" id="show">
+    	<br/>
+    	<a href="#" onclick="test2()">测试66</a>
+    <script type="text/javascript">
+    //jQuery.noConflict(); //用来解决Jquery与zepto冲突，需先引入zepto, 使用Jquery时$全部使用Jquery
+    function test(){
+    	//alert("加载网页");
+    }
+    function test2(){
+    jQuery("#show").val(jQuery("#test").val());
+    	fgqqgUploadFile:test();
+    }
+    function testJS(){
+    	jQuery("#show").val(jQuery("#test").val());
+    	//$.alert("我被点击了,值已经更改了")
+    }
+    </script>
+  </body>
+</html>

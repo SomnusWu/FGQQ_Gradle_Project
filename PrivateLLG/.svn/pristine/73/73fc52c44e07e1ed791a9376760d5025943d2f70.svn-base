@@ -1,0 +1,86 @@
+package com.llg.privateproject.adapters;
+
+import java.util.IllegalFormatCodePointException;
+import java.util.List;
+
+import com.bjg.lcc.privateproject.R;
+import com.rabbitmq.client.GetResponse;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+public class FabuKindAdapter extends BaseAdapter {
+	private List<String> list;
+	private LayoutInflater inflater;
+	private int selectPostion=0;
+
+	public FabuKindAdapter(Context context, List<String> list) {
+		// TODO Auto-generated constructor stub
+		this.list = list;
+		inflater = LayoutInflater.from(context);
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		if (list != null) {
+			return list.size();
+		}
+		return 0;
+	}
+
+	@Override
+	public Object getItem(int arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long getItemId(int arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public View getView(int position, View v, ViewGroup arg2) {
+		// TODO Auto-generated method stub
+		ViewHolder holder;
+		if (v == null) {
+			holder = new ViewHolder();
+			v = inflater.inflate(R.layout.listitem_fabu_kind, null);
+			holder.tvTile = (TextView) v.findViewById(R.id.tv_title);
+			holder.viewLine = v.findViewById(R.id.greenLine);
+			holder.viewLineVertical = v.findViewById(R.id.line_vertical);
+			v.setTag(holder);
+		} else {
+			holder = (ViewHolder) v.getTag();
+		}
+		holder.tvTile.setText(list.get(position));
+		if (position == selectPostion) {
+			holder.tvTile.setTextColor(Color.parseColor("#90cf7c"));
+			holder.viewLineVertical.setVisibility(View.VISIBLE);
+		} else {
+			holder.tvTile.setTextColor(Color.parseColor("#9d9b9c"));
+			holder.viewLineVertical.setVisibility(View.GONE);
+		}
+
+		return v;
+	}
+
+	private class ViewHolder {
+		TextView tvTile;
+		View viewLine;
+		View viewLineVertical;
+	}
+
+	/** 设置选中项 */
+	public void setSelectedPos(int position) {
+		this.selectPostion = position;
+		notifyDataSetChanged();
+	}
+}

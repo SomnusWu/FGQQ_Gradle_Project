@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_full"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <!-- home title bar -->
+
+    <include layout="@layout/commodity_head" />
+
+    <include layout="@layout/commodity_requirement" />
+
+    <!-- home  Content -->
+
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        android:id="@+id/pulltorefreshscrollview"
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        style="@style/layout_full"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        android:scrollbars="none"
+        ptr:ptrHeaderTextColor="@color/black3"
+        ptr:ptrMode="both" >
+
+        <com.llg.privateproject.view.MyGridView
+            android:id="@+id/commodity_id"
+            android:layout_width="match_parent"
+            android:horizontalSpacing="-10dp"
+            android:layout_height="match_parent" 
+            android:cacheColorHint="@android:color/transparent"
+            android:scrollbars="none"
+           	android:listSelector="@color/white"
+            />
+       
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+
+</LinearLayout>

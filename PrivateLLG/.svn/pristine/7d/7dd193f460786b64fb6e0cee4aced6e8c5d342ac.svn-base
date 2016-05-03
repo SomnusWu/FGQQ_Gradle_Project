@@ -1,0 +1,79 @@
+package com.llg.privateproject.adapters;
+
+import java.util.List;
+import java.util.Map;
+
+import com.bjg.lcc.privateproject.R;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+/**收支明细适配器
+ * yh
+ * */
+public class BalanceAdapter extends BaseAdapter{
+	private List<Map<String,Object>>list;
+	private Context context;
+	public BalanceAdapter(Context context,List<Map<String, Object>> list){
+		this.list=list;
+		this.context=context;
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return list==null?0:list.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return list.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+
+	@Override
+	public View getView(int position, View v, ViewGroup parent) {
+		// TODO Auto-generated method stu
+		Map<String, Object> map=list.get(position);
+		Holder holder;
+		if(v==null){
+			holder=new Holder();
+			v=View.inflate(context, R.layout.balance_list_item, null);
+			holder.date=(TextView) v.findViewById(R.id.date);
+			holder.dsc=(TextView) v.findViewById(R.id.dsc);
+			holder.money=(TextView) v.findViewById(R.id.money);
+			holder.type=(TextView) v.findViewById(R.id.type);
+					
+			v.setTag(holder);
+		}else{
+			holder=(Holder) v.getTag();
+		}
+		holder.date.setText(map.get("date").toString());
+		holder.dsc.setText(map.get("dsc").toString());
+		if(Float.parseFloat(map.get("money").toString())>=0){
+			holder.money.setText("+"+map.get("currency_type").toString()+map.get("money").toString());
+		}else{
+			holder.money.setTextColor(context.getResources().getColor(R.color.orange2));
+			holder.money.setText("-"+map.get("currency_type").toString()+map.get("money").toString());
+			
+		}
+		holder.type.setText(map.get("type").toString());
+		return v;
+	}
+private class Holder{
+	TextView date;
+	TextView dsc;
+	TextView money;
+	TextView type;
+	
+	
+}
+}

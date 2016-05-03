@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#c8cbcc"
+        android:orientation="vertical" >
+
+        <LinearLayout style="@style/layout_input_amount_style" >
+
+            <!-- <Button -->
+            <!-- android:id="@+id/btn_1" -->
+            <!-- style="@style/btn_input_amount_style" -->
+            <!-- android:layout_marginRight="1dp" -->
+            <!-- android:text="1" /> -->
+
+            <com.llg.privateproject.view.KeyboardViewItem
+                android:id="@+id/view_keyborad_01"
+                style="@style/btn_input_item_style"
+                android:layout_marginRight="1dp"
+                android:clickable="true"
+                app:letters=""
+                app:numbers="1" />
+
+            <com.llg.privateproject.view.KeyboardViewItem
+                android:id="@+id/view_keyborad_02"
+                style="@style/btn_input_item_style"
+                android:layout_marginRight="1dp"
+                app:letters="ABC"
+                app:numbers="2" />
+
+            <com.llg.privateproject.view.KeyboardViewItem
+                android:id="@+id/view_keyborad_03"
+                style="@style/btn_input_item_style"
+                app:letters="DEF"
+                app:numbers="3" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/layout_input_amount_style" >
+
+            <com.llg.privateproject.view.KeyboardViewItem
+                android:id="@+id/view_keyborad_04"
+                style="@style/btn_input_item_style"
+                android:layout_marginRight="1dp"
+                app:letters="GHI"
+                app:numbers="4" />
+
+            <com.llg.privateproject.view.KeyboardViewItem
+                android:id="@+id/view_keyborad_05"
+                style="@style/btn_input_item_style"
+                android:layout_marginRight="1dp"
+                app:letters="JKL"
+                app:numbers="5" />
+
+            <com.llg.privateproject.view.KeyboardViewItem
+                android:id="@+id/view_keyborad_06"
+                style="@style/btn_input_item_style"
+                app:letters="MNO"
+                app:numbers="6" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/layout_input_amount_style" >
+
+            <!-- <Button -->
+            <!-- android:id="@+id/btn_7" -->
+            <!-- style="@style/btn_input_amount_style" -->
+            <!-- android:layout_marginRight="1dp" -->
+            <!-- android:text="7" /> -->
+
+
+            <!-- <Button -->
+            <!-- android:id="@+id/btn_8" -->
+            <!-- style="@style/btn_input_amount_style" -->
+            <!-- android:layout_marginRight="1dp" -->
+            <!-- android:text="8" /> -->
+
+
+            <!-- <Button -->
+            <!-- android:id="@+id/btn_9" -->
+            <!-- style="@style/btn_input_amount_style" -->
+            <!-- android:text="9" /> -->
+
+            <com.llg.privateproject.view.KeyboardViewItem
+                android:id="@+id/view_keyborad_07"
+                style="@style/btn_input_item_style"
+                android:layout_marginRight="1dp"
+                app:letters="PQRS"
+                app:numbers="7" />
+
+            <com.llg.privateproject.view.KeyboardViewItem
+                android:id="@+id/view_keyborad_08"
+                style="@style/btn_input_item_style"
+                android:layout_marginRight="1dp"
+                app:letters="TUV"
+                app:numbers="8" />
+
+            <com.llg.privateproject.view.KeyboardViewItem
+                android:id="@+id/view_keyborad_09"
+                style="@style/btn_input_item_style"
+                app:letters="wxyz"
+                app:numbers="9" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/layout_input_amount_style" >
+
+            <com.llg.privateproject.view.KeyboardViewItem
+                android:id="@+id/view_keyborad_10"
+                style="@style/btn_input_item_style"
+                android:layout_marginRight="1dp"
+                app:letters=","
+                app:numbers="*" />
+
+            <com.llg.privateproject.view.KeyboardViewItem
+                android:id="@+id/view_keyborad_11"
+                style="@style/btn_input_item_style"
+                android:layout_marginRight="1dp"
+                app:letters="+"
+                app:numbers="0" />
+
+            <com.llg.privateproject.view.KeyboardViewItem
+                android:id="@+id/view_keyborad_12"
+                style="@style/btn_input_item_style"
+                app:letters=""
+                app:numbers="#" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,573 @@
+package com.llg.privateproject.html;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+
+import com.bjg.lcc.privateproject.R;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.util.PreferencesCookieStore;
+import com.llg.help.ScreenManager;
+import com.llg.privateproject.AppContext;
+import com.llg.privateproject.actvity.WebLoginActivity;
+import com.llg.privateproject.entities.UserInformation;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.utils.Constants;
+import com.llg.privateproject.utils.LogManag;
+import com.llg.privateproject.utils.StringUtils;
+import com.llg.privateproject.utils.TelephonyManagerUtils;
+import com.llg.privateproject.utils.VersionUtils;
+import com.llg.privateproject.view.MyProgressBar;
+
+/**
+ * 请求数据工具类
+ * 
+ * @author gongyibing
+ * @version 1.0
+ * @created 2015-05-07
+ */
+public class HtmlUitls extends Constants {
+	/** 数据请求 */
+	private String dataHttp;
+	private String dataHttpm;
+	/** 图片请求 */
+	private String imageHttp;
+	/** 进度条 */
+	private MyProgressBar myProgressBar;
+
+	/***
+	 * 构造函数
+	 * 
+	 * @param context
+	 */
+	public HtmlUitls(Context context) {
+		if (TEST) {
+			dataHttp = context.getResources().getString(
+					R.string.test_data_server_url);
+			dataHttpm = context.getResources().getString(
+					R.string.test_data_server_urlm);
+			imageHttp = context.getResources().getString(
+					R.string.test_image_server_url);
+		} else {
+			dataHttp = context.getResources().getString(R.string.loginurl);
+			imageHttp = context.getResources().getString(
+					R.string.image_server_url);
+		}
+	}
+
+	public String getDataHttp() {
+		return dataHttp;
+	}
+
+	public String getDataHttpm() {
+		return dataHttpm;
+	}
+
+	public void setDataHttp(String dataHttp) {
+		this.dataHttp = dataHttp;
+	}
+
+	public String getImageHttp() {
+		return imageHttp;
+	}
+
+	public void setImageHttp(String imageHttp) {
+		this.imageHttp = imageHttp;
+	}
+
+	private HttpMethod _httpMethod;
+	private String _method;
+	private RequestParams _params;
+	private HttpCallback _httpcallback;
+
+	/***
+	 * 网络请求
+	 * 
+	 * @param httpMethod
+	 *            请求方式 POST/GET
+	 * @param Method
+	 *            方法名
+	 * @param params
+	 *            参数
+	 * @param httpcallback
+	 *            回调函数
+	 */
+	public void xUtils(final Context context, HttpMethod httpMethod,
+			final String method, RequestParams params,
+			final HttpCallback httpcallback) {
+		/** 设置请求超时时间为10秒 */
+		HttpHandler<String> httpHandler = null;
+		HttpUtils client = new HttpUtils(1000 * 5);
+		/** 设置超时时间 */
+		// client.configSoTimeout(1000 * 5);
+		client.configTimeout(1000 * 10);
+		// client.configCurrentHttpCacheExpiry(currRequestExpiry)
+		client.configResponseTextCharset("UTF-8");
+		client.configCurrentHttpCacheExpiry(0);
+		// 保存服务器端(Session)的Cookie
+		PreferencesCookieStore cookieStore = new PreferencesCookieStore(context);
+		cookieStore.clear(); // 清除原来的cookie
+		client.configCookieStore(cookieStore);
+		if (params != null) {
+			params.addBodyParameter("app_id",
+					TelephonyManagerUtils.getDeviceId(context));
+			params.addBodyParameter("app_version",
+					VersionUtils.getVersionName(context));
+		}
+
+		Log.d("my", "url:" + AppContext.getHtmlUitls().getDataHttp() + method);
+		httpHandler = client.send(HttpMethod.POST, AppContext.getHtmlUitls()
+				.getDataHttp() + method, params, new RequestCallBack<String>() {
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+
+				Log.e("my", "onFailure"
+						+ AppContext.getHtmlUitls().getDataHttp() + method
+						+ arg1);
+				httpcallback.onError(arg0.getExceptionCode() + "");
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				String jsonContent = arg0.result;
+				JSONObject response = null;
+				Log.i("my", "arg0.result" + arg0.result);
+				try {
+					if (StringUtils.isJsonFormat(jsonContent)) {
+						response = new JSONObject(jsonContent);
+						if (response.isNull("success")) {
+							// Log.e("my",
+							// "response.isNull(sucess)"+response.isNull("sucess"));
+							httpcallback.onBack(response);
+						} else if (response.optBoolean("success")) {
+							// Log.e("my",
+							// "response.optBoolean(success)"+response.optBoolean("success"));
+							httpcallback.onBack(response);
+						} else {
+							// g.e("my",
+							// "sucess==nullsucess==nullsucess==null"+sucess);
+							httpcallback.onBack(response);
+							// httpcallback.onError(response.getString("msg"));
+						}
+					} else {
+						Log.e("my", "接收不合法的json");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					httpcallback.onError(context.getResources().getString(
+							R.string.exception));
+				}
+			}
+		});
+	}
+
+	/***
+	 * 受保护网络请求
+	 * 
+	 * @param httpMethod
+	 *            请求方式 POST/GET
+	 * @param Method
+	 *            方法名
+	 * @param params
+	 *            参数
+	 * @param httpcallback
+	 *            回调函数
+	 */
+	public void xUtilsm(final Context context, HttpMethod httpMethod,
+			final String method, RequestParams params,
+			final HttpCallback httpcallback) {
+
+		xUtilsm(context, httpMethod, method, params, 5 * 1000, httpcallback);
+	}
+
+	/***
+	 * 受保护网络请求
+	 * 
+	 * @param httpMethod
+	 *            请求方式 POST/GET
+	 * @param Method
+	 *            方法名
+	 * @param params
+	 *            参数
+	 * @param httpcallback
+	 *            回调函数
+	 */
+	boolean app_id_value = false;
+
+	public void xUtilsm(final Context context, final HttpMethod httpMethod,
+			final String method, final RequestParams params, int connTimeout,
+			final HttpCallback httpcallback) {
+
+		_httpMethod = httpMethod;
+		_method = method;
+		_params = params;
+		_httpcallback = httpcallback;
+
+		if (connTimeout <= 0) {
+			connTimeout = 5 * 1000;
+		}
+		// RequestParams newparams = null;
+		/** 设置请求超时时间为10秒 */
+		HttpUtils client = new HttpUtils(connTimeout);
+		/** 设置超时时间 */
+		client.configSoTimeout(connTimeout);// 配置socket时间连接溢出
+		client.configTimeout(connTimeout * 4);//
+		client.configResponseTextCharset("UTF-8");
+		client.configCurrentHttpCacheExpiry(0);
+		// if (params != null) {
+		// // newparams = new RequestParams();
+		// for (int i = 0; i < params.getQueryStringParams().size(); i++) {
+		// Log.d("my", "param:" + params.getQueryStringParams().get(i));
+		// if (params.getQueryStringParams().get(i).getName()
+		// .equals("access_token")) {
+		// params.getQueryStringParams().remove(i);
+		// // params.addQueryStringParameter("access_token",
+		// // AppContext.getUserInformation().getAccess_token());
+		// // hasToken = true;
+		// break;
+		// }
+		// // else {
+		// // newparams.addQueryStringParameter(params
+		// // .getQueryStringParams().get(i));
+		// // }
+		// }
+		// // if (!hasToken) {
+		// params.addQueryStringParameter("access_token", AppContext
+		// .getUserInformation().getAccess_token());
+		// // }
+
+		// for (int i = 0; i < params.getQueryStringParams().size(); i++) {
+		// if (params.getQueryStringParams().get(i).getName().equals("app_id"))
+		// {
+		// params.getQueryStringParams().remove(i);
+		// break;
+		// }
+		// }
+
+		if (!app_id_value) {
+			params.addQueryStringParameter("app_id",
+					TelephonyManagerUtils.getDeviceId(context));
+			params.addQueryStringParameter("app_version",
+					VersionUtils.getVersionName(context));
+			app_id_value = true;
+		}
+		// 保存服务器端(Session)的Cookie
+		// PreferencesCookieStore cookieStore = new
+		// PreferencesCookieStore(context);
+		// // cookieStore.clear(); // 清除原来的cookiem m/
+		// client.configCookieStore(cookieStore);
+		// if( params.getQueryStringParams()!=null){
+		// for (int i=0;i< params.getQueryStringParams().size();i++) {
+		// Log.d("my", "param:"+params.getQueryStringParams().get(i));
+		// }
+		// }
+		// Log.d("my", "new_param:" + params.getQueryStringParams().toString());
+		client.send(httpMethod, AppContext.getHtmlUitls().getDataHttpm()
+				+ method, params, new RequestCallBack<String>() {
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+
+				int errorCode = arg0.getExceptionCode();
+
+				// if (myProgressBar!=null) {
+				// myProgressBar.dismiss();
+				// }
+				// Log.d("my", "url"+
+				// AppContext.getHtmlUitls().getDataHttpm()+method+params);
+				// Log.e("my", "onFailure +errorCode=" + errorCode
+				// + AppContext.getHtmlUitls().getDataHttpm() + method
+				// + arg1);
+				if (errorCode == 401) {
+					RefeshToken(context);
+				} else {
+					httpcallback.onError(errorCode + "");
+				}
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				// Log.d("my", "url"+
+				// AppContext.getHtmlUitls().getDataHttpm()+method+params);
+				// if (myProgressBar!=null) {
+				// myProgressBar.dismiss();
+				// }
+				String jsonContent = arg0.result;
+				int statusCode = arg0.statusCode;
+
+				JSONObject response = null;
+
+				// Log.i("tag", "arg0.result--------------statusCode ="+
+				// statusCode + arg0.result);
+				LogManag.d("json-->", arg0.result);
+				try {
+					if (StringUtils.isJsonFormat(jsonContent)) {
+						response = new JSONObject(jsonContent);
+						if (response.isNull("success")) {
+							// Log.e("my",
+							// "response.isNull(sucess)"+response.isNull("sucess"));
+							httpcallback.onBack(response);
+						} else if (response.optBoolean("success")) {
+							// Log.e("my",
+							// "response.optBoolean(success)"+response.optBoolean("success"));
+							httpcallback.onBack(response);
+						} else {
+							if (response.get("errorCode").equals("NOT_LOGIN")) {// token失效
+								RefeshToken(context);
+							} else {
+								httpcallback.onBack(response);
+							}
+							// g.e("my",
+							// "sucess==nullsucess==nullsucess==null"+sucess);
+							// httpcallback.onError(response.getString("msg"));
+						}
+
+					} else {
+						Log.e("my", "接收不合法的json");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					httpcallback.onError(context.getResources().getString(
+							R.string.exception));
+				}
+			}
+		});
+	}
+
+	private String client_id = "mobile-client";
+	private String client_secret = "mobile";
+
+	/**
+	 * 刷新token
+	 */
+	public void RefeshToken(final Context context) {
+		AppContext.isLogin = false;
+		// final SharedPreferences sharedPreferences = getSharedPreferences(
+		// "userInformation1", Context.MODE_PRIVATE);
+		String refresh_token = AppContext.getUserInformation()
+				.getRefreshToken();
+		final RequestParams params = new RequestParams();
+		params.addBodyParameter("client_id", client_id);
+		params.addBodyParameter("client_secret", client_secret);
+		params.addBodyParameter("grant_type", "refresh_token");
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		// Log.i("tag", "------+++RefeshToken++++----RefeshToken----");
+		// if (refresh_token != null && refresh_token.length() > 0) {
+		Log.i("tag", refresh_token
+				+ "------+执行刷新token方法传入的++RefeshToken值++++-------");
+		params.addQueryStringParameter("refresh_token", refresh_token);
+
+		HttpUtils httpUtils = new HttpUtils();
+		httpUtils.send(HttpMethod.POST, AppContext.getHtmlUitls()
+				.getDataHttpm() + "oauth/token", params,
+				new RequestCallBack<String>() {
+
+					public void onFailure(HttpException arg0, String msg) {
+						((BaseActivity) context).getSharePrefence().edit()
+								.clear();
+						// if (msg.equals("404")) {
+						Intent intent = new Intent(ScreenManager
+								.getScreenManager().currentActivity(),
+								WebLoginActivity.class);
+						context.startActivity(intent);
+						// if (autoLoading != null) {
+						// autoLoading.hideAll();
+						// }
+						// }
+					};
+
+					public void onSuccess(ResponseInfo<String> json) {
+						boolean tokenValue = false;
+						String jsonContent = json.result;
+						JSONObject response = null;
+						String access_token = "", refresh_token = "";
+						Log.i("my", "arg0.result" + json.result);
+
+						if (StringUtils.isJsonFormat(jsonContent)) {
+							try {
+								response = new JSONObject(jsonContent);
+
+								if (response.isNull("success")) {
+									access_token = new JSONObject(json.result)
+											.optString("access_token");
+									refresh_token = new JSONObject(json.result)
+											.optString("refresh_token");
+
+									if (!StringUtils.isEmpty(access_token)
+											&& !StringUtils
+													.isEmpty(refresh_token)) {
+										tokenValue = true;
+									}
+								}
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
+						}
+
+						if (tokenValue) {
+							((BaseActivity) context).getSharePrefence().edit()
+									.putString("access_token", access_token)
+									.putString("refresh_token", refresh_token)
+									.commit();
+							UserInformation.setAccess_token(access_token);
+							UserInformation.setRefreshToken(refresh_token);
+							// refresh.refreshRequst(access_token);
+							AppContext.isLogin = true;
+							UserInformation.setLogin(true);
+
+							if (_params != null) {
+								
+								for (int i = 0; i < _params
+										.getQueryStringParams().size(); i++) {
+									if (_params.getQueryStringParams().get(i)
+											.getName().equals("access_token")) {
+										_params.getQueryStringParams()
+												.remove(i);
+										break;
+									}
+								}
+								_params.addQueryStringParameter("access_token",
+										access_token);
+							}
+							// 刷新成功 重新执行一次方法
+							xUtilsm(context, _httpMethod, _method, _params,
+									_httpcallback);
+						} else {
+							Intent intent = new Intent(ScreenManager
+									.getScreenManager().currentActivity(),
+									WebLoginActivity.class);
+							context.startActivity(intent);
+						}
+
+					}
+
+				});
+
+		// xUtils(context, HttpMethod.POST, "oauth/token", params,
+		// new HttpCallback() {
+		//
+		// @Override
+		// public void onError(String msg) {
+		// // TODO Auto-generated method stub
+		// if (msg.equals("404")) {
+		// Intent intent = new Intent(ScreenManager
+		// .getScreenManager().currentActivity(),
+		// WebLoginActivity.class);
+		// context.startActivity(intent);
+		// // if (autoLoading != null) {
+		// // autoLoading.hideAll();
+		// // }
+		// } else {
+		// // if (autoLoading != null) {
+		// // autoLoading.showExceptionLayout();
+		// // }
+		// }
+		// }
+		//
+		// @Override
+		// public void onBack(JSONObject json) {
+		// // TODO Auto-generated method stub
+		// String access_token = json.optString("access_token");
+		// String refresh_token = json.optString("refresh_token");
+		// if (access_token != null && refresh_token != null
+		// && access_token.length() > 0
+		// && refresh_token.length() > 0) {
+		// ((com.llg.privateproject.fragment.BaseActivity) context)
+		// .getSharePrefence().edit()
+		// .putString("access_token", access_token)
+		// .putString("refresh_token", refresh_token)
+		// .commit();
+		// UserInformation.setAccess_token(access_token);
+		// UserInformation.setRefreshToken(refresh_token);
+		// // refresh.refreshRequst(access_token);
+		//
+		// // 刷新成功 重新执行一次方法
+		// xUtilsm(context, _httpMethod, _method, _params,
+		// _httpcallback);
+		//
+		// AppContext.isLogin = true;
+		// UserInformation.setLogin(true);
+		// // Log.i("tag", "---提交了两个token值到本地文件----");
+		// } else {
+		// // toast("BaseActivity" +
+		// // "-**-onback-WebLoginActivity");
+		// Log.i("tag", "---------onback-else---跳转-");
+		// Intent intent = new Intent(context,
+		// WebLoginActivity.class);
+		// context.startActivity(intent);
+		// }
+		// }
+		// });
+		// xUtils(this, HttpMethod.POST, "oauth/token",
+		// params, new HttpCallback() {
+		//
+		// @Override
+		// public void onError(String msg) {
+		// // TODO Auto-generated method stub
+		// Log.i("tag", msg + "---------RefeshToken失败----");
+		// if (msg.equals("404")) {
+		// Intent intent = new Intent(ScreenManager
+		// .getScreenManager().currentActivity(),
+		// WebLoginActivity.class);
+		// startActivity(intent);
+		// if (autoLoading != null) {
+		// autoLoading.hideAll();
+		// }
+		// } else {
+		// if (autoLoading != null) {
+		// autoLoading.showExceptionLayout();
+		// }
+		// }
+		// }
+		//
+		// @Override
+		// public void onBack(JSONObject json) {
+		// // TODO Auto-generated method stub
+		// // Log.i("tag", I.toString()
+		// // + "------+++onBack++++----RefeshToken----");
+		// String access_token = json.optString("access_token");
+		// String refresh_token = json.optString("refresh_token");
+		// // Log.i("tag",
+		// // refresh_token
+		// // + "-----RefeshToken()++onback+--refresh_token值--");
+		// if (access_token != null && refresh_token != null
+		// && access_token.length() > 0
+		// && refresh_token.length() > 0) {
+		// context.getSharePrefence().edit()
+		// .putString("access_token", access_token)
+		// .putString("refresh_token", refresh_token)
+		// .commit();
+		// UserInformation.setAccess_token(access_token);
+		// UserInformation.setRefreshToken(refresh_token);
+		// refresh.refreshRequst(access_token);
+		// AppContext.isLogin = true;
+		// UserInformation.setLogin(true);
+		// // Log.i("tag", "---提交了两个token值到本地文件----");
+		// } else {
+		// // toast("BaseActivity" +
+		// // "-**-onback-WebLoginActivity");
+		// Log.i("tag", "---------onback-else---跳转-");
+		// Intent intent = new Intent(BaseActivity.this,
+		// WebLoginActivity.class);
+		// startActivity(intent);
+		// }
+		// }
+		// });
+	}
+
+}

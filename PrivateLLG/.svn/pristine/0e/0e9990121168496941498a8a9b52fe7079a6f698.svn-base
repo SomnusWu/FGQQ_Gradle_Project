@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 项目配置 -->
+    <string name="app_name">风购全球</string>
+    <!-- 请求数据 -->
+     <string name="test_data_server_url">http://192.168.0.196:8083/buyapp/common/</string>
+     <string name="test_data_server_urlm">http://192.168.0.196:8083/buyapp/</string>
+     <!--请求图片地址  -->
+    <string name="test_image_server_url">http://192.168.0.121:7777/</string>
+    <!--  访问静态网页-->
+    <string name="buyserver">http://192.168.0.196:8082/llgweb/</string>
+    <!--  商品分享-->
+    <string name="buyservershare">http://www.fgqqg.com/pages/m/prod/m_</string>
+    
+    <string name="data_server_url"></string>
+    <string name="image_server_url"></string>
+    
+</resources>

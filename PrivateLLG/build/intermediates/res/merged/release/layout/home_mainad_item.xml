@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/ad_root"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="5dp" >
+
+        <ImageView
+            android:id="@+id/ad_iv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/defaultpic" />
+
+        <TextView
+            android:id="@+id/ad_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/ad_iv1"
+            android:ellipsize="marquee"
+            android:ems="10"
+            android:singleLine="true"
+            android:textColor="@color/black1"
+            android:text="标题" />
+
+        <TextView
+            android:id="@+id/ad_dsc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ad_title"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/ad_iv1"
+            android:ellipsize="marquee"
+            android:ems="10"
+            android:text="描述"
+            android:textColor="@color/black2"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+</LinearLayout>

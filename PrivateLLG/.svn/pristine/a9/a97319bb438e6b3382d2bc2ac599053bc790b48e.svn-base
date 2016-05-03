@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="IndictorView">
+        <attr name="indictorCount" format="integer|reference" />
+        <attr name="indictorSize" format="integer|reference" />
+        <attr name="indictorStyle">
+            <enum name="circle" value="0" />
+            <enum name="square" value="1" />
+        </attr>
+        <attr name="indictorMargin" format="integer|reference" />
+        <attr name="indictorColor" format="color|reference" />
+        <attr name="indictorSelectedColor" format="color|reference" />
+        <attr name="indictorGravity">
+            <enum name="left" value="3" />
+            <enum name="center" value="17" />
+            <enum name="right" value="5" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="RoundImageView">
+        <attr name="circlebg" format="color|reference" />
+        <attr name="src" format="reference" />
+    </declare-styleable>
+
+</resources>

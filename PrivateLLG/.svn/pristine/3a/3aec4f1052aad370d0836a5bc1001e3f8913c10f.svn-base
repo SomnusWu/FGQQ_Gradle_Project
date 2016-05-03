@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <include layout="@layout/xian_and_dian" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp" >
+
+        <TextView
+            android:id="@+id/shop_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="店铺名"
+            android:textColor="@color/black1"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/product_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/shop_name"
+            android:text="共3件"
+            android:textColor="@color/black2" />
+
+        <TextView
+            android:id="@+id/_xiaoji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/shop_name"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/product_count"
+            android:text="小计："
+            android:textColor="@color/black2" />
+
+        <TextView
+            android:id="@+id/xiaoji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/shop_name"
+            android:layout_toRightOf="@id/_xiaoji"
+            android:text="小计："
+            android:textColor="@color/orange1" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/dian_line_product_e8" />
+    <!-- 添加商品 -->
+
+    <LinearLayout
+        android:id="@+id/ll_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+    <!-- 选择配送、付款方式 -->
+
+    <RelativeLayout
+        android:id="@+id/rl_select_posttime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            android:text="送货/付款"
+            android:textColor="@color/black2"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:visibility="invisible"
+            android:src="@drawable/dingdanzhifu_xiafan" />
+
+        <TextView
+            android:id="@+id/posttime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/iv_more"
+
+            android:text="请选择请选择"
+            android:textColor="@color/black2" />
+
+        <TextView
+            android:id="@+id/payment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/posttime"
+            android:text="网上支付"
+            android:layout_toLeftOf="@id/iv_more"
+            android:textColor="@color/black2" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@id/payment"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/dian_line_product_e8" />
+    <!-- 选择开发票 -->
+
+    <RelativeLayout
+        android:id="@+id/rl_select_bill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:padding="20dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="开具发票"
+            android:textColor="@color/black2"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_billmore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/dingdanzhifu_xiafan" />
+
+        <TextView
+            android:id="@+id/select_bill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/iv_billmore"
+            android:text="不开发票"
+            android:textColor="@color/black2" />
+
+        <TextView
+            android:id="@+id/select_billcategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/select_bill"
+            android:visibility="gone"
+            android:layout_toLeftOf="@id/iv_billmore"
+            android:text="发票分类"
+            android:textColor="@color/black2" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:visibility="gone"
+        android:background="@drawable/dian_line_product_e8" />
+    <!-- 给卖家留言 -->
+
+    <EditText
+        android:id="@+id/et_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/stroke_grayline_e8"
+        android:hint="给卖家留言... (限60字)"
+        android:maxLength="60"
+        android:padding="10dp"
+        android:textColor="@color/black2"
+        android:textColorHint="@color/black3"
+        android:textSize="12sp" />
+
+    <include layout="@layout/dian_and_xian" />
+
+</LinearLayout>

@@ -1,0 +1,68 @@
+package com.llg.privateproject.view;
+
+import java.util.List;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.bjg.lcc.privateproject.R;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.entities.ActivityBean;
+
+/****/
+public class ActivityView extends LinearLayout {
+	private Context mContext;
+	private LinearLayout layout_activity;
+	private ImageView img_icon;
+	private TextView tv_content;
+
+	public ActivityView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		// TODO Auto-generated constructor stub
+		init(context);
+
+	}
+
+	public ActivityView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		// TODO Auto-generated constructor stub
+		init(context);
+	}
+
+	public ActivityView(Context context) {
+		super(context);
+		// TODO Auto-generated constructor stub
+		init(context);
+	}
+
+	private void init(Context context) {
+		mContext = context;
+		View view = LayoutInflater.from(context).inflate(
+				R.layout.view_activity_layout, this);
+		layout_activity = (LinearLayout) view
+				.findViewById(R.id.layout_activity);
+	}
+
+	public void setData(List<ActivityBean> activitys) {
+		layout_activity.removeAllViews();
+		if (activitys != null) {
+			for (int i = 0; i < activitys.size(); i++) {
+				ActivityBean bean = activitys.get(i);
+				View view = LayoutInflater.from(mContext).inflate(
+						R.layout.view_activitys, null);
+				img_icon = (ImageView) view.findViewById(R.id.img_icon);
+				tv_content = (TextView) view.findViewById(R.id.tv_content);
+				MyFormat.setBitmap(mContext, img_icon, bean.getIconPath(), 0, 0);
+				tv_content.setText( bean.getText());
+				layout_activity.addView(view);
+			}
+		}
+		
+	}
+
+}

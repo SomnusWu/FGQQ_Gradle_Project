@@ -1,0 +1,649 @@
+package com.llg.privateproject.actvity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.llg.help.MyFormat;
+import com.llg.privateproject.AppContext;
+import com.bjg.lcc.alipay.pay.PayActivity;
+import com.bjg.lcc.privateproject.R;
+import com.llg.privateproject.adapters.OrderAdapter;
+import com.llg.privateproject.adapters.OrderAdapter.ChangeInvoice;
+import com.llg.privateproject.adapters.ShoppingCardAdapter;
+import com.llg.privateproject.fragment.BaseActivity;
+import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
+import com.llg.privateproject.view.Gerenziliao_Dialog;
+import com.llg.privateproject.view.Gerenziliao_Dialog.PreferentialListener;
+import com.smartandroid.sa.view.AutoLoading;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
+import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+/**
+ * 订单结算页面 yh 2015.07.14
+ * */
+public class OrderClearActivity extends BaseActivity implements
+		PreferentialListener, ChangeInvoice {
+	/** 订单布局文件 */
+	@ViewInject(R.id.sv)
+	private ScrollView sv;
+	/** 订单GridView */
+	@ViewInject(R.id.order_gv)
+	private GridView order_gv;
+	/** 用户名 */
+	@ViewInject(R.id.username)
+	private TextView username;
+	/** 电话 */
+	@ViewInject(R.id.phone)
+	private TextView phone;
+	/** 地址 */
+	@ViewInject(R.id.address)
+	private TextView address;
+	/** 运费 */
+	@ViewInject(R.id.youhui0)
+	private TextView youhui0;
+	/** 运费额 */
+	@ViewInject(R.id.youhui)
+	private TextView youhui;
+	/** 订单可用优惠 */
+	@ViewInject(R.id._youhui)
+	private TextView _youhui;
+	/** 订单可用优惠 */
+	@ViewInject(R.id._youhui0)
+	private TextView _youhui0;
+	/** 商品总净额 */
+	@ViewInject(R.id.total_price)
+	private TextView total_price;
+	/** 支付金额 */
+	@ViewInject(R.id.total_prices)
+	private TextView total_prices;
+	OrderAdapter adapter;
+	/** 订单列表 */
+	List<Map<String, Object>> list;
+	/** 订单层部分数据 */
+	Map<String, Object> prepayCartModelMap;
+	private AutoLoading AutoLoading;
+	@ViewInject(R.id.ll)
+	private LinearLayout ll;
+	AppContext appContext;
+	private String invoiceType = "";
+	private String invoiceHead = "";
+	int count;
+	/**订单号*/
+	String code="";
+	/**订单名称*/
+	String name="";
+	/**结算价格*/
+	double price;
+	int addressposition=-1;
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 1:// 访问成功
+
+				youhui.setText("本单运费:￥"
+						+ MyFormat.getPriceFormat(prepayCartModelMap.get(
+								"allPdPrice").toString()));
+				// youhui0.setText("本次消费可用CO币抵扣:"+prepayCartModelMap.get("allCoPrice").toString()+"元");
+				_youhui.setText("我的CO币:"
+						+ prepayCartModelMap.get("myco").toString());
+				_youhui0.setText("本次消费可用CO币抵扣:"
+						+ prepayCartModelMap.get("allCoPrice").toString() + "元");
+				total_price.setText("￥"
+						+ MyFormat.getPriceFormat(prepayCartModelMap.get(
+								"prodPrice").toString()));
+				total_prices.setText("￥"
+						+ MyFormat.getPriceFormat(prepayCartModelMap.get(
+								"payPrice").toString()));
+				if (prepayCartModelMap.get("name") != null) {
+					username.setText("收货人:" + prepayCartModelMap.get("name"));
+				}
+				if (prepayCartModelMap.get("phone") != null) {
+					phone.setText("电话:" + prepayCartModelMap.get("phone"));
+				}
+				if (prepayCartModelMap.get("compAddress") != null) {
+					address.setText("地址:"
+							+ prepayCartModelMap.get("compAddress"));
+				}
+				break;
+			case 2:// 更改地址或发票开头或移除无效商品后后刷新结算单
+				list.clear();
+				if (appContext.isNetworkConnected()) {
+					getPrepay("fastGetPrepay", AppContext.getUserInformation()
+							.getAccess_token());
+				} else {
+					toast(R.string.t_Connection);
+				}
+
+				break;
+			case 3:// 有无效商品时,移除无效商品
+				if (appContext.isNetworkConnected()) {
+					getPrepay("removeInvalidSpec", AppContext
+							.getUserInformation().getAccess_token());
+				} else {
+					toast(R.string.t_Connection);
+				}
+				break;
+			case 4:// 跳转到生成订单界面
+				save("save", AppContext.getUserInformation().getAccess_token());
+				break;
+			case 5:// 跳转到支付页面
+				Intent intent =new Intent(OrderClearActivity.this, PayActivity.class);
+				intent.putExtra("code", code);
+				intent.putExtra("name", name);
+				intent.putExtra("price", String.valueOf(price));
+				startActivity(intent);
+				finish();
+				break;
+			}
+			handler.post(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					// sv.fullScroll(ScrollView.FOCUS_UP);
+					// sv.scrollTo(0, 0);
+					sv.smoothScrollTo(0, 0);
+				}
+			});
+		};
+	};
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.order_clear);
+		ViewUtils.inject(this);
+		init();
+	}
+
+	private void init() {
+		initAutoLoading(ll);
+		appContext = getAppContext();
+		if (appContext.isNetworkConnected()) {
+
+			getPrepay("forceGetPrepay", AppContext.getUserInformation()
+					.getAccess_token());
+
+		} else {
+			toast(R.string.t_Connection);
+		}
+		autoLoading.setClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (appContext.isNetworkConnected()) {
+
+					if (AppContext.getUserInformation().isLogin()) {
+						getPrepay("forceGetPrepay", AppContext
+								.getUserInformation().getAccess_token());
+					} else {
+					
+						Intent intent = new Intent(OrderClearActivity.this,
+								WebLoginActivity.class);
+						startActivity(intent);
+
+					}
+				} else {
+					toast(R.string.t_Connection);
+				}
+			}
+		});
+		list = new ArrayList<Map<String, Object>>();
+		prepayCartModelMap = new HashMap<String, Object>();
+		adapter = new OrderAdapter(this, list, this);
+		order_gv.setAdapter(adapter);
+		// testData();
+	}
+
+	/**
+	 * 获取结算订单
+	 * 
+	 * @param:method:forceGetPrepay强制从数据库获取订单信息,method:fastGetPrepay从缓存中获取订单信息
+	 * 
+	 * */
+	private void getPrepay(final String method, String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+//		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/prepay/" + method, params, new HttpCallback() {
+
+					@Override
+					public void onError(String msg) {
+						Log.d("my", ""+msg);
+						autoLoading.showExceptionLayout();
+					}
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						Log.d("my", ""+json);
+						autoLoading.hideAll();
+						try {
+							if (json.getBoolean("success")) {
+								JSONObject obj = json.getJSONObject("obj");
+								JSONObject prepayCartModel = obj
+										.getJSONObject("prepayCartModel");
+
+								prepayCartModelMap.put("myco",
+										prepayCartModel.getInt("myco"));// 我的co
+								prepayCartModelMap.put("allCoPrice",
+										prepayCartModel.getInt("allCoPrice"));// 使用co数
+								prepayCartModelMap.put("difCoPrice",
+										prepayCartModel.getInt("difCoPrice"));// 需补足co
+								prepayCartModelMap.put("useCo",
+										prepayCartModel.getBoolean("useCo"));// 选择是否可用
+								prepayCartModelMap
+										.put("allPdPrice", prepayCartModel
+												.getString("allPdPrice"));// 运费总价
+								prepayCartModelMap.put("prodPrice",
+										prepayCartModel.getString("prodPrice"));// 商品原总价
+								prepayCartModelMap.put("payPrice",
+										prepayCartModel.getString("payPrice"));// 支付价格
+								prepayCartModelMap.put("allCount",
+										prepayCartModel.getString("allCount"));// 所有商品数
+								prepayCartModelMap.put("checked",
+										prepayCartModel.getString("checked"));//
+
+								if (!obj.get("receiveAddress").equals(null)) {// 获取地址
+									JSONObject jsonObject = obj
+											.getJSONObject("receiveAddress");
+									prepayCartModelMap.put("name",
+											jsonObject.getString("name"));
+									prepayCartModelMap.put("phone",
+											jsonObject.getString("phone"));
+									prepayCartModelMap
+											.put("compAddress", jsonObject
+													.getString("compAddress"));
+								}else{
+									prepayCartModelMap
+									.put("compAddress","请输入收获地址");
+								}
+
+								JSONArray shopModels = prepayCartModel
+										.getJSONArray("shopModels");
+
+								Map<String, Object> map;// 店铺
+								if (shopModels.length() > 0) {
+									for (int i = 0; i < shopModels.length(); i++) {
+										JSONObject object = shopModels
+												.getJSONObject(i);
+										map = new HashMap<String, Object>();
+										map.put("shopId",
+												object.getString("shopId"));
+										map.put("shopName",
+												object.getString("shopName"));
+										map.put("shopActivity", "店铺活动" + i);
+										map.put("shopProductCount",
+												object.getString("allCount"));// 数量
+										map.put("shopTotalprice",
+												object.getString("payPrice"));// 支付运费
+										map.put("pdPrice",
+												object.getString("pdPrice"));// 运费
+										map.put("postTime", "时间不限");
+										map.put("payment", "网上支付");
+										// prepayCartModelMap.put("invoiceType",
+										// obj.getString("invoiceType"));// 发票类型
+										// prepayCartModelMap.put("invoiceTitle",
+										// obj.getString("invoiceTitle"));//
+										// 发票开头
+										if (obj.getString("invoiceType") != null) {
+
+											map.put("invoiceType", obj
+													.getString("invoiceType"));
+											map.put("invoiceHead", obj
+													.getString("invoiceTitle"));
+											if (obj.getString("invoiceType")
+													.equals("0")) {//不开发票
+												map.put("invoiceCategory",
+														"不开发票");
+											} else if (obj.getString(
+													"invoiceType").equals("1")) {//个人
+												map.put("invoiceCategory",
+														"个人");
+											} else if (obj.getString(
+												"invoiceType").equals("2")) {//公司
+												map.put("invoiceCategory",
+														"公司");
+										}
+										} else {
+											map.put("invoiceType", "0");
+											map.put("invoiceHead", "不开发票");
+											map.put("invoiceCategory",
+													"不开发票");
+										}
+
+										
+										JSONArray specs = object
+												.getJSONArray("specs");
+
+										if (specs.length() > 0) {
+											Map<String, Object> map1;// 商品
+											List<Map<String, Object>> listProducts = new ArrayList<Map<String, Object>>();
+
+											for (int j = 0; j < specs.length(); j++) {
+												map1 = new HashMap<String, Object>();
+												JSONObject object2 = specs
+														.getJSONObject(j);
+												map1.put("productId", object2
+														.getString("specId"));// 规格id
+												map1.put("productName", object2
+														.getString("prodName"));// 商品名
+												map1.put("productImg", object2
+														.getString("iconPath"));// 图片地址
+												map1.put("productDsc", object2
+														.getString("prodName"));
+												map1.put(
+														"productPrice",
+														object2.getString("price"));
+												map1.put(
+														"productCount",
+														object2.getString("allCheckedCount"));
+												map1.put(
+														"allCheckedPrice",
+														object2.getString("allCheckedPrice"));
+
+												listProducts.add(map1);
+
+											}
+											map.put("listProducts",
+													listProducts);
+											// Log.d("my",
+											// "listProducts.size()"+listProducts.size());
+											listProducts = null;
+										}
+
+										list.add(map);
+
+									}
+								}
+								handler.sendEmptyMessage(1);
+								adapter.notifyDataSetChanged();
+
+							} else if (json.getString("errorCode") != null
+									&& json.getString("errorCode").equals(
+											"NOT_LOGIN")) {
+								// Log.i("tag", json.toString()
+								// + "------监听上一句--------");
+								setRefreshListtener(new Refresh() {
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+
+										getPrepay(method, access_token);
+									}
+								});
+								RefeshToken();
+							}
+
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						autoLoading.hideAll();
+						handler.post(new Runnable() {
+
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								// sv.fullScroll(ScrollView.FOCUS_UP);
+								// sv.scrollTo(0, 0);
+								sv.smoothScrollTo(0, 0);
+							}
+						});
+					}
+				});
+	}
+
+	/** 生成订单 */
+	private void save(final String method, String access_token) {
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("access_token", access_token);
+		params.addHeader("X-Requested-With", "XMLHttpRequest");
+		AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+				"m/order/" + method, params, new HttpCallback() {
+
+					@Override
+					public void onBack(JSONObject json) {
+						// TODO Auto-generated method stub
+						try {
+							if (json.getBoolean("success")) {
+								handler.sendEmptyMessage(5);
+								code=json.getJSONObject("obj").getString("code");
+								name=json.getJSONObject("obj").getString("name");
+								price=json.getJSONObject("obj").getDouble("price");
+								
+							}else if(!json.getBoolean("success")&&json.get("msg")!=null){
+								toast(json.getString("msg"));
+							
+							}
+							else if (json.getString("errorCode") != null
+									&& json.getString("errorCode").equals(
+											"NOT_LOGIN")) {
+								count++;
+								if (count > 5) {
+									return;
+								}
+								setRefreshListtener(new Refresh() {
+									@Override
+									public void refreshRequst(
+											String access_token) {
+										// TODO Auto-generated method stub
+
+										save(method, access_token);
+									}
+								});
+								RefeshToken();
+							}
+							else{
+							toast("提交信息不全");
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+	}
+
+	@OnClick({ R.id.turn, R.id.rl_address, R.id.ll_preferential,
+			R.id.tijiaodingdan })
+	public void myclick(View v) {
+		switch (v.getId()) {
+		case R.id.turn:// 返回
+			finish();
+			break;
+		case R.id.rl_address:// 选择收货地址
+			Intent intent = new Intent(this, OrderAddressListActivity.class);
+			intent.putExtra("position", addressposition);
+			startActivityForResult(intent, 1);
+
+			break;
+		case R.id.ll_preferential:// 选择优惠
+			// Gerenziliao_Dialog dialog = new Gerenziliao_Dialog(this, 9,
+			// this);
+			// dialog.show();
+			// LayoutParams lp = dialog.getWindow().getAttributes();
+			// lp.width = AppContext.getScreenWidth();
+			// lp.height = AppContext.getScreenHeight();
+			// dialog.getWindow().setAttributes(lp);
+			// Toast.makeText(this, "选择优惠", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.tijiaodingdan:// 提交订单
+			changeInvoice("containsInvalidSpec", "", "", AppContext
+					.getUserInformation().getAccess_token());
+			
+			break;
+
+		}
+	}
+
+	/** 获取修改后的地址 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (data != null ) {
+			
+			addressposition=data.getIntExtra("position", -1);
+		
+			
+			changeInvoice("changeAddr", data.getStringExtra("region")+data.getStringExtra("street"), "", "");
+			
+//			intent.putExtra("position", arg2);
+//			intent.putExtra("region", adapter.getItem(arg2).getZoneName());
+//			intent.putExtra("street", adapter.getItem(arg2).getAddress());
+		}
+	}
+
+	@Override
+	public void setPreferential(String coin, String voucher) {
+		// TODO Auto-generated method stub
+		if (coin.length() > 0 && voucher.length() > 0) {
+			youhui.setText("CO币可抵扣：" + coin + "元," + "满省优惠已省：" + voucher);
+		} else if (coin.length() > 0 && voucher.length() < 1) {
+			youhui.setText("CO币可抵扣：" + coin + "元");
+		} else if (coin.length() < 1 && voucher.length() < 1) {
+
+			youhui.setText("未使用优惠");
+		} else if (coin.length() < 1 && voucher.length() > 0) {
+
+			youhui.setText("满省优惠已省：" + voucher);
+		}
+
+	}
+
+	/**
+	 * 改变发票开头/修改地址
+	 * 
+	 * @param invoiceType为类型
+	 *            （0不需要发票/1个人/2公司）、companyName为公司名称
+	 * @param method
+	 *            :为changeInvoice时,为改变发票接口, method为changeAddr 时为更改地址接口,传参数
+	 *            id(invoiceType), method为containsInvalidSpec时,判断是否有无效商品
+	 *            method为removeInvalidSpec时,移除无效商品
+	 * */
+	private void changeInvoice(final String method, final String invoiceType,
+			final String invoiceHead, String access_token) {
+		if (appContext.isNetworkConnected()) {
+			RequestParams params = new RequestParams();
+			params.addQueryStringParameter("access_token", access_token);
+			if (method.equals("changeAddr")) {
+				params.addQueryStringParameter("id", invoiceType);
+			} else if (method.equals("changeInvoice")) {
+				params.addQueryStringParameter("invoiceType", invoiceType);
+				params.addQueryStringParameter("companyName", invoiceHead);
+			} else if (method.equals("containsInvalidSpec")) {
+				// params = null;
+			} else if (method.equals("removeInvalidSpec")) {
+				// params = null;
+			}
+			params.addHeader(MyFormat.HEADER_KEY, MyFormat.HEADER_VALUE);
+			AppContext.getHtmlUitls().xUtilsm(this, HttpMethod.POST,
+					"m/prepay/" + method, params, new HttpCallback() {
+
+						@Override
+						public void onError(String msg) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void onBack(JSONObject json) {
+							// TODO Auto-generated method stub
+							try {
+								if (json.getBoolean("success")) {
+									if (method.equals("containsInvalidSpec")) {// 判断是否存在无效商品方法
+										if (json.getBoolean("obj")) {
+											handler.sendEmptyMessage(3);// 存在无效商品调用移除无效商品接口
+											toast("正在移除无效商品...");
+										} else {
+											handler.sendEmptyMessage(4);// 跳转到生成支付订单
+										}
+
+									} else if (method
+											.equals("removeInvalidSpec")) {// 移除无效商品方法
+										handler.sendEmptyMessage(4);// 生成订单
+									} else if (method.equals("save")) {
+										handler.sendEmptyMessage(5);// 跳转到支付页面
+									} else {
+
+										handler.sendEmptyMessage(2);// 从新获取结算订单
+									}
+								} else {
+									if (json.getString("msg") != null) {
+										toast(json.getString("msg"));
+
+									}
+									if (json.getString("errorCode") != null
+											&& json.getString("errorCode")
+													.equals("NOT_LOGIN")) {
+										setRefreshListtener(new Refresh() {
+											@Override
+											public void refreshRequst(
+													String access_token) {
+												// TODO Auto-generated method
+												// stub
+
+												changeInvoice(method,
+														invoiceType,
+														invoiceHead,
+														access_token);
+											}
+										});
+										RefeshToken();
+									}
+								}
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					});
+		} else {
+			toast(R.string.t_Connection);
+		}
+	}
+
+	@Override
+	public void getInvoiceType(String invoiceHead, String invoiceCategory,
+			String invoiceType) {
+		// TODO Auto-generated method stub
+		this.invoiceHead = invoiceHead;
+		this.invoiceType = invoiceType;
+		changeInvoice("changeInvoice", invoiceType, invoiceHead, AppContext
+				.getUserInformation().getAccess_token());
+	}
+}

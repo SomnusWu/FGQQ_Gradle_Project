@@ -1,0 +1,36 @@
+package com.llg.common.constant.enums;
+
+/**
+ * 
+ * @Comments: 用户类型枚举
+ * @Author： <作者中文名或拼音缩写>
+ * @Create Date： <创建日期，格式:YYYY-MM-DD>
+ * @Modified By： <修改人中文名或拼音缩写>
+ * @Modified Date: <修改日期，格式:YYYY-MM-DD>
+ * @Why & What is modified <修改原因描述>
+ * @Version: <V1.0>
+ * 
+ */
+public enum UserTypeEnums {
+
+	GENERAL_USER("0", "普通用户"), VIP_USER("1", "VIP用户"), ENTREPRENEUR("5", "创业者"), STUDIO_COM(
+			"50", "创业工作室员工"), NETWORK_LEADER("6", "网头"), REGION_PROXY("7",
+			"区域代理商"), MANAGER("101", "运营部"), SUPER_ADMIN("100", "系统管理员"), PROVINCE(
+			"8", "省代理"), COUNTY("9", "县代理");
+
+	private final String value;
+	private final String info;
+
+	private UserTypeEnums(String value, String info) {
+		this.value = value;
+		this.info = info;
+	}
+
+	public String getInfo() {
+		return info;
+	}
+
+	public String getValue() {
+		return value;
+	}
+}
