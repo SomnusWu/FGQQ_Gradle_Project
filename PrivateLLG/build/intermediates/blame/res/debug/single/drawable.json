@@ -196,6 +196,10 @@
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable\\yuan_gray.xml"
     },
     {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\debug\\drawable\\shape_bg_gray_stroke.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable\\shape_bg_gray_stroke.xml"
+    },
+    {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\debug\\drawable\\stroke_orange2.xml",
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable\\stroke_orange2.xml"
     },

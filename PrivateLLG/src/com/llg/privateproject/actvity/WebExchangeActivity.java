@@ -3,15 +3,13 @@
  */
 package com.llg.privateproject.actvity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.bjg.lcc.alipay.pay.PayActivity;
 import com.bjg.lcc.privateproject.R;
@@ -20,14 +18,16 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.llg.privateproject.AppContext;
-import com.llg.privateproject.actvity.WebApplyActivity.JavaScriptObject;
-import com.llg.privateproject.camera.PopupSelectImage;
 import com.llg.privateproject.entities.PayInfoModel;
 import com.llg.privateproject.entities.UserInformation;
 import com.llg.privateproject.fragment.BaseActivity;
 import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
-import com.llg.privateproject.utils.LogManag;
+import com.llg.privateproject.utils.CommonUtils;
+import com.llg.privateproject.utils.VersionUtils;
 import com.smartandroid.sa.json.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * @author cc
@@ -54,6 +54,13 @@ public class WebExchangeActivity extends BaseActivity {
 		
 		url = getIntent().getStringExtra("url");
 		initWebviewSetting();
+		webView.setWebViewClient(new WebViewClient() {
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				view.loadUrl(url);
+				return true;
+			}
+		});
 	}
 
 	private void initWebviewSetting() {
@@ -70,7 +77,13 @@ public class WebExchangeActivity extends BaseActivity {
 		// 设置出现缩放工具
 		webSettings.setBuiltInZoomControls(false);
 		webSettings.setDefaultFontSize(20);
+//		打开页面时， 自适应屏幕：
+		webSettings.setUseWideViewPort(true);
+		webSettings.setLoadWithOverviewMode(true);
 		webView.addJavascriptInterface(new JavaScriptObject(this), "fgqqg");
+		//设置UserAgent
+		String ua = webView.getSettings().getUserAgentString();
+		webSettings.setUserAgentString(ua+" fgqqg " + VersionUtils.getVersionName(this));
 		webView.loadUrl(url);
 	}
 
@@ -107,6 +120,35 @@ public class WebExchangeActivity extends BaseActivity {
 		@JavascriptInterface
 		public void backFun() {
 			finish();
+		}
+
+		@JavascriptInterface
+		public void downLoadImage(String imgUrl){
+			new downloadImgThread(imgUrl).start();
+		}
+	}
+
+	/**
+	 * 下载图片文件
+	 */
+	private class downloadImgThread extends Thread {
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see java.lang.Thread#run()
+		 */
+
+		private String url = "";
+
+		public downloadImgThread(String url) {
+			// TODO Auto-generated constructor stub
+			this.url = url;
+		}
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			CommonUtils.downLoadWebImage(WebExchangeActivity.this,this.url);
 		}
 	}
 
@@ -158,5 +200,13 @@ public class WebExchangeActivity extends BaseActivity {
 					}
 				});
 	}
+//	按返回键时， 不退出程序而是返回上一浏览页面：
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//		if ((keyCode == KeyEvent.KEYCODE_BACK) &&   webView.canGoBack()) {
+//			webView.goBack();
+//			return true;
+//		}
+//		return super.onKeyDown(keyCode, event);
+//	}
 
 }

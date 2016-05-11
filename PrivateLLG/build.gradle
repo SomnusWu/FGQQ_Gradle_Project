@@ -9,14 +9,23 @@ dependencies {
 
 
 android {
+
+
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
     //org.apache.http.* error
     useLibrary 'org.apache.http.legacy'
-
     // 解决 sRGB error
     aaptOptions.cruncherEnabled = false
     aaptOptions.useNewCruncher = false
+    defaultConfig {
+        applicationId "com.bjg.lcc.privateproject"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 9
+        versionName "0.0.41"
+    }
+
 
     //解决com.android.build.api.transform.TransformException: com.android.builder.packaging.DuplicateFileException:
     // Duplicate files copied in APK META-INF/NOTICE
@@ -24,8 +33,13 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
-
-
+    //打包出现错误
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+        // 防止在发布的时候出现因MissingTranslation导致Build Failed!
+        disable 'MissingTranslation'
+    }
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -35,7 +49,7 @@ android {
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
-          // 注意 这样才会加载 So 文件
+            // 注意 这样才会加载 So 文件
             jniLibs.srcDirs = ['libs']
         }
 
@@ -51,4 +65,5 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+
 }

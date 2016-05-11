@@ -27,8 +27,6 @@
 	         android:padding="1dp"
 	         android:background="@color/black3"
 	         android:numColumns="2"></com.llg.privateproject.view.MyGridView >
-
-
   </LinearLayout>
 
 </LinearLayout>

@@ -8,24 +8,24 @@ package com.smartandroid.sa;
 
 public final class R {
 	public static final class anim {
-		public static final int frame_meituan = 0x7f050006;
+		public static final int frame_meituan = 0x7f050007;
 	}
 	public static final class dimen {
 		public static final int activity_horizontal_margin = 0x7f070000;
 		public static final int activity_vertical_margin = 0x7f070001;
 	}
 	public static final class drawable {
-		public static final int ic_launcher = 0x7f020105;
-		public static final int jiazaidongtai3 = 0x7f020122;
-		public static final int jiazaidongtai4 = 0x7f020123;
-		public static final int pengyouq1 = 0x7f02013f;
-		public static final int progress_loading_image_01 = 0x7f02016b;
-		public static final int progress_loading_image_02 = 0x7f02016c;
+		public static final int ic_launcher = 0x7f020106;
+		public static final int jiazaidongtai3 = 0x7f020125;
+		public static final int jiazaidongtai4 = 0x7f020126;
+		public static final int pengyouq1 = 0x7f020142;
+		public static final int progress_loading_image_01 = 0x7f02016e;
+		public static final int progress_loading_image_02 = 0x7f02016f;
 	}
 	public static final class id {
 		public static final int RelativeLayout1 = 0x7f0c0162;
 		public static final int RelativeLayout2 = 0x7f0c0163;
-		public static final int action_settings = 0x7f0c0444;
+		public static final int action_settings = 0x7f0c044a;
 		public static final int exception_Wrapper = 0x7f0c0164;
 		public static final int exception_button = 0x7f0c0167;
 		public static final int exception_message = 0x7f0c0166;
@@ -44,9 +44,9 @@ public final class R {
 	public static final class string {
 		public static final int action_settings = 0x7f080000;
 		public static final int app_name = 0x7f080001;
-		public static final int empty_string = 0x7f080021;
+		public static final int empty_string = 0x7f080020;
 		public static final int hello_world = 0x7f080002;
-		public static final int retry = 0x7f080067;
+		public static final int retry = 0x7f080066;
 	}
 	public static final class style {
 		public static final int AppBaseTheme = 0x7f090000;

@@ -16,6 +16,18 @@
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xxhdpi\\one.png"
     },
     {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\ic_circle2.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xxhdpi\\ic_circle2.png"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\xianchangxiaofei.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xxhdpi\\xianchangxiaofei.png"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\ic_phone_total.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xxhdpi\\ic_phone_total.png"
+    },
+    {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\phone.png",
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xxhdpi\\phone.png"
     },
@@ -24,15 +36,15 @@
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xxhdpi\\ic_banner.png"
     },
     {
-        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\xianchangxiaofei.png",
-        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xxhdpi\\xianchangxiaofei.png"
-    },
-    {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\advertisement.png",
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xxhdpi\\advertisement.png"
     },
     {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\haiyoufazhan.png",
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xxhdpi\\haiyoufazhan.png"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\ic_phone_charge.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xxhdpi\\ic_phone_charge.png"
     }
 ]

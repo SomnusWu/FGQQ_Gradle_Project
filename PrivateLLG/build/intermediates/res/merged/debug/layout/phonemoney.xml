@@ -4,40 +4,96 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp" >
-
+      >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="@dimen/head50"
+        android:background="@color/white"
+        android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/tv_net"
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:lines="1"
+            android:singleLine="true"
+            android:text="账户中心"
+            android:textColor="@color/black1"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <View
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/toumingblack"
-            android:drawableRight="@drawable/net_white"
-            android:gravity="center"
-            android:paddingRight="10dp"
-            android:text="没有网络，请检查网络设置"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:visibility="visible" />
+            android:layout_height="20dp"
+            android:background="@color/albumback"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+            <TextView
+                android:id="@+id/tv_net"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/toumingblack"
+                android:drawableRight="@drawable/net_white"
+                android:gravity="center"
+                android:paddingRight="10dp"
+                android:text="没有网络，请检查网络设置"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"  >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="账户余额"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:drawablePadding="10dp"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/ic_phone_total"
+                    android:textColor="@color/black2" />
+
+                <Button
+                    android:id="@+id/btn_refresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="30dp"
+                    android:text="刷新"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/shape_bg_gray_stroke"/>
+            </LinearLayout>
+        </RelativeLayout>
+        <View  style="@style/view_line_match_parent_style" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
             android:orientation="horizontal"
+            android:layout_marginLeft="25dp"
             android:padding="10dp" >
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="账号："
+                android:text="账号"
                 android:textColor="@color/black2" />
 
             <TextView
@@ -48,76 +104,172 @@
                 android:gravity="right"
                 android:textColor="@color/black2" />
         </LinearLayout>
-    </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black3" />
+        <View style="@style/view_line_match_parent_style_margin_left_15"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="25dp"
+            android:padding="10dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="话费余额"
+                android:textColor="@color/black2" />
+
+            <TextView
+                android:id="@+id/money"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="0"
+                android:textColor="@color/orange1" />
+        </LinearLayout>
+
+        <View style="@style/view_line_match_parent_style_margin_left_15"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="25dp"
+            android:padding="10dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="有效期"
+                android:textColor="@color/black2" />
+
+            <TextView
+                android:id="@+id/lastdate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="@color/black2" />
+        </LinearLayout>
+
+        <View style="@style/view_line_match_parent_style_margin_left_15"  />
+
+        <View style="@style/view_height_20"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"  >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="账户充值"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:drawablePadding="10dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_phone_charge"
+                android:textColor="@color/black2" />
+        </LinearLayout>
+        <View style="@style/view_line_match_parent_style"  />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="35dp"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="电话号码"
+                android:textColor="@color/black2" />
+
+            <TextView
+                android:id="@+id/tv_phone_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="@color/black2" />
+        </LinearLayout>
+
+        <View style="@style/view_line_match_parent_style_margin_left_15"  />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="35dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="电话充值卡号"
+                android:textColor="@color/black2" />
+
+            <EditText
+                android:id="@+id/edit_card_number"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:paddingRight="15dp"
+                android:gravity="center_vertical|right"
+                android:textColor="@color/black2" />
+        </LinearLayout>
+        <View style="@style/view_line_match_parent_style_margin_left_15"  />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="35dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="电话充值卡密码"
+                android:textColor="@color/black2" />
+
+            <EditText
+                android:id="@+id/edit_card_pwd"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:password="true"
+                android:paddingRight="15dp"
+                android:gravity="center_vertical|right"
+                android:textColor="@color/black2" />
+        </LinearLayout>
+
+        <View style="@style/view_line_match_parent_style_margin_left_15"  />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_recharge_add"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="话费余额："
-            android:textColor="@color/black2" />
-
-        <TextView
-            android:id="@+id/money"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:text="0"
-            android:textColor="@color/orange1" />
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_orange_rectangle_o"
+            android:gravity="center"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="充值"
+            android:textColor="@color/white" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black3" />
+    </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="有效期："
-            android:textColor="@color/black2" />
-
-        <TextView
-            android:id="@+id/lastdate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:textColor="@color/black2" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black3" />
-
-    <TextView
-        android:id="@+id/tv_notify"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@color/orange1"
-        android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:text="刷新"
-        android:textColor="@color/white" />
 
 </LinearLayout>

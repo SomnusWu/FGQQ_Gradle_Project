@@ -1,8 +1,5 @@
 package com.llg.privateproject.actvity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -22,7 +18,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
@@ -30,22 +25,20 @@ import com.bjg.lcc.privateproject.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
-import com.lidroid.xutils.util.PreferencesCookieStore;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
-import com.llg.help.MyFormat;
 import com.llg.privateproject.AppContext;
 import com.llg.privateproject.entities.UserInformation;
 import com.llg.privateproject.fragment.BaseActivity;
 import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
 import com.llg.privateproject.utils.CommonUtils;
 import com.llg.privateproject.utils.VersionUtils;
-import com.llg.privateproject.utils.update.UpdateManager;
-import com.llg.privateproject.utils.update.UpdateVersion;
 import com.llg.privateproject.view.OrderStatusDialog;
-import com.llg.privateproject.view.OrderStatusDialog.FinishListener;
 import com.llg.privateproject.view.OrderStatusDialog.IsOpen;
 import com.tencent.android.tpush.XGPushManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 系统设置 yh 2015.10.16
@@ -64,6 +57,9 @@ public class SysSetting extends BaseActivity implements
 	/** 是否开启红包弹窗 */
 	@ViewInject(R.id.ispopup)
 	private CheckBox ispopup;
+	/** 是否开启app欢迎页 */
+	@ViewInject(R.id.cb_welcome)
+	private CheckBox cb_welcome;
 	/** 检查新版本 */
 	@ViewInject(R.id.newversion)
 	private TextView newversion;
@@ -80,15 +76,16 @@ public class SysSetting extends BaseActivity implements
 	private int checkResult;
 	private String url = "";
 	private String sign = "";
+	private static final String WELCOMESTATUS = "appWelcomeImage";
 	Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-			case 1:// 返回成功
-				checkedResult(checkResult, sign);
-				break;
+				case 1:// 返回成功
+					checkedResult(checkResult, sign);
+					break;
 
-			default:
-				break;
+				default:
+					break;
 			}
 
 		}
@@ -139,58 +136,63 @@ public class SysSetting extends BaseActivity implements
 
 	private void init() {
 		head_tilte.setText("系统设置");
-		String version= VersionUtils.getVersionName(this);
-		aboutus.setText("V"+version);
+		String version = VersionUtils.getVersionName(this);
+		aboutus.setText("V" + version);
 		ispush.setOnCheckedChangeListener(this);
 		ispopup.setOnCheckedChangeListener(this);
+		cb_welcome.setOnCheckedChangeListener(this);
 		if (!UserInformation.isLogin()) {
 			// exit_currentuser.setVisibility(View.GONE);
 		} else {
 			exit_currentuser.setVisibility(View.VISIBLE);
 		}
+
+		boolean app_image_status = getSharedPreferences(WELCOMESTATUS,
+				Context.MODE_PRIVATE).getBoolean("welComeImage", true);
+		cb_welcome.setChecked(app_image_status);
 	}
 
 	@OnClick({ R.id.turn, R.id.exit_currentuser, R.id.newversion, R.id.aboutus,
 			R.id.clean })
 	public void myClick(View v) {
 		switch (v.getId()) {
-		case R.id.turn:// 返回
-			finish();
-			break;
-		case R.id.newversion:// 检查新版本
-			if (packageManager == null) {
-				packageManager = getPackageManager();
-			}
-			if (packageInfo == null) {
-				try {
-					packageInfo = packageManager.getPackageInfo(
-							getPackageName(), 0);
-				} catch (NameNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			case R.id.turn:// 返回
+				finish();
+				break;
+			case R.id.newversion:// 检查新版本
+				if (packageManager == null) {
+					packageManager = getPackageManager();
 				}
+				if (packageInfo == null) {
+					try {
+						packageInfo = packageManager.getPackageInfo(
+								getPackageName(), 0);
+					} catch (NameNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
-			}
-			// UpdateVersion.getServiceVersion(this, );
-			// UpdateManager.getUpdateManager().checkAppUpdate(this, false);
-			versionCheck(packageInfo.versionCode);
-			break;
-		case R.id.aboutus:// 关于我们
-			Intent intent = new Intent(this, MyDialog.class);
-			intent.putExtra("type", 2);
-			intent.putExtra("title", "关于我们");
-			startActivity(intent);
+				}
+				// UpdateVersion.getServiceVersion(this, );
+				// UpdateManager.getUpdateManager().checkAppUpdate(this, false);
+				versionCheck(packageInfo.versionCode);
+				break;
+			case R.id.aboutus:// 关于我们
+				Intent intent = new Intent(this, MyDialog.class);
+				intent.putExtra("type", 2);
+				intent.putExtra("title", "关于我们");
+				startActivity(intent);
 
-			break;
-		case R.id.clean:// 清除缓存
-			toast("缓存已清除!");
-			CommonUtils.cleanCustomCache(CommonUtils.createSDCardDir());
-			break;
-		case R.id.exit_currentuser:// 退出当前用户
-			loginout();
-			clearMessage();
-			finish();
-			break;
+				break;
+			case R.id.clean:// 清除缓存
+				toast("缓存已清除!");
+				CommonUtils.cleanCustomCache(CommonUtils.createSDCardDir());
+				break;
+			case R.id.exit_currentuser:// 退出当前用户
+				loginout();
+				clearMessage();
+				finish();
+				break;
 
 		}
 	}
@@ -252,7 +254,7 @@ public class SysSetting extends BaseActivity implements
 
 	/**
 	 * 检查版本更新
-	 * 
+	 *
 	 * @param :version 返回:checkResult:1~4 (1必须强制更新，2提示更新，3检查更新，4无需更新)
 	 * */
 	private void versionCheck(int versionCode) {
@@ -307,33 +309,42 @@ public class SysSetting extends BaseActivity implements
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		// TODO Auto-generated method stub
 		switch (buttonView.getId()) {
-		case R.id.ispush:
-			if (isChecked) {
-				tui(isChecked);
-				return;
-			}
-			if (dialog2 == null) {
+			case R.id.ispush:
+				if (isChecked) {
+					tui(isChecked);
+					return;
+				}
+				if (dialog2 == null) {
 
-				dialog2 = new OrderStatusDialog(SysSetting.this, 14, this);
-			}
-			showMydialog(dialog2);
+					dialog2 = new OrderStatusDialog(SysSetting.this, 14, this);
+				}
+				showMydialog(dialog2);
 
-			break;
+				break;
 
-		case R.id.ispopup:// 是否开启弹窗广告
+			case R.id.ispopup:// 是否开启弹窗广告
 
-			// ispopup.setChecked(!isChecked);
-			if (isChecked) {
-				tan(isChecked);
-				return;
-			}
-			if (dialog1 == null) {
+				// ispopup.setChecked(!isChecked);
+				if (isChecked) {
+					tan(isChecked);
+					return;
+				}
+				if (dialog1 == null) {
 
-				dialog1 = new OrderStatusDialog(SysSetting.this, 12, this);
-			}
-			showMydialog(dialog1);
-			break;
+					dialog1 = new OrderStatusDialog(SysSetting.this, 12, this);
+				}
+				showMydialog(dialog1);
+				break;
+
+			case R.id.cb_welcome:
+				//默认true 默认是开启欢迎页
+//			LogManag.d("app welcome", isChecked+"");
+				/** app欢迎页 */
+				getSharedPreferences("appWelcomeImage", Context.MODE_PRIVATE)
+						.edit().putBoolean("welComeImage", isChecked).commit();
+				break;
 		}
+
 	}
 
 	private void showMydialog(OrderStatusDialog dialog1) {

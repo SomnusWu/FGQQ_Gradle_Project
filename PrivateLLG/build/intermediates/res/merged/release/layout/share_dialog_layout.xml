@@ -7,12 +7,12 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/tv_share_friend_circle "
+        android:id="@+id/tv_share_friend_circle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:text="分享到朋友圈" />
+        android:text="加塞红包" />
 
     <EditText
         android:id="@+id/edit_red_money"
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/selector_btn_keyboard"
+            android:background="@null"
             android:text="取消" />
 
         <Button
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/selector_btn_keyboard"
+            android:background="@null"
             android:text="确定" />
     </LinearLayout>
 

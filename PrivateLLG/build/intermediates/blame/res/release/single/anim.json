@@ -1,5 +1,9 @@
 [
     {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\anim\\alpha_anim.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\anim\\alpha_anim.xml"
+    },
+    {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\anim\\shake.xml",
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\anim\\shake.xml"
     },

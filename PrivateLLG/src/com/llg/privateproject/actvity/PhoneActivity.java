@@ -1,5 +1,6 @@
 package com.llg.privateproject.actvity;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -14,7 +15,9 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import com.bjg.lcc.privateproject.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.llg.privateproject.AppContext;
 import com.llg.privateproject.entities.KeyBoradBean;
+import com.llg.privateproject.entities.UserInformation;
 import com.llg.privateproject.fragment.FGQQCallFragment;
 import com.llg.privateproject.fragment.FragmentPhoneCharge;
 import com.llg.privateproject.fragment.FragmentPhoneMoney;
@@ -64,7 +67,7 @@ public class PhoneActivity extends FragmentActivity implements
 	private FragmentPhoneMoney fpm;
 	private FragmentPhoneCharge fpc;
 	private FragmentTransaction ft;
-
+	public String billCenterURL = "";
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -86,6 +89,10 @@ public class PhoneActivity extends FragmentActivity implements
 
 		initEvents();
 		registerThis();
+
+		billCenterURL = AppContext.getHtmlUitls().getDataHttpm()
+				+ "web/hf/index?access_token="+ UserInformation.getAccess_token()+ "&t="
+				+ System.currentTimeMillis();
 
 	}
 
@@ -160,8 +167,10 @@ public class PhoneActivity extends FragmentActivity implements
 
 	private void initEvents() {
 		mPhoneTab.setOnTabSelectedListener(this);
+		mPhoneTab.setTabSelect(true);
 		// 注册EventBus
 		EventBus.getDefault().register(this);
+
 	}
 
 	@Override
@@ -263,8 +272,10 @@ public class PhoneActivity extends FragmentActivity implements
 			//将键盘弹起
 //			EventBus.getDefault().post(KeyBoradBottom.KeyBoradSwitch);
 		}
+
 		switch (index) {
 		case Constants.HOME_FRAGMENT_INDEX:
+			mIndex = index;
 			if (null == mQQGCallFragment) {
 				mQQGCallFragment = new FGQQCallFragment();
 				transaction.add(R.id.fl_phone, mQQGCallFragment);
@@ -273,6 +284,7 @@ public class PhoneActivity extends FragmentActivity implements
 			}
 			break;
 		case Constants.CATEGORY_FRAGMENT_INDEX:
+			mIndex = index;
 			if (null == fpRecent) {
 				fpRecent = new FragmentPhoneRecent();
 				transaction.add(R.id.fl_phone, fpRecent);
@@ -282,6 +294,7 @@ public class PhoneActivity extends FragmentActivity implements
 			}
 			break;
 		case Constants.COLLECT_FRAGMENT_INDEX:
+			mIndex = index;
 			if (null == fpl) {
 				fpl = new FragmentPhonelist();
 				transaction.add(R.id.fl_phone, fpl);
@@ -290,6 +303,7 @@ public class PhoneActivity extends FragmentActivity implements
 			}
 			break;
 		case Constants.SETTING_FRAGMENT_INDEX:
+			mIndex = index;
 			if (null == fpm) {
 				fpm = new FragmentPhoneMoney();
 				transaction.add(R.id.fl_phone, fpm);
@@ -302,21 +316,26 @@ public class PhoneActivity extends FragmentActivity implements
 			}
 			break;
 		case Constants.PHONE_CHARGE_INDEX:
-			if (null == fpc) {
-				fpc = new FragmentPhoneCharge();
-				transaction.add(R.id.fl_phone, fpc);
-				// Bundle bundle=new Bundle();
-				// bundle.putString("msg", message);
-				// Log.e("my", "msgmssggsafdsadf+:"+message);
-				// mSettingFragment.setArguments(bundle);
-			} else {
-				transaction.show(fpc);
-			}
+			//跳转到web
+			Intent intent1 = new Intent();
+			intent1.setClass(this, WebExchangeActivity.class);
+			intent1.putExtra("url", billCenterURL);
+			startActivity(intent1);
+
+//			if (null == fpc) {
+//				fpc = new FragmentPhoneCharge();
+//				transaction.add(R.id.fl_phone, fpc);
+//				// Bundle bundle=new Bundle();
+//				// bundle.putString("msg", message);
+//				// Log.e("my", "msgmssggsafdsadf+:"+message);
+//				// mSettingFragment.setArguments(bundle);
+//			} else {
+//				transaction.show(fpc);
+//			}
 			break;
 		default:
 			break;
 		}
-		mIndex = index;
 		transaction.commitAllowingStateLoss();
 	}
 

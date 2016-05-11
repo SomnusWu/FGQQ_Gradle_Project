@@ -21,10 +21,10 @@
             android:gravity="center"
             android:text="商品汇" />
 
-<!--         <View -->
-<!--             android:layout_width="0.5dp" -->
-<!--             android:layout_height="match_parent" -->
-<!--             android:background="@color/orange1" /> -->
+        <!-- <View -->
+        <!-- android:layout_width="0.5dp" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:background="@color/orange1" /> -->
 
         <TextView
             android:id="@+id/xianchangxiaofei"
@@ -36,10 +36,10 @@
             android:gravity="center"
             android:text="特惠商家" />
 
-<!--         <View -->
-<!--             android:layout_width="0.5dp" -->
-<!--             android:layout_height="match_parent" -->
-<!--             android:background="@color/orange1" /> -->
+        <!-- <View -->
+        <!-- android:layout_width="0.5dp" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:background="@color/orange1" /> -->
 
         <TextView
             android:id="@+id/wodehoutai"
@@ -52,10 +52,10 @@
             android:text="个人中心" />
     </LinearLayout>
 
-<!--     <View -->
-<!--         android:layout_width="match_parent" -->
-<!--         android:layout_height="0.5dp" -->
-<!--         android:background="@color/orange1" /> -->
+    <!-- <View -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="0.5dp" -->
+    <!-- android:background="@color/orange1" /> -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,20 +64,34 @@
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/haoyoufazhan"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawablePadding="10dp"
-            android:drawableTop="@drawable/haiyoufazhan"
-            android:gravity="center"
-            android:text="邀请好友" />
+            android:gravity="center|top"
+            android:orientation="horizontal" >
 
-<!--         <View -->
-<!--             android:layout_width="0.5dp" -->
-<!--             android:layout_height="match_parent" -->
-<!--             android:background="@color/orange1" /> -->
+            <TextView
+                android:id="@+id/haoyoufazhan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/haiyoufazhan"
+                android:gravity="center"
+                android:text="邀请好友" />
+
+            <View
+                android:id="@+id/view_bg_circle"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:visibility="gone"
+                android:background="@drawable/ic_circle2" />
+        </LinearLayout>
+
+        <!-- <View -->
+        <!-- android:layout_width="0.5dp" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:background="@color/orange1" /> -->
 
         <TextView
             android:id="@+id/yewulianxi"
@@ -89,10 +103,10 @@
             android:gravity="center"
             android:text="我的广告" />
 
-<!--         <View -->
-<!--             android:layout_width="0.5dp" -->
-<!--             android:layout_height="match_parent" -->
-<!--             android:background="@color/orange1" /> -->
+        <!-- <View -->
+        <!-- android:layout_width="0.5dp" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:background="@color/orange1" /> -->
 
         <TextView
             android:id="@+id/dianhua"

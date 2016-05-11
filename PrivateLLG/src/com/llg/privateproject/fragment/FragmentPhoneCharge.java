@@ -1,7 +1,14 @@
 package com.llg.privateproject.fragment;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.bjg.lcc.privateproject.R;
 import com.lidroid.xutils.ViewUtils;
@@ -9,26 +16,14 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
-import com.llg.help.MyFormat;
 import com.llg.privateproject.AppContext;
-import com.llg.privateproject.actvity.NewHomeActivity;
 import com.llg.privateproject.actvity.PhoneActivity;
-import com.llg.privateproject.actvity.PhoneRegistAty;
 import com.llg.privateproject.actvity.WebLoginActivity;
 import com.llg.privateproject.entities.UserInformation;
-import com.llg.privateproject.fragment.BaseActivity.Refresh;
 import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
-import com.smartandroid.sa.sql.util.Log;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.EditText;
-import android.widget.TextView;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 电话充值
@@ -117,7 +112,7 @@ public class FragmentPhoneCharge extends BaseFragment {
 				.toString());
 
 		AppContext.getHtmlUitls().xUtilsm(context, HttpMethod.POST,
-				"m/tel/charge", params, new HttpCallback() {
+				"m/tel/rechargeTel", params, new HttpCallback() {
 
 					@Override
 					public void onError(String msg) {

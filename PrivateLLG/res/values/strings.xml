@@ -144,8 +144,8 @@
     <string name="tab_phone_call">拨号键盘</string>
     <string name="tab_phone_recent">最近通话</string>
     <string name="tab_phone_list_o1_b1">通讯录</string>
-    <string name="tab_phone_money">余额</string>
-    <string name="tab_phone_charge">充值</string>
+    <string name="tab_phone_money">账户中心</string>
+    <string name="tab_phone_charge">话费中心</string>
     
     <string name="tab_shop_main">商品汇</string>
     <string name="tab_phone">电话</string>

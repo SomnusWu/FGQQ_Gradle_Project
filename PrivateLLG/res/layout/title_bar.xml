@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rool"
-    style="@style/title_bar_style"
-    >
+    style="@style/title_bar_style">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_weight="1"
-         android:layout_alignParentBottom="true"
-         android:paddingBottom="20dp"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingBottom="20dp">
 
         <LinearLayout
             android:id="@+id/ll_center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom|center_horizontal"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
+                android:orientation="horizontal">
                 <!-- 用户头像 -->
 
                 <RelativeLayout
                     android:id="@+id/ralay_head"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/tv_login"
@@ -37,8 +35,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:text="登录/注册"
-                        android:textSize="14sp"
                         android:textColor="@color/black1"
+                        android:textSize="14sp"
                         android:visibility="visible" />
 
                     <ImageView
@@ -66,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp" >
+                    android:layout_marginLeft="10dp">
 
                     <TextView
                         android:id="@+id/username"
@@ -98,18 +96,19 @@
     </LinearLayout>
     <!-- 订单 -->
 
-    <ImageView android:id="@+id/back"
+    <ImageView
+        android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:src="@drawable/threestagepage_return_yuan"
-        />
-    <ImageView android:id="@+id/iv_set"
+        android:src="@drawable/threestagepage_return_yuan" />
+
+    <ImageView
+        android:id="@+id/iv_set"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:src="@drawable/shezhi"
         android:layout_alignParentRight="true"
-        />
+        android:padding="5dp"
+        android:src="@drawable/shezhi" />
 
 </RelativeLayout>

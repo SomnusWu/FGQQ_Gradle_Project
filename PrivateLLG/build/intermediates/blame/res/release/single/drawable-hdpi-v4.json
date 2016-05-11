@@ -44,12 +44,12 @@
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-hdpi\\yemianqiehuan1.png"
     },
     {
-        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\shouye4.png",
-        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-hdpi\\shouye4.png"
-    },
-    {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\bjg_tupjiazai_jiazaishuabai.9.png",
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-hdpi\\bjg_tupjiazai_jiazaishuabai.9.png"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\shouye4.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-hdpi\\shouye4.png"
     },
     {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\bjg_shouye_tub5_xqfb.png",
@@ -280,12 +280,12 @@
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-hdpi\\contact.png"
     },
     {
-        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\bbt_3_2_1_yifabu1.png",
-        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-hdpi\\bbt_3_2_1_yifabu1.png"
-    },
-    {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\setting_bg.9.png",
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-hdpi\\setting_bg.9.png"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\bbt_3_2_1_yifabu1.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-hdpi\\bbt_3_2_1_yifabu1.png"
     },
     {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\bbt_1_1_shouye_search1.png",
@@ -970,6 +970,10 @@
     {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\feature_point.png",
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-hdpi\\feature_point.png"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\talk.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-hdpi\\talk.png"
     },
     {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\spinner_9.png",

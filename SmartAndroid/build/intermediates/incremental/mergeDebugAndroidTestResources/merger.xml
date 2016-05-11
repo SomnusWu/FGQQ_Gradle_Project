@@ -12,7 +12,7 @@
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
-    </style><dimen name="activity_horizontal_margin">16dp</dimen><string name="retry">重试</string><style name="exception"/><string name="empty_string">网络未连接</string><dimen name="activity_vertical_margin">16dp</dimen><string name="hello_world">你好，世界!</string><style name="exception_button">
+    </style><style name="exception"/><string name="retry">重试</string><dimen name="activity_horizontal_margin">16dp</dimen><string name="empty_string">网络未连接</string><dimen name="activity_vertical_margin">16dp</dimen><string name="hello_world">你好，世界!</string><style name="exception_button">
         <item name="android:layout_marginTop">25dip</item>
     </style><style name="exception.title">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
@@ -23,12 +23,12 @@
         <item name="android:layout_height">wrap_content</item>
     </style><style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style></file><file path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\build\intermediates\bundles\debug\res\values-en-rUS\values-en-rUS.xml" qualifiers="en-rUS"><string name="app_name">CommonAndroidFrame</string><dimen name="activity_horizontal_margin">16dp</dimen><string name="hello_world">Hello，Word!</string><style name="AppBaseTheme" parent="android:Theme.Light">
+    </style></file><file path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\build\intermediates\bundles\debug\res\values-en-rUS\values-en-rUS.xml" qualifiers="en-rUS"><string name="app_name">CommonAndroidFrame</string><dimen name="activity_horizontal_margin">16dp</dimen><style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style><style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
-    </style><style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style><dimen name="activity_vertical_margin">16dp</dimen><string name="action_settings">Settings</string></file><file path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\build\intermediates\bundles\debug\res\values-sw720dp-land-v13\values-sw720dp-land-v13.xml" qualifiers="sw720dp-land-v13"><dimen name="activity_horizontal_margin">128dp</dimen></file></source></dataSet><dataSet config="main" generated-set="main$Generated"><source path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\src\androidTest\res"/><source path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\build\generated\res\rs\androidTest\debug"/><source path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\build\generated\res\resValues\androidTest\debug"/></dataSet><mergedItems/></merger>
+    </style><string name="hello_world">Hello，Word!</string><string name="action_settings">Settings</string><dimen name="activity_vertical_margin">16dp</dimen></file><file path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\build\intermediates\bundles\debug\res\values-sw720dp-land-v13\values-sw720dp-land-v13.xml" qualifiers="sw720dp-land-v13"><dimen name="activity_horizontal_margin">128dp</dimen></file></source></dataSet><dataSet config="main" generated-set="main$Generated"><source path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\src\androidTest\res"/><source path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\build\generated\res\rs\androidTest\debug"/><source path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\build\generated\res\resValues\androidTest\debug"/></dataSet><mergedItems/></merger>

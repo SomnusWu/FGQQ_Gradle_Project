@@ -1,13 +1,8 @@
 package com.llg.privateproject.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.bjg.lcc.privateproject.R;
-import com.llg.privateproject.AppContext;
-import com.llg.privateproject.entities.UserInformation;
-
 import android.graphics.Bitmap;
+
+import java.util.List;
 
 /**
  * 常量
@@ -129,6 +124,9 @@ public class Constants {
 
 	/** 微信官网申请的app_id */
 	public static final String APP_ID = "wx8be0aab008ab17ae";
+//	public static final String APP_ID = "wx14ad28819da96475";
+
+
 	/** 普通会员简介 */
 	public static final String MEMBER = "1、进入平台有机会看广告得红包。\n"
 			+ "2、在平台合作商家可用CO酷币消费抵扣折扣部分。\n"

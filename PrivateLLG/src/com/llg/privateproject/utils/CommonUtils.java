@@ -1,15 +1,5 @@
 package com.llg.privateproject.utils;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -32,8 +22,16 @@ import android.widget.ImageView;
 import com.bjg.lcc.privateproject.R;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import com.llg.privateproject.AppContext;
-import com.llg.privateproject.entities.UserInformation;
+
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 
 /**
  * 通用工具类
@@ -47,6 +45,7 @@ public class CommonUtils {
 
 	private static final String APPSTARTIMG = "fgqq_start.jpg";
 	public static final String ZXingImage = "zxing.jpg";
+	public static final String WebImage = "webimg.jpg";
 	
 	 
 	
@@ -316,7 +315,7 @@ public class CommonUtils {
 	}
 
 	/**
-	 * 下载图片文件
+	 * 下载图片文件（app启动页）
 	 */
 	public static void downLoadAppStartImage(String imgUrl) {
 		// 判断SD卡是否存在，并且是否具有读写权限
@@ -326,7 +325,37 @@ public class CommonUtils {
 			try {
 				InputStream is = getImageStream(imgUrl);
 				Bitmap mBitmap = BitmapFactory.decodeStream(is);
+
 				saveFile(mBitmap, APPSTARTIMG);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 下载图片 Web
+	 * @param imgUrl
+	 */
+	public static void downLoadWebImage(Context context,String imgUrl) {
+		// 判断SD卡是否存在，并且是否具有读写权限
+		if (Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED)) {
+			// 创建输入流
+			try {
+				InputStream is = getImageStream(imgUrl);
+				Bitmap mBitmap = BitmapFactory.decodeStream(is);
+				try {
+					CommonUtils.saveFile(mBitmap, WebImage);
+					CommonUtils.scanFileAsync(context,
+							CommonUtils.createSDCardDir() + WebImage);
+					// CommonUtils.scanDirAsync(dir.this, "");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				saveFile(mBitmap, WebImage);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

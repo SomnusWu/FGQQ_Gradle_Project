@@ -240,12 +240,12 @@
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\layout\\contact_list_item.xml"
     },
     {
-        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\layout\\addaddress.xml",
-        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\layout\\addaddress.xml"
-    },
-    {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\layout\\cate_list_item.xml",
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\layout\\cate_list_item.xml"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\layout\\addaddress.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\layout\\addaddress.xml"
     },
     {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\layout\\dialog_authentication.xml",

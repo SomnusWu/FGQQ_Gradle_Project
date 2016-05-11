@@ -1,11 +1,5 @@
 package com.llg.privateproject.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +28,6 @@ import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.llg.help.MyFormat;
-import com.llg.help.SetListHeigt;
 import com.llg.privateproject.AppContext;
 import com.llg.privateproject.actvity.Consume;
 import com.llg.privateproject.actvity.ContactUsActivity;
@@ -49,6 +42,7 @@ import com.llg.privateproject.actvity.OrderStatusActivity;
 import com.llg.privateproject.actvity.SecurityCenter;
 import com.llg.privateproject.actvity.ShakeScreen;
 import com.llg.privateproject.actvity.SysSetting;
+import com.llg.privateproject.actvity.WebExchangeActivity;
 import com.llg.privateproject.actvity.WebLoginActivity;
 import com.llg.privateproject.adapters.InformationItemAdapter;
 import com.llg.privateproject.entities.Customer;
@@ -57,6 +51,12 @@ import com.llg.privateproject.entities.UserInformation;
 import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
 import com.llg.privateproject.utils.Constants;
 import com.llg.privateproject.utils.StringUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 设置 Fragment
@@ -101,6 +101,8 @@ public class SettingFragment extends BaseFragment implements
 	private Bitmap bitmap;// 用户头像
 	private Drawable roundedAvatarDrawable;// 用户头像
 
+	public String billCenterURL = "";
+
 	public Customer customer;// 个人用户资料
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -143,10 +145,9 @@ public class SettingFragment extends BaseFragment implements
 		// int
 		// images[]=getResources().getIntArray(R.array.userinformationimages);
 		// 用户信息图片数组
-		int images[] = new int[] { R.drawable.gr_wcldd, R.drawable.personer,
+		int images[] = new int[] {R.drawable.talk,R.drawable.gr_wcldd, R.drawable.personer,
 				R.drawable.songhuoshangmen_small, R.drawable.guanzhu,
 				R.drawable.suggest, R.drawable.wdeguanggao, R.drawable.help,
-
 				R.drawable.level, R.drawable.safe, R.drawable.shake,
 				R.drawable.suggest, R.drawable.contact };
 		// 用户信息描述列表
@@ -166,7 +167,6 @@ public class SettingFragment extends BaseFragment implements
 			if (name[i].equals("待处理订单")
 					&& (!userPreferences.getString("userType", "0").equals(
 							"103"))) {
-
 				continue;
 			}
 			if (name[i].equals("我的任务")) {
@@ -179,7 +179,14 @@ public class SettingFragment extends BaseFragment implements
 			list.add(new InformationItem(getActivity(), images[i], name[i],
 					describe[i]));
 		}
+		billCenterURL = AppContext.getHtmlUitls().getDataHttpm()
+				+ "web/hf/index?access_token="+ UserInformation.getAccess_token()+ "&t="
+				+ System.currentTimeMillis();
 
+//		ephoneCardURL = AppContext.getHtmlUitls().getDataHttpm()
+//				+ "/m/ephoneCard?access_token="
+//				+ UserInformation.getAccess_token() + "&t="
+//				+ System.currentTimeMillis();
 	}
 
 	@Override
@@ -191,10 +198,10 @@ public class SettingFragment extends BaseFragment implements
 		ViewUtils.inject(this, view);
 		InformationItemAdapter adapter = new InformationItemAdapter(
 				getActivity(), list);
-		SetListHeigt listHeigt = new SetListHeigt();
+//		SetListHeigt listHeigt = new SetListHeigt();
 		information_lv.setAdapter(adapter);
 		// 设置列表高度
-		listHeigt.setlistHeight(information_lv);
+//		listHeigt.setlistHeight(information_lv);
 		information_lv.setOnItemClickListener(this);
 		getUserInfo();
 		return view;
@@ -455,7 +462,12 @@ public class SettingFragment extends BaseFragment implements
 			intent.setClass(mActivity, ShakeScreen.class);
 			mActivity.startActivity(intent);
 
-		} else if (item.name.equals("反馈意见")) {
+		} else if(item.name.equals("话费中心")){
+			Intent intent1 = new Intent();
+			intent1.setClass(mActivity, WebExchangeActivity.class);
+			intent1.putExtra("url", billCenterURL);
+			mActivity.startActivity(intent1);
+		}else if (item.name.equals("反馈意见")) {
 			// Toast.makeText(getActivity(), "item.name"+item.name,
 			// Toast.LENGTH_SHORT).show();
 			intent.setClass(mActivity, FeedBackActivity.class);

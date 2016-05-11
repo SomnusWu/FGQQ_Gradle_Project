@@ -5,6 +5,8 @@ ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:2:1-899:
 		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:2:11-69
 	package
 		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:3:5-41
+		INJECTED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml
+		INJECTED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml
 	android:versionName
 		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:5:5-33
 		INJECTED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml
@@ -164,8 +166,12 @@ MERGED from [FGQQ_Gradle_Project:SmartAndroid:unspecified] E:\Somnus\FGQQ_Gradle
 MERGED from [FGQQ_Gradle_Project:base_library_pullToRefresh_chenyoca:unspecified] E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\base_library_pullToRefresh_chenyoca\unspecified\AndroidManifest.xml:7:5-43
 	android:targetSdkVersion
 		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:96:9-38
+		INJECTED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml
+		INJECTED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml
 	android:minSdkVersion
 		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:95:9-35
+		INJECTED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml
+		INJECTED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml
 application
 ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:98:5-897:19
 MERGED from [FGQQ_Gradle_Project:base_library_pullToRefresh_chenyoca:unspecified] E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\base_library_pullToRefresh_chenyoca\unspecified\AndroidManifest.xml:9:5-20
@@ -174,7 +180,7 @@ MERGED from [FGQQ_Gradle_Project:base_library_pullToRefresh_chenyoca:unspecified
 	android:allowBackup
 		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:100:9-35
 	android:icon
-		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:101:9-43
+		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:101:9-40
 	android:theme
 		ADDED from E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\AndroidManifest.xml:103:9-40
 	android:name

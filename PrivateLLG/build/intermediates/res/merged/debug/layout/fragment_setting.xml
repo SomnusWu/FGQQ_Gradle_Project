@@ -91,16 +91,16 @@
         </FrameLayout>
     </LinearLayout>
 
-    <com.llg.privateproject.view.AbScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:fillViewport="true" >
+    <!--<com.llg.privateproject.view.AbScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="2"-->
+        <!--android:fillViewport="true" >-->
 
         <ListView
             android:id="@+id/infomation_lv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    </com.llg.privateproject.view.AbScrollView>
+    <!--</com.llg.privateproject.view.AbScrollView>-->
 
 </LinearLayout>

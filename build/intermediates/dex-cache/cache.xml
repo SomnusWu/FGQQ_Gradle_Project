@@ -2,25 +2,186 @@
 <items version="2" >
 
     <item
-        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\SmartAndroid\unspecified\jars\libs\android-support-v4.jar"
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\systembartint-1.0.4.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="4c3148babc70a1373d2e71db195bab42fb40f640">
-        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\debug\android-support-v4_e6209983a509f405f53c894f8c8b30962c30ebf7.jar" />
+        sha1="06404f77b92ec723cc132e825afe85a07da85ee6">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\systembartint-1.0.4_51643703109dcc365c4a589147629dc68f9bbd4a.jar" />
     </item>
     <item
-        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\base_library_pullToRefresh_chenyoca\unspecified\jars\classes.jar"
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\xUtils-2.6.14.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="7d28e1bf9c8f4f55a361e837afdde9cd98e81b80">
-        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\debug\FGQQ_Gradle_Project-base_library_pullToRefresh_chenyoca-unspecified_1e43869594172af77762670345848480c4046337.jar" />
+        sha1="f10c51f3e0732fdeefe6e104279a58e275879b6c">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\xUtils-2.6.14_f94c39eacc673c3c00343353df4cacb212d14514.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\rabbitmq-client.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="79013ae2300ec74e576db23b007379bb982dc75f">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\rabbitmq-client_2e2ccadeca90a4a1969888e6ac790c9a7c8c04a8.jar" />
     </item>
     <item
         jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\SmartAndroid\unspecified\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="0dcc9bb54b2ad2e8045866badfdb54d2ea970a99">
-        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\debug\FGQQ_Gradle_Project-SmartAndroid-unspecified_cf1e9e9d988909473fa7c827307aad7573869983.jar" />
+        sha1="236be13e27afb2ca694eda5363583fc216257485">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\FGQQ_Gradle_Project-SmartAndroid-unspecified_cf1e9e9d988909473fa7c827307aad7573869983.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\Xg_sdk_v2.38_20150616_1057.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b7d6cf9e40b44971cb043f30979ad6869295ae4c">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\Xg_sdk_v2.38_20150616_1057_0e9eaa83cbf7f06b723255caebf41f90ea309fb4.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\zxing.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e88c14e6e7daa0fa65172a62b54ee6a16ff4162d">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\zxing_6025438be4b221bcd3ccd7f8c3e6754f6032e18b.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\BaiduLBS_Android.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="a3c01919af9e8e0eb917a50767d39a2d780a3b28">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\BaiduLBS_Android_4461c37bb9dd6f3d0b99cecda58ea1e218ca8db1.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\weibosdkcore.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="119e2034c8db764d5742ec1cdbcc4aa6bdf85e7a">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\weibosdkcore_40180011c02e0c433a1f533a07c0333f22d68a87.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\mta-sdk-1.6.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c184c69f43b1fe46390f7123717c65bd844bccb6">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\mta-sdk-1.6.2_a215f88e05945578f67e86445e37ef9e3e97d49f.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\android-support-v7-appcompat.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="21297ae2bf22a0ce81c9b59992cf0693eec45d5b">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\android-support-v7-appcompat_f1a4bc80ba553eccc8d93dcea066753ee8c8d9e6.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\libammsdk_old.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="db6144f812752e2f62b8811c8b9d5e4346fff151">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\libammsdk_old_869c3dbfd88095e9030a6fd0f306305ec3120644.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\ShareSDK-Core-2.6.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ce77708798f39a79b83785dd24dd551b4680e469">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\ShareSDK-Core-2.6.0_6a8ed98aa2638cfa451942ee4d7359aaf2214d73.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\jg_filter_sdk_1.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ebfc3cde0309ff27e9568757784eefefc71407a2">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\jg_filter_sdk_1.1_2768d79ffd4cc89fcfe360a99f8c21fcbcb94cc5.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\alipaySdk-20151112.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="5ce758768906f045b279735e7cefc0b89160d9d6">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\alipaySdk-20151112_3af1280d6c9f966343cbdfa8f0fd7640269f0df9.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\MobTools.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b2cba35ceab382729de67845f613556d38a32133">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\MobTools_fd52d352c9b7c177212c561e55d1da9babb12a5a.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\mid-sdk-2.20.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="0822bf00661a83ba2fab32214c70cc50a244a0a3">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\mid-sdk-2.20_2091a402883e2280169785a433ec6fb7129e84b6.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\ShareSDK-QQ-2.6.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e6c6b568ccacd915fbf96b9b73697fecb778d36e">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\ShareSDK-QQ-2.6.0_22748b2f843a44b8de22343fc98769d55eac0dad.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\open_sdk_r5509.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="538ea8fb21ea76e8cb424598ac38127cb3344d79">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\open_sdk_r5509_faf80c4b7249ed94cc6e893ae4661267dc65970f.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\commons-cli-1.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="11c98b99ad538f2f67633afd4d7f4d98ecfbb408">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\commons-cli-1.1_59fd250b6add56b99cf5a3d05859860edf124ae2.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\wup-1.0.0-SNAPSHOT.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="a0845068801a0b9a3a144b7cf57cb650b3d467e5">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\wup-1.0.0-SNAPSHOT_c841291f7808473e72ea123cf2ddc59ffc53e839.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\SmartAndroid\unspecified\jars\libs\android-support-v4.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2ceb26962c1f929c2b7bc1d9b358b8c504364676">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\android-support-v4_e6209983a509f405f53c894f8c8b30962c30ebf7.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\gson-2.2.4.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\gson-2.2.4_f7c288352c1352c1730ced3fa753474ab10424d8.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\commons-io-1.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="0ad6ae511ca4608a18317fcb19850fd113bb2ae8">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\commons-io-1.2_03d674e81d960042430c6f572ee7141df0abce00.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\android-viewbadger.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="f1303b50d535716ca7601c5014357b8435658313">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\android-viewbadger_a0c92f67498d0a2d0ce2c6ffe244f93090a37ab7.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\exploded-aar\FGQQ_Gradle_Project\base_library_pullToRefresh_chenyoca\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="fc594115987f889bb7aaa06b7161a02e23ed9b84">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\FGQQ_Gradle_Project-base_library_pullToRefresh_chenyoca-unspecified_1e43869594172af77762670345848480c4046337.jar" />
+    </item>
+    <item
+        jar="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\libs\lion-tools.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="6bab718678c32c37c3c3c45f6044448cff7d7b09">
+        <dex dex="E:\Somnus\FGQQ_Gradle_Project\PrivateLLG\build\intermediates\pre-dexed\release\lion-tools_5af078252a6a1a7ae71535d5a37f6ba40723695e.jar" />
     </item>
 
 </items>

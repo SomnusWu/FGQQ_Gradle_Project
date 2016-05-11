@@ -68,7 +68,7 @@
         android:id="@+id/tv_charge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/orange1"
+        android:background="@drawable/bg_orange_rectangle_o"
         android:gravity="center"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"

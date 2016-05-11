@@ -2,14 +2,19 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+
+
+
+
     -->
 
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.        -->
+            backward-compatibility can go here.
+        -->
     </style>
     <!-- 自定义Dialog -->
     <style name="Custom_Progress" parent="@android:style/Theme.Dialog">
@@ -125,7 +130,11 @@
     <style name="Theme.Timetodo" parent="@android:style/Theme.Holo.Light">
         <!--
          <item name="android:windowTranslucentStatus">true</item>
-    <item name="android:windowTranslucentNavigation">true</item>
+    <item name="android:windowTranslucentNavigation">true</item>
+
+
+
+
         -->
     </style>
 
@@ -240,7 +249,11 @@
 
 　　                        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
 
-　　</style>
+　　</style>
+
+
+
+
     -->
     <style name="guidestyle" parent="@android:style/Theme.Light.NoTitleBar"></style>
 
@@ -269,5 +282,22 @@
         <item name="android:layout_weight">1</item>
         <!-- <item name="android:background">@drawable/selector_btn_keyboard</item> -->
     </style>
+
+    <style name="view_line_match_parent_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/albumback</item>
+    </style>
+
+    <style name="view_line_match_parent_style_margin_left_15" parent="@style/view_line_match_parent_style" >
+        <item name="android:layout_marginLeft">15dp</item>
+    </style>
+
+    <style name="view_height_20">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:background">@color/albumback</item>
+    </style>
+
 
 </resources>

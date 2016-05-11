@@ -861,8 +861,8 @@ public class FGQQCallFragment extends BaseFragment implements
 				getSharePrefence().getString("phone", "null"));
 		params.addQueryStringParameter("callerDisplayNumber", tv_title
 				.getText().toString().trim());
-		AppContext.getHtmlUitls().xUtils(getActivity(), HttpMethod.POST,
-				"tel/call", params, new HttpCallback() {
+		AppContext.getHtmlUitls().xUtilsm(getActivity(), HttpMethod.POST,
+				"m/tel/callTel", params, new HttpCallback() {
 
 					@Override
 					public void onError(String msg) {

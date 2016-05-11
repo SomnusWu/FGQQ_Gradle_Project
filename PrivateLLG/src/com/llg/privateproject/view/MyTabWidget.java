@@ -47,6 +47,8 @@ public class MyTabWidget extends LinearLayout {
 	// 存放指示点
 	private List<TextView> mIndicateImgs = new ArrayList<TextView>();
 
+	private boolean tabSelectfalg = false;
+
 	public MyTabWidget(Context context, AttributeSet attrs, int Style) {
 		super(context, attrs, Style);
 
@@ -114,7 +116,8 @@ public class MyTabWidget extends LinearLayout {
 					R.drawable.phone_recent, R.drawable.phone_list_o1_b1,
 					R.drawable.phone_money, R.drawable.phone_charge };	
 		}
-		for (int i = 0; i < size; i++) {
+
+		for ( int  i = 0; i < size; i++) {
 			final int index = i;
 			// 每个tab对应的layout
 			final View view = inflater.inflate(R.layout.tab_item, null);
@@ -144,6 +147,13 @@ public class MyTabWidget extends LinearLayout {
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					if (tabSelectfalg){
+						if (null != mTabListener && index == 4) {
+							// tab项被选中的回调事件
+							mTabListener.onTabSelected(index);
+							return;
+						}
+					}
 					// 设置底部图片和文字的显示
 					setTabsDisplay(context, index);
 					if (null != mTabListener) {
@@ -211,6 +221,9 @@ public class MyTabWidget extends LinearLayout {
 				// 250));
 			}
 		}
+	}
+	public void setTabSelect(boolean falg){
+		tabSelectfalg = falg;
 	}
 
 	@Override

@@ -23,12 +23,12 @@
         <item name="android:layout_height">wrap_content</item>
     </style><style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style></file><file path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\res\values-en-rUS\dimens.xml" qualifiers="en-rUS"><dimen name="activity_horizontal_margin">16dp</dimen><dimen name="activity_vertical_margin">16dp</dimen></file><file path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\res\values-en-rUS\strings.xml" qualifiers="en-rUS"><string name="app_name">CommonAndroidFrame</string><string name="hello_world">Hello，Word!</string><string name="action_settings">Settings</string></file><file path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\res\values-en-rUS\styles.xml" qualifiers="en-rUS"><style name="AppBaseTheme" parent="android:Theme.Light">
+    </style></file><file path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\res\values-en-rUS\dimens.xml" qualifiers="en-rUS"><dimen name="activity_horizontal_margin">16dp</dimen><dimen name="activity_vertical_margin">16dp</dimen></file><file path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\res\values-en-rUS\strings.xml" qualifiers="en-rUS"><string name="app_name">CommonAndroidFrame</string><string name="hello_world">Hello，Word!</string><string name="action_settings">Settings</string></file><file path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\res\values-en-rUS\styles.xml" qualifiers="en-rUS"><style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style><style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
-    </style><style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style></file><file path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\res\values-sw720dp-land\dimens.xml" qualifiers="sw720dp-land-v13"><dimen name="activity_horizontal_margin">128dp</dimen></file></source><source path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\build\generated\res\rs\release"/><source path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\build\generated\res\resValues\release"/></dataSet><dataSet config="release" generated-set="release$Generated"><source path="E:\Somnus\FGQQ_Gradle_Project\SmartAndroid\build-types\release\res"/></dataSet><mergedItems/></merger>

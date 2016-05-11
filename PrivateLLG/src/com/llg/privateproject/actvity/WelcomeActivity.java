@@ -1,21 +1,5 @@
 package com.llg.privateproject.actvity;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -49,7 +33,6 @@ import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
-import com.lidroid.xutils.view.ViewInjectInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.llg.help.MyFormat;
 import com.llg.privateproject.AppContext;
@@ -62,11 +45,26 @@ import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
 import com.llg.privateproject.listener.MyLocationListener;
 import com.llg.privateproject.utils.CommonUtils;
 import com.llg.privateproject.utils.LogManag;
-import com.smartandroid.sa.pv.log.LogManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 启动页
- * 
+ *
  * @author gongyibing
  * @version 1.0
  * @created 2015-05-07
@@ -112,6 +110,9 @@ public class WelcomeActivity extends FragmentActivity implements
 	private long time1;
 
 	private static final String OPENAPPIMG = "openappimg";
+	private static final String WELCOMESTATUS = "appWelcomeImage";
+	/** app欢迎页开关的状态 */
+	private boolean isWelcomeStatus = true;
 
 	public interface IsetPic {
 		void setPicId(String url);
@@ -122,87 +123,87 @@ public class WelcomeActivity extends FragmentActivity implements
 		public void handleMessage(android.os.Message msg) {
 			int key = msg.what;
 			switch (key) {
-			case 0:// 跳转到主界面
-				if (toGetRedPackage) {
-					return;
-				}
-				Intent intent = new Intent(WelcomeActivity.this,
-				// MainActivity.class);
-						NewHomeActivity.class);
-				startActivity(intent);
-				finish();
-				break;
-			case 2:// 加载失败
+				case 0:// 跳转到主界面
+					if (toGetRedPackage) {
+						return;
+					}
+					Intent intent = new Intent(WelcomeActivity.this,
+							// MainActivity.class);
+							NewHomeActivity.class);
+					startActivity(intent);
+					finish();
+					break;
+				case 2:// 加载失败
 
-				break;
-			case 3:// 引导页加载成功
-				if (guide1 == null) {
-					guide1 = new Guide1();
-				}
-				if (map.size() > 0) {
-					myPic(guide1, map.get(0).get("img").toString());
-					myPic(guide2, map.get(1).get("img").toString());
-					myPic(guide3, map.get(2).get("img").toString());
-					myPic(guide4, map.get(3).get("img").toString());
-				}
-				// String string=map.get(0).get("img").toString();
-				// new BitmapUtils(context,
-				// CommonUtils.createSDCardDir()).configDefaultLoadFailedImage(R.drawable.defaultpic).display(guide4.getView(),string);
-				viewPagerAdapter.notifyDataSetChanged();
-				break;
-			case 4:// 正常加载
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				if (list1 != null && list1.size() > 0) {
+					break;
+				case 3:// 引导页加载成功
+					if (guide1 == null) {
+						guide1 = new Guide1();
+					}
+					if (map.size() > 0) {
+						myPic(guide1, map.get(0).get("img").toString());
+						myPic(guide2, map.get(1).get("img").toString());
+						myPic(guide3, map.get(2).get("img").toString());
+						myPic(guide4, map.get(3).get("img").toString());
+					}
+					// String string=map.get(0).get("img").toString();
+					// new BitmapUtils(context,
+					// CommonUtils.createSDCardDir()).configDefaultLoadFailedImage(R.drawable.defaultpic).display(guide4.getView(),string);
+					viewPagerAdapter.notifyDataSetChanged();
+					break;
+				case 4:// 正常加载
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					if (list1 != null && list1.size() > 0) {
 
-					llLayout.setOnClickListener(WelcomeActivity.this);
-					String imgUrlEnd = getResources().getString(
-							R.string.test_image_server_url)
-							+ list1.get(0).get("imageUrl").toString();
+						llLayout.setOnClickListener(WelcomeActivity.this);
+						String imgUrlEnd = getResources().getString(
+								R.string.test_image_server_url)
+								+ list1.get(0).get("imageUrl").toString();
 
-					getSharedPreferences("openappimg", Context.MODE_PRIVATE)
-							.edit().putString("imageUrl", imgUrlEnd).commit();
+						getSharedPreferences("openappimg", Context.MODE_PRIVATE)
+								.edit().putString("imageUrl", imgUrlEnd).commit();
 
-					LogManag.d("Welcome", CommonUtils.createSDCardDir());
-					// 下载图片文件
-					new downloadImgThread(imgUrlEnd).start();
+						// LogManag.d("Welcome", CommonUtils.createSDCardDir());
+						// 下载图片文件
+						new downloadImgThread(imgUrlEnd).start();
 
-					// new BitmapUtils(context, CommonUtils.createSDCardDir())
-					// .configDefaultLoadFailedImage(
-					// context.getResources().getDrawable(
-					// R.drawable.welcome))
-					// .configDefaultLoadFailedImage(
-					// context.getResources().getDrawable(
-					// R.drawable.welcome))
-					// .display(llLayout, imgUrlEnd);
-//					new BitmapUtils(context, CommonUtils.createSDCardDir())
-//							.display(llLayout, imgUrlEnd);
+						// new BitmapUtils(context, CommonUtils.createSDCardDir())
+						// .configDefaultLoadFailedImage(
+						// context.getResources().getDrawable(
+						// R.drawable.welcome))
+						// .configDefaultLoadFailedImage(
+						// context.getResources().getDrawable(
+						// R.drawable.welcome))
+						// .display(llLayout, imgUrlEnd);
+						// new BitmapUtils(context, CommonUtils.createSDCardDir())
+						// .display(llLayout, imgUrlEnd);
 
-					new Thread() {
-						@Override
-						public void run() {
-							try {
+						new Thread() {
+							@Override
+							public void run() {
+								try {
 
-								Thread.sleep(2000);
-								handler.sendEmptyMessage(0);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
+									Thread.sleep(2000);
+									handler.sendEmptyMessage(0);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
 							}
-						}
-					}.start();
-				} else {
+						}.start();
+					} else {
 
-					handler.sendEmptyMessage(0);
-				}
+						handler.sendEmptyMessage(0);
+					}
 
-				break;
-			case 5:// 加载弹出广告
+					break;
+				case 5:// 加载弹出广告
 
-				break;
+					break;
 
 			}
 		}
@@ -236,9 +237,7 @@ public class WelcomeActivity extends FragmentActivity implements
 
 		if (isInstall) {
 			addFragment(methodName, listName);
-
 		} else if (objectId.length() > 0) {
-
 			toShop(objectId, action, i_getvalue, uri);
 
 		} else if (getIntent().getBooleanExtra("isDialog", false)) {
@@ -251,7 +250,7 @@ public class WelcomeActivity extends FragmentActivity implements
 
 	/** 去店铺 */
 	private void toShop(String objectId, String action, Intent i_getvalue,
-			Uri uri) {
+						Uri uri) {
 
 		if (Intent.ACTION_VIEW.equals(action)) {
 
@@ -315,48 +314,53 @@ public class WelcomeActivity extends FragmentActivity implements
 		// llLayout,
 		// getSharedPreferences("openappimg", Context.MODE_PRIVATE)
 		// .getString("img", ""));
-
-		String app_img = getSharedPreferences(OPENAPPIMG, Context.MODE_PRIVATE)
-				.getString("imageUrl", "");
-		if (StringUtils.isEmpty(app_img)) {
-			// llLayout.setBackgroundResource(R.drawable.welcome);
-			// 如果是空的 那么就下载图片保存到本地 ， 下一次加载使用
-			img_app_start.setBackgroundResource(R.drawable.welcome);
-		} else {
-			// 如果不是空的 ， 显示出来
-			Bitmap imgBitMap = CommonUtils.getAppStartImage();
-			if (imgBitMap != null) {
-				img_app_start.setImageBitmap(imgBitMap);
-			}else{
+		boolean app_image_status = getSharedPreferences(WELCOMESTATUS,
+				Context.MODE_PRIVATE).getBoolean("welComeImage", true);
+		if (app_image_status) {
+			String app_img = getSharedPreferences(OPENAPPIMG,
+					Context.MODE_PRIVATE).getString("imageUrl", "");
+			if (StringUtils.isEmpty(app_img)) {
+				// llLayout.setBackgroundResource(R.drawable.welcome);
+				// 如果是空的 那么就下载图片保存到本地 ， 下一次加载使用
 				img_app_start.setBackgroundResource(R.drawable.welcome);
+			} else {
+				// 如果不是空的 ， 显示出来
+				Bitmap imgBitMap = CommonUtils.getAppStartImage();
+				if (imgBitMap != null) {
+					img_app_start.setImageBitmap(imgBitMap);
+				} else {
+					img_app_start.setBackgroundResource(R.drawable.welcome);
+				}
 			}
+			RequestParams params = new RequestParams();
+			params.addQueryStringParameter("cusId", AppContext.userid);
+			params.addQueryStringParameter("locationCode", "APP_HOME_OPEN_APP");// 欢迎页广告
+			params.addQueryStringParameter("lng",
+					String.valueOf(AppContext.myLongitude));
+			params.addQueryStringParameter("lat",
+					String.valueOf(AppContext.myLatitude));
+
+			LogManag.d("cusId", AppContext.userid);
+			AppContext.getHtmlUitls().xUtils(this, HttpMethod.GET,
+					"ad/getAdList", params, new HttpCallback() {
+
+						@Override
+						public void onError(String msg) {
+							// TODO Auto-generated method stub
+							handler.sendEmptyMessage(0);
+						}
+
+						@Override
+						public void onBack(JSONObject json) {
+							// TODO Auto-generated method stub
+							getAdRedPackageParse1(json);
+
+						}
+					});
+
+		} else {
+			handler.sendEmptyMessage(0);
 		}
-
-		RequestParams params = new RequestParams();
-		params.addQueryStringParameter("cusId", AppContext.userid);
-		params.addQueryStringParameter("locationCode", "APP_HOME_OPEN_APP");// 欢迎页广告
-		params.addQueryStringParameter("lng",
-				String.valueOf(AppContext.myLongitude));
-		params.addQueryStringParameter("lat",
-				String.valueOf(AppContext.myLatitude));
-
-		LogManag.d("cusId", AppContext.userid);
-		AppContext.getHtmlUitls().xUtils(this, HttpMethod.GET, "ad/getAdList",
-				params, new HttpCallback() {
-
-					@Override
-					public void onError(String msg) {
-						// TODO Auto-generated method stub
-						handler.sendEmptyMessage(0);
-					}
-
-					@Override
-					public void onBack(JSONObject json) {
-						// TODO Auto-generated method stub
-						getAdRedPackageParse1(json);
-
-					}
-				});
 
 	}
 
@@ -429,7 +433,7 @@ public class WelcomeActivity extends FragmentActivity implements
 
 	/**
 	 * 添加引导页
-	 * 
+	 *
 	 * @param methodName
 	 *            方法名
 	 * @param listName
@@ -546,7 +550,6 @@ public class WelcomeActivity extends FragmentActivity implements
 		SharedPreferences myLoction = getSharedPreferences("myLoction",
 				Context.MODE_PRIVATE);
 		Editor editor = myLoction.edit();
-
 		editor.putFloat("myLatitude", (float) AppContext.myLatitude);
 		editor.putFloat("myLongitude", (float) AppContext.myLongitude);
 		editor.putString("myCity", AppContext.myCity);
@@ -567,31 +570,31 @@ public class WelcomeActivity extends FragmentActivity implements
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		case R.id.tv_finish:// 离开
-			finish();
-			break;
-		case R.id.tv_see:// 查看
+			case R.id.tv_finish:// 离开
+				finish();
+				break;
+			case R.id.tv_see:// 查看
 
-			toSomeWhere();
+				toSomeWhere();
 
-			break;
-		case R.id.welcome:// 去红包页面
-			toGetRedPackage = true;
-			Intent intent = new Intent();
-			// if (type != 0) {
-			intent = new Intent(this, GetRedPackage.class);
-			Map<String, Object> map = list1.get(0);
-			intent.putExtra("img", map.get("imageUrl").toString());
-			intent.putExtra("objectId", map.get("objectId").toString());
-			intent.putExtra("objectType", map.get("objectType").toString());
-			intent.putExtra("isEmpty", map.get("isEmpty").toString());
-			intent.putExtra("adRedEnvelopId", map.get("adRedEnvelopId")
-					.toString());
-			intent.putExtra("adForwardId", map.get("adForwardId").toString());
-			intent.putExtra("type", map.get("type").toString());
-			intent.putExtra("adInfoId", map.get("adid").toString());// 广告id
-			startActivity(intent);
-			break;
+				break;
+			case R.id.welcome:// 去红包页面
+				toGetRedPackage = true;
+				Intent intent = new Intent();
+				// if (type != 0) {
+				intent = new Intent(this, GetRedPackage.class);
+				Map<String, Object> map = list1.get(0);
+				intent.putExtra("img", map.get("imageUrl").toString());
+				intent.putExtra("objectId", map.get("objectId").toString());
+				intent.putExtra("objectType", map.get("objectType").toString());
+				intent.putExtra("isEmpty", map.get("isEmpty").toString());
+				intent.putExtra("adRedEnvelopId", map.get("adRedEnvelopId")
+						.toString());
+				intent.putExtra("adForwardId", map.get("adForwardId").toString());
+				intent.putExtra("type", map.get("type").toString());
+				intent.putExtra("adInfoId", map.get("adid").toString());// 广告id
+				startActivity(intent);
+				break;
 		}
 	}
 

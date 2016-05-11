@@ -1,9 +1,5 @@
 package com.llg.privateproject.actvity;
 
-import java.util.Map;
-
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,6 +35,10 @@ import com.llg.privateproject.fragment.BaseActivity;
 import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
 import com.llg.privateproject.utils.LogManag;
 import com.llg.privateproject.view.FGQQSelectShareDialog;
+
+import org.json.JSONObject;
+
+import java.util.Map;
 
 /**
  * 广告详情
@@ -124,7 +123,8 @@ public class AdvertisementDetailAty extends BaseActivity {
 										toast("请输入红包金额");
 										return;
 									}
-									LogManag.d("tag", content);
+									dialog.dismiss();
+//									LogManag.d("tag", content);
 									requestAddMoney(content);
 
 									break;

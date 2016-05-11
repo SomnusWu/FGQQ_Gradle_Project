@@ -8,12 +8,12 @@
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xhdpi\\center.png"
     },
     {
-        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\one.png",
-        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xhdpi\\one.png"
-    },
-    {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\phone.png",
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xhdpi\\phone.png"
+    },
+    {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\one.png",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable-xhdpi\\one.png"
     },
     {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\haiyoufazhan.png",

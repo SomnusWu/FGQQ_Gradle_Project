@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
 }
-//http://www.sjsjw.com/100/009645MYM016696/   Ê¹ÓÃorg.apache.http.*
+//http://www.sjsjw.com/100/009645MYM016696/   Ê¹ï¿½ï¿½org.apache.http.*
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"

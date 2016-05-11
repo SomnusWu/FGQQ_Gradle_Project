@@ -48,6 +48,7 @@
     </array>
     <!-- 用户信息列表说明数组 -->
     <string-array name="userinformation">
+        <item>话费中心</item>
         <item>待处理订单</item>
         <item>我的商品订单</item>
         <item>我的任务</item>
@@ -62,6 +63,7 @@
         <item>联系我们</item>
     </string-array>
     <string-array name="userinformationdescribe">
+        <item>话费中心</item>
         <item>待处理订单</item>
         <item>待收款、待收货、待评价、全部订单</item>
         <item>同城代购送货上门、入驻平台就可以做物流</item>

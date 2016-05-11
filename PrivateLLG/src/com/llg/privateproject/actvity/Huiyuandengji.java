@@ -1,17 +1,5 @@
 package com.llg.privateproject.actvity;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -26,12 +14,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.LayoutInflater;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -68,6 +58,17 @@ import com.tencent.mm.sdk.modelmsg.WXTextObject;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 邀请好友
@@ -176,6 +177,7 @@ public class Huiyuandengji extends BaseActivity {
 	private TextView tv_leader_invite_description;
 	
 	private String leader_invite_descriptionStr = "";
+
 	int type = 1;
 	ClipboardManager cbm;
 
@@ -217,6 +219,7 @@ public class Huiyuandengji extends BaseActivity {
 					createImage(leaderInviteUrl, iv_zxing2);
 					leader_invite_descriptionStr = leader_invite_descriptionStr.replace("\\n", "\n");
 					tv_leader_invite_description.setText(leader_invite_descriptionStr);
+					startAlphaAnim();
 					
 				}
 				ll_layout_person_detail.removeAllViews();
@@ -243,6 +246,14 @@ public class Huiyuandengji extends BaseActivity {
 			}
 		}
 	};
+	/**
+	 * 渐显动画
+	 */
+	private void startAlphaAnim() {
+		Animation anim = AnimationUtils.loadAnimation(this, R.anim.alpha_anim);
+		tv_leader_invite_description.startAnimation(anim);
+	}
+
 	DialogDeleteView dialog;
 
 	@Override

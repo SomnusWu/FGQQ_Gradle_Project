@@ -1,15 +1,5 @@
 package com.llg.privateproject.actvity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -51,11 +41,21 @@ import com.llg.privateproject.entities.UserInformation;
 import com.llg.privateproject.fragment.BaseActivity;
 import com.llg.privateproject.html.AndroidCallBack.HttpCallback;
 import com.llg.privateproject.utils.ActivitiesManager;
+import com.llg.privateproject.utils.StringUtils;
 import com.llg.privateproject.view.CubeTransformer;
-import com.llg.privateproject.view.FGQQSelectShareDialog;
 import com.llg.privateproject.view.IndictorView;
 import com.llg.privateproject.view.MyViewPager;
 import com.llg.privateproject.view.OrderStatusDialog;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
 
 /**
  * 新版首页 yh 2015.9.15(主界面---在这里可以找到所有界面的始端)
@@ -727,15 +727,24 @@ public class NewHomeActivity extends BaseActivity {
 			break;
 		case R.id.dianhua:// 打电话
 
-			if (TextUtils
-					.isEmpty(getSharePrefence().getString("phone", "null"))
-					|| getSharePrefence().getString("phone", "null").equals(
-							"null")) {
-				customProgressSmall.show();
-				getPhone();
-				return;
+//			if (TextUtils
+//					.isEmpty(getSharePrefence().getString("phone", "null"))
+//					|| getSharePrefence().getString("phone", "null").equals(
+//							"null")) {
+//				customProgressSmall.show();
+//				getPhone();
+//				return;
+//			}
+			String isLogin = getSharedPreferences(
+					"userInformation1", Context.MODE_PRIVATE).getString(
+					"access_token", "");
+			if (StringUtils.isEmpty(isLogin)) {
+				startActivity(new Intent(
+						NewHomeActivity.this,
+						WebLoginActivity.class));
+			}else{
+				startActivity(new Intent(this, PhoneActivity.class));
 			}
-			startActivity(new Intent(this, PhoneActivity.class));
 			break;
 		}
 	}

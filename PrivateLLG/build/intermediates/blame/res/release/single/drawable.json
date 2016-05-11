@@ -176,6 +176,10 @@
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable\\bg_delete_dialog_normal.xml"
     },
     {
+        "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable\\shape_bg_gray_stroke.xml",
+        "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable\\shape_bg_gray_stroke.xml"
+    },
+    {
         "merged": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\build\\intermediates\\res\\merged\\release\\drawable\\plugin_camera_pic_choose_selector.xml",
         "source": "E:\\Somnus\\FGQQ_Gradle_Project\\PrivateLLG\\res\\drawable\\plugin_camera_pic_choose_selector.xml"
     },
